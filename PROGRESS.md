@@ -550,3 +550,9 @@ Pushed live on his "Publish" (v=38, checked on the live site). The tag `before-p
 
 Not done: the caption under the quill still says "Quill" (no wording changed without his say).
 
+## 2026-11-15: two quills instead of the quill and inkpot
+
+Committed on main, not pushed. Local tag `before-quills` marks the version before. Assets at v=39.
+
+Wehan found the quill "a bit off" and was not happy with the inkpot. The Tutoring shape is now a larger and a smaller quill writing together: both nibs go round a flat page in curls (about fourteen seconds a turn), each quill trailing behind its nib and rocking with every curl, each leaving a line of ink that fades; the smaller follows half a turn behind and writes over the same line as the larger one's ink fades. One quill is defined once (`QUILL`, nib at the origin) and placed twice by `quill(t)`. The caption under it changed from "Quill" to "Quills" (the one wording change, flagged to him).
+

@@ -855,7 +855,7 @@
   });
 
   /* ---------- The maker's shapes on the Make cabinet: one wireframe for each service, each morphing into the next ---------- */
-  // Tutoring is a quill in its inkpot; Editing is a sentence gathering itself out of a cloud of words; Learning design is a lesson
+  // Tutoring is two quills writing together; Editing is a sentence gathering itself out of a cloud of words; Learning design is a lesson
   // as a puzzle box of four layers that twist; Consulting is the tetraktys, ten points in a pyramid, with points that light and dim.
   // A drag turns the shape, a tap (or Enter) changes it, and the title under it opens that service.
   const tc = $('#tetra');
@@ -868,10 +868,11 @@
     const pulse = (t, period, up, hold, down) => { const s = t % period, r = period * .16; return s < up ? 0 : s < up + r ? ease((s - up) / r) : s < up + r + hold ? 1 : s < up + r + hold + r ? 1 - ease((s - up - r - hold) / r) : 0; };
     let TW = 0;
 
-    /* 1. Tutoring: a quill standing in its inkpot. A spine, a vane on either side that curls a little out of the page, a nib, and a squat pot of ink. */
-    const quill = (() => {
-      const pts = [], links = [], N = 11, nx = -.819, ny = .573, OX = .1, OY = .12;
-      const spine = t => [-.5 + 1.0 * t + .12 * Math.sin(t * Math.PI) + OX, -.7 + 1.45 * t - .1 * Math.sin(t * Math.PI) + OY, .1 * Math.sin(t * Math.PI * 1.5)];
+    /* 1. Tutoring: two quills writing together. The larger leads round the page in curls; the smaller follows half a turn behind
+       and writes over the same line just as the first one's ink fades. */
+    const QUILL = (() => {   // one quill with its nib at the origin, leaning to the right: a spine, a vane on either side that curls a little out of the page, a nib
+      const pts = [], links = [], N = 11, nx = -.819, ny = .573;
+      const spine = t => [.1 + 1.0 * t + .12 * Math.sin(t * Math.PI), .16 + 1.45 * t - .1 * Math.sin(t * Math.PI), .1 * Math.sin(t * Math.PI * 1.5)];
       for (let i = 0; i <= N; i++) { pts.push({ p: spine(i / N), r: 0 }); if (i) links.push([i - 1, i, 1]); }
       // The vanes begin a little way up the shaft, are widest below the middle and come to a point at the tip.
       [1, -1].forEach(side => {
@@ -884,16 +885,32 @@
         }
         links.push([1, base, 1]); links.push([N, base + N - 3, 1]);
       });
-      pts.push({ p: [-.6 + OX, -.86 + OY, 0], r: .9 }); links.push([0, pts.length - 1, 1]);   // the nib, down in the ink
-      // The inkpot: rings from the base up to the lip (height, radius, size of its dots), joined down the sides.
-      const PX = -.6 + OX, K = 10, RINGS = [[-1.04, .25, .3], [-.8, .29, 0], [-.68, .22, 0], [-.63, .13, 0], [-.56, .16, .3]];
-      RINGS.forEach((ring, n) => {
-        const base = pts.length, edge = n === 0 || n === RINGS.length - 1;
-        for (let k = 0; k < K; k++) { const th = k / K * TAU; pts.push({ p: [PX + Math.cos(th) * ring[1], ring[0] + OY, Math.sin(th) * ring[1]], r: ring[2] }); }
-        for (let k = 0; k < K; k++) { links.push([base + k, base + (k + 1) % K, edge ? 1 : .55]); if (n) links.push([base + k - K, base + k, .45]); }
-      });
-      return () => ({ pts, links, labels: [] });
+      pts.push({ p: [0, 0, 0], r: .62 }); links.push([0, pts.length - 1, 1]);   // the nib
+      return { pts, links };
     })();
+    const PAGE = -.74, ORBIT = .46, CURL = .11, LOOPS = 7, TRAIL = 46, SPAN = Math.PI * .92;
+    const nibAt = th => [ORBIT * Math.cos(th) + CURL * Math.cos(LOOPS * th), ORBIT * Math.sin(th) + CURL * Math.sin(LOOPS * th)];   // a nib goes round the middle of the page, curling as it goes
+    function quill(t) {
+      const pts = [], links = [], turn = t * .00045;   // once round the page in about fourteen seconds
+      [[.86, 0, 1], [.56, Math.PI, .8]].forEach(([s, lag, dot]) => {
+        const th = turn - lag, n = nibAt(th), base = pts.length;
+        // Each quill trails behind its nib like a pen being drawn along, and rocks a little with every curl.
+        const yaw = Math.atan2(Math.cos(th), Math.sin(th)) + .3 * Math.sin(LOOPS * th), rock = .1 * Math.cos(LOOPS * th);
+        const cy = Math.cos(yaw), sy = Math.sin(yaw), cr = Math.cos(rock), sr = Math.sin(rock);
+        QUILL.pts.forEach(q => {
+          const x1 = q.p[0] * cr - q.p[1] * sr, y1 = q.p[0] * sr + q.p[1] * cr, z = q.p[2];
+          pts.push({ p: [n[0] + s * (x1 * cy + z * sy), PAGE + s * y1, n[1] + s * (-x1 * sy + z * cy)], r: q.r * dot });
+        });
+        QUILL.links.forEach(l => links.push([base + l[0], base + l[1], l[2]]));
+        // The ink it has just laid down, fading the further back it goes.
+        for (let k = 0; k <= TRAIL; k++) {
+          const p = nibAt(th - k / TRAIL * SPAN);
+          pts.push({ p: [p[0], PAGE, p[1]], r: 0 });
+          if (k) links.push([pts.length - 2, pts.length - 1, 1.5 * (1 - k / TRAIL)]);
+        }
+      });
+      return { pts, links, labels: [] };
+    }
 
     /* 2. Editing: the words of a sentence drift in a cloud, then the ones worth keeping gather into the shorter sentence. */
     const WORDS = PAIRS[0][0].split(' '), KEEP = PAIRS[0][1].split(' ');   // "In order to write well, one must first read closely." becomes "To write well, read closely."
@@ -963,7 +980,7 @@
     }
 
     const SHAPES = [
-      { key: 'tutoring', title: 'Tutoring', what: 'Quill', frame: quill },
+      { key: 'tutoring', title: 'Tutoring', what: 'Quills', frame: quill },
       { key: 'editing', title: 'Editing', what: 'Words', frame: words },
       { key: 'design', title: 'Learning design', what: 'Lesson stages', frame: blocks },
       { key: 'consulting', title: 'Philosophical & AI consulting', what: 'Tetraktys', frame: tetraktys }
