@@ -468,6 +468,7 @@
     dressSheet(sheetBody);
     if (item.read) addContents(sheetBody);
     activateEmbeds(sheetBody); activateRequest(sheetBody); activateRatings(sheetBody);
+    if (sheetBody.querySelector('.blocks')) layout(lk); // the design blocks, laid out in the copy that just opened
     const order = ORDER[item.ch] || [], i = order.indexOf(id);
     $('#sheet-prev').disabled = !(i > 0); $('#sheet-next').disabled = !(i >= 0 && i < order.length - 1);
     sheetWhere.textContent = i >= 0 ? (i + 1) + ' of ' + order.length + ' · ' + (CH_LABEL[item.ch] || '') : '';
@@ -576,6 +577,8 @@
       set.items.map((_, k) => '<button type="button" aria-label="Quotation ' + (k + 1) + ' of ' + set.items.length + '"></button>').join('') +
       '<button class="textlink" type="button" data-sheet="' + set.more + '">More →</button></div>';
     const fig = $('.voice', box), p = $('p', fig), cap = $('figcaption', fig), dots = $$('.voices-nav button:not(.textlink)', box);
+    const extra = box.nextElementSibling;
+    if (extra && extra.classList.contains('voices-extra')) { $('.voices-nav', box).append(...extra.children); extra.remove(); }
     function show(k, instant) {
       i = (k + set.items.length) % set.items.length;
       const go = () => { p.textContent = set.items[i][0]; cap.textContent = set.items[i][1]; fig.classList.remove('swap'); dots.forEach((d, n) => { if (n === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); }); };
@@ -718,10 +721,6 @@
   function centreSky() { if (skyWrap.scrollWidth > skyWrap.clientWidth + 4) skyWrap.scrollLeft = (skyWrap.scrollWidth - skyWrap.clientWidth) / 2; }
   centreSky(); window.addEventListener('resize', centreSky);
 
-  /* ---------- The study guides, folded away until asked for ---------- */
-  const gBtn = $('.guides-toggle'), gWrap = $('#guides');
-  if (gBtn) gBtn.addEventListener('click', () => { const open = gWrap.hidden; gWrap.hidden = !open; gBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-
   /* ---------- Lectures: the player loads when you press play ---------- */
   $$('.lecture').forEach(l => {
     $('.play', l).addEventListener('click', () => {
@@ -733,7 +732,7 @@
   });
 
   /* ---------- The editing typewriter ---------- */
-  const typer = $('#typer .txt');
+  const typeTo = s => $$('.typer .txt').forEach(el => { el.textContent = s; });
   const PAIRS = [
     ['In order to write well, one must first read closely.', 'To write well, read closely.'],
     ['This essay will attempt to discuss the question of whether...', 'This essay argues that...'],
@@ -745,26 +744,25 @@
     let i = 0;
     for (;;) {
       const a = PAIRS[i % PAIRS.length][0], b = PAIRS[i % PAIRS.length][1]; i++;
-      for (let k = 1; k <= a.length; k++) { typer.textContent = a.slice(0, k); await wait(26); }
+      for (let k = 1; k <= a.length; k++) { typeTo(a.slice(0, k)); await wait(26); }
       await wait(1400);
-      for (let k = a.length; k >= 0; k--) { typer.textContent = a.slice(0, k); await wait(11); }
+      for (let k = a.length; k >= 0; k--) { typeTo(a.slice(0, k)); await wait(11); }
       await wait(260);
-      for (let k = 1; k <= b.length; k++) { typer.textContent = b.slice(0, k); await wait(38); }
+      for (let k = 1; k <= b.length; k++) { typeTo(b.slice(0, k)); await wait(38); }
       await wait(3000);
-      for (let k = b.length; k >= 0; k--) { typer.textContent = b.slice(0, k); await wait(9); }
+      for (let k = b.length; k >= 0; k--) { typeTo(b.slice(0, k)); await wait(9); }
       await wait(500);
     }
   })();
 
   /* ---------- The design blocks ---------- */
-  const blocks = $$('.blocks i');
   const LAYOUTS = [
     [[0, 0, 140, 26], [0, 32, 66, 26], [74, 32, 66, 26], [0, 64, 42, 26], [49, 64, 42, 26], [98, 64, 42, 26]],
     [[0, 0, 40, 90], [48, 0, 92, 20], [48, 26, 44, 28], [96, 26, 44, 28], [48, 60, 92, 12], [48, 76, 60, 14]],
     [[0, 0, 66, 42], [74, 0, 66, 42], [0, 48, 66, 42], [74, 48, 30, 42], [110, 48, 30, 20], [110, 72, 30, 18]],
     [[0, 0, 140, 16], [0, 20, 140, 16], [0, 40, 140, 16], [0, 60, 140, 16], [0, 80, 100, 10], [108, 80, 32, 10]]
   ];
-  function layout(k) { LAYOUTS[k].forEach((r, i) => { const b = blocks[i]; b.style.transform = 'translate(' + r[0] + 'px,' + r[1] + 'px)'; b.style.width = r[2] + 'px'; b.style.height = r[3] + 'px'; }); }
+  function layout(k) { $$('.blocks').forEach(box => { const bs = $$('i', box); LAYOUTS[k].forEach((r, i) => { const b = bs[i]; if (!b) return; b.style.transform = 'translate(' + r[0] + 'px,' + r[1] + 'px)'; b.style.width = r[2] + 'px'; b.style.height = r[3] + 'px'; }); }); }
   let lk = 0; layout(0);
   setInterval(() => { lk = (lk + 1) % LAYOUTS.length; layout(lk); }, 2800);
 
