@@ -539,3 +539,14 @@ The lesson at a glance now also appears in eight pop-ups, each for one lesson, w
 - Philosophy for teenagers: Abbotts plan 13, 31 August 2026 (5, 10, 20, 5)
 
 Each stage's description is what Wehan wrote in that part of the plan (the teacher's column; the SMART task notes are left out). Only spelling slips and quotation marks were tidied; nothing was reworded, so the register is that of a lesson plan and the tense varies. One fix: in the Grammar plan two form lines overlap, and a stray tail was removed from the Hook. The stage names for these eight are the form's four; Macbeth and The Poet keep the portfolio's own names. Each stage in a bar is now at least as wide as its name. Assets at v=36.
+
+## 2026-11-15: the portfolio's pop-out look on every pop-up (step 3), and the maker's shapes, second pass
+
+Committed on main, not pushed. Local tag `before-popouts` marks the version before both changes. Assets at v=38.
+
+**Pop-ups.** Every pop-up now has the PGCE portfolio's header: a tint of the chapter colour and a large faint drawing (a crown for Macbeth, a ship for The Tempest, a leaf for The Herb Garden, and so on; 44 pop-ups, named by `data-art` on each `article`, drawings in `ART` in main.js; request and star pop-ups get an envelope and a star). Each lesson and each study guide has its own colour (`data-tone`, matching its spine on the shelf), which also colours its lesson bar. The date chips are tinted. Links that leave a pop-up (the Macbeth revision sheet, the study guides, the lectures, the evaluations, the full resume) are drawn as cards by `dressSheet` when the pop-up opens, in the link's own words. No wording was changed.
+
+**The maker's shapes.** At Wehan's request: the whole object is larger (canvas up to 540px, shapes drawn at 0.4 of it) with a soft breathing glow behind it like the solid on the first screen; the quill now stands in an inkpot; the lesson is a puzzle box of four layers (Hook 5, Introduction 10, Body 20, Consolidation 5: the stage names of his lesson plans and the minutes of a 40-minute lesson), with each name on all four sides of its layer; the layers twist a quarter turn one after another, slide apart like drawers and close. "Poiesis" is gone from it. Words no longer stutter: every word is drawn once onto its own small canvas and placed as a picture, which glides between pixels where type stepped; "to" now fades into "To" instead of switching.
+
+Not done: the caption under the quill still says "Quill" (no wording changed without his say).
+

@@ -855,8 +855,8 @@
   });
 
   /* ---------- The maker's shapes on the Make cabinet: one wireframe for each service, each morphing into the next ---------- */
-  // Tutoring is a quill; Editing is a sentence gathering itself out of a cloud of words; Learning design is the stages
-  // of a lesson as blocks that reassemble; Consulting is the tetraktys, ten points in a pyramid, with points that light and dim.
+  // Tutoring is a quill in its inkpot; Editing is a sentence gathering itself out of a cloud of words; Learning design is a lesson
+  // as a puzzle box of four layers that twist; Consulting is the tetraktys, ten points in a pyramid, with points that light and dim.
   // A drag turns the shape, a tap (or Enter) changes it, and the title under it opens that service.
   const tc = $('#tetra');
   let drawTetra = () => {}, sizeTetra = () => {};
@@ -868,10 +868,10 @@
     const pulse = (t, period, up, hold, down) => { const s = t % period, r = period * .16; return s < up ? 0 : s < up + r ? ease((s - up) / r) : s < up + r + hold ? 1 : s < up + r + hold + r ? 1 - ease((s - up - r - hold) / r) : 0; };
     let TW = 0;
 
-    /* 1. Tutoring: a quill. A spine, a vane on either side that curls a little out of the page, and a nib. */
+    /* 1. Tutoring: a quill standing in its inkpot. A spine, a vane on either side that curls a little out of the page, a nib, and a squat pot of ink. */
     const quill = (() => {
-      const pts = [], links = [], N = 11, nx = -.819, ny = .573;
-      const spine = t => [-.5 + 1.0 * t + .12 * Math.sin(t * Math.PI), -.7 + 1.45 * t - .1 * Math.sin(t * Math.PI), .1 * Math.sin(t * Math.PI * 1.5)];
+      const pts = [], links = [], N = 11, nx = -.819, ny = .573, OX = .1, OY = .12;
+      const spine = t => [-.5 + 1.0 * t + .12 * Math.sin(t * Math.PI) + OX, -.7 + 1.45 * t - .1 * Math.sin(t * Math.PI) + OY, .1 * Math.sin(t * Math.PI * 1.5)];
       for (let i = 0; i <= N; i++) { pts.push({ p: spine(i / N), r: 0 }); if (i) links.push([i - 1, i, 1]); }
       // The vanes begin a little way up the shaft, are widest below the middle and come to a point at the tip.
       [1, -1].forEach(side => {
@@ -884,17 +884,24 @@
         }
         links.push([1, base, 1]); links.push([N, base + N - 3, 1]);
       });
-      pts.push({ p: [-.6, -.86, 0], r: .9 }); links.push([0, pts.length - 1, 1]);   // the nib
+      pts.push({ p: [-.6 + OX, -.86 + OY, 0], r: .9 }); links.push([0, pts.length - 1, 1]);   // the nib, down in the ink
+      // The inkpot: rings from the base up to the lip (height, radius, size of its dots), joined down the sides.
+      const PX = -.6 + OX, K = 10, RINGS = [[-1.04, .25, .3], [-.8, .29, 0], [-.68, .22, 0], [-.63, .13, 0], [-.56, .16, .3]];
+      RINGS.forEach((ring, n) => {
+        const base = pts.length, edge = n === 0 || n === RINGS.length - 1;
+        for (let k = 0; k < K; k++) { const th = k / K * TAU; pts.push({ p: [PX + Math.cos(th) * ring[1], ring[0] + OY, Math.sin(th) * ring[1]], r: ring[2] }); }
+        for (let k = 0; k < K; k++) { links.push([base + k, base + (k + 1) % K, edge ? 1 : .55]); if (n) links.push([base + k - K, base + k, .45]); }
+      });
       return () => ({ pts, links, labels: [] });
     })();
 
     /* 2. Editing: the words of a sentence drift in a cloud, then the ones worth keeping gather into the shorter sentence. */
     const WORDS = PAIRS[0][0].split(' '), KEEP = PAIRS[0][1].split(' ');   // "In order to write well, one must first read closely." becomes "To write well, read closely."
     const keepAt = WORDS.map(w => KEEP.findIndex(k => k.toLowerCase() === w.toLowerCase()));
-    const cloud = WORDS.map((w, i) => { const y = 1 - 2 * (i + .5) / WORDS.length, r = Math.sqrt(1 - y * y), th = i * 2.399963; return [Math.cos(th) * r * .78, y * .78, Math.sin(th) * r * .78]; });
+    const cloud = WORDS.map((w, i) => { const y = 1 - 2 * (i + .5) / WORDS.length, r = Math.sqrt(1 - y * y), th = i * 2.399963; return [Math.cos(th) * r * .9, y * .9, Math.sin(th) * r * .9]; });
     function words(t) {
-      const a = pulse(t, 11000, 3200, 3000), size = TW * .052;
-      tx.font = '500 ' + (size * 1.08).toFixed(1) + 'px "EB Garamond", Georgia, serif';   // the size the words are drawn at once they reach the line
+      const a = pulse(t, 11000, 3200, 3000), size = TW * .058, swap = clamp01((a - .35) / .3);
+      tx.font = '500 ' + (size * 1.075).toFixed(1) + 'px "EB Garamond", Georgia, serif';   // the size the words are drawn at once they reach the line
       const widths = KEEP.map(k => tx.measureText(k).width), gap = size * .32, total = widths.reduce((s, w) => s + w, 0) + gap * (KEEP.length - 1);
       let x = -total / 2;
       const lineX = widths.map(w => { const c = x + w / 2; x += w + gap; return c; });
@@ -903,31 +910,42 @@
         return { p: [cloud[i][0], cloud[i][1] + bob, cloud[i][2]], r: 0, f: k >= 0 ? [lineX[k], 0] : null, a: k >= 0 ? a : 0 };
       });
       const links = WORDS.map((w, i) => [i, (i + 1) % WORDS.length, .28 * (1 - a)]);
-      const labels = WORDS.map((w, i) => ({ i, text: keepAt[i] >= 0 && a > .5 ? KEEP[keepAt[i]] : w, size, serif: true, alpha: keepAt[i] >= 0 ? 1 : 1 - .82 * a, ox: 0, oy: 0 }));
+      const labels = [];
+      WORDS.forEach((w, i) => {
+        const k = keepAt[i];
+        if (k < 0) labels.push({ i, text: w, size, serif: true, alpha: 1 - .82 * a });
+        else if (KEEP[k] === w) labels.push({ i, text: w, size, serif: true, alpha: 1 });
+        else { labels.push({ i, text: w, size, serif: true, alpha: 1 - swap }); labels.push({ i, text: KEEP[k], size, serif: true, alpha: swap }); }   // "to" fades into "To"
+      });
       return { pts, links, labels };
     }
 
-    /* 3. Learning design: the stages of a lesson as blocks, as long as their minutes. A row, then a staircase, then a row again. */
-    const STAGES = [['Hook', 5], ['Device hunt', 10], ['Poiesis', 15], ['The dilemma', 15]];   // my Grade 11 lesson on "The Poet", 45 minutes
+    /* 3. Learning design: a lesson as a puzzle box. Four layers, one for each stage of my lesson plans and as tall as its minutes,
+       with the stage's name on every side. The layers twist a quarter turn one after another, slide apart like drawers, and close again. */
+    const STAGES = [['Hook', 5], ['Introduction', 10], ['Body', 20], ['Consolidation', 5]];   // a 40-minute lesson
     const BOX = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]];
     const EDGES = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
-    const U = .034, BH = .26, GAP = .05, rowW = STAGES.reduce((s, st) => s + st[1] * U, 0) + GAP * (STAGES.length - 1);
+    const FACES = [[4, 5, 6, 7], [1, 2, 6, 5], [0, 1, 2, 3], [0, 3, 7, 4], [3, 2, 6, 7], [0, 1, 5, 4]];
+    const SIDE = 1.04, TALL = 1.5, MINUTES = STAGES.reduce((s, st) => s + st[1], 0);
     function blocks(t) {
-      const b = pulse(t, 10000, 2600, 2800), turn = b * Math.PI / 2, pts = [], links = [], labels = [], size = Math.max(10.5, TW * .034);
-      tx.font = '600 ' + size.toFixed(1) + 'px "Source Sans 3", system-ui, sans-serif';
-      let x = -rowW / 2;
+      const PERIOD = 9000, cyc = Math.floor(t / PERIOD), s = t % PERIOD, hs = SIDE / 2;
+      const open = s < 3400 ? 0 : s < 4500 ? ease((s - 3400) / 1100) : s < 6200 ? 1 : s < 7300 ? 1 - ease((s - 6200) / 1100) : 0;
+      const gap = .03 + .1 * open, size = Math.max(10, TW * .03), pts = [], links = [], labels = [], quads = [];
+      let top = (TALL + gap * (STAGES.length - 1)) / 2;
       STAGES.forEach((st, n) => {
-        const w = st[1] * U, rowC = [x + w / 2, 0, 0]; x += w + GAP;
-        const stairC = [-.88 + w / 2, (1.5 - n) * (BH + GAP), 0];
-        const c = rowC.map((v, k) => mixv(v, stairC[k], b)), ang = turn * (n % 2 ? 1 : -1), ca = Math.cos(ang), sa = Math.sin(ang), base = pts.length;
-        BOX.forEach(q => { const y = q[1] * BH / 2, z = q[2] * BH / 2; pts.push({ p: [c[0] + q[0] * w / 2, c[1] + y * ca - z * sa, c[2] + y * sa + z * ca], r: .3 }); });
+        const h = st[1] / MINUTES * TALL, dir = n % 2 ? 1 : -1, cy = top - h / 2, cx = dir * .16 * open; top -= h + gap;
+        const th = dir * Math.PI / 2 * (cyc + ease(clamp01((s - 400 - n * 380) / 1300))), c = Math.cos(th), sn = Math.sin(th), base = pts.length;
+        BOX.forEach(q => { const x = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + x * c + z * sn, cy + q[1] * h / 2, -x * sn + z * c], r: .3 }); });
         EDGES.forEach(e => links.push([base + e[0], base + e[1], 1]));
-        pts.push({ p: c, r: 0 });
-        // In the row the names sit above and below by turns; in the staircase each sits to the right of its block.
+        FACES.forEach(f => quads.push(f.map(k => base + k)));
         const text = st[0] + ' · ' + st[1] + ' min';
-        labels.push({ i: pts.length - 1, text, size, serif: false, alpha: 1, ox: 0, oy: 0, box: base, side: b, up: n % 2 === 0, tw: tx.measureText(text).width });
+        for (let k = 0; k < 4; k++) {   // the middle of each side, a point to its right and a point above it: enough to lay the name flat on the side
+          const ph = th + k * Math.PI / 2, nx = Math.sin(ph), nz = Math.cos(ph), o = pts.length;
+          pts.push({ p: [cx + nx * hs, cy, nz * hs], r: 0 }, { p: [cx + (nx + nz) * hs, cy, (nz - nx) * hs], r: 0 }, { p: [cx + nx * hs, cy + h / 2, nz * hs], r: 0 });
+          labels.push({ face: [o, o + 1, o + 2], hx: hs, hy: h / 2, text, size, serif: false, alpha: 1 });
+        }
       });
-      return { pts, links, labels };
+      return { pts, links, labels, quads };
     }
 
     /* 4. Consulting: the tetraktys. Four corners of a tetrahedron and the middle of each edge: ten points, in layers of one, three and six. */
@@ -947,7 +965,7 @@
     const SHAPES = [
       { key: 'tutoring', title: 'Tutoring', what: 'Quill', frame: quill },
       { key: 'editing', title: 'Editing', what: 'Words', frame: words },
-      { key: 'design', title: 'Learning design', what: 'Lesson stages', frame: blocks, sway: true },   // sways, so its names stay readable
+      { key: 'design', title: 'Learning design', what: 'Lesson stages', frame: blocks },
       { key: 'consulting', title: 'Philosophical & AI consulting', what: 'Tetraktys', frame: tetraktys }
     ];
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now() };
@@ -960,7 +978,23 @@
     }
     caption(0);
 
-    sizeTetra = () => { TW = tc.getBoundingClientRect().width || 300; tc.width = tc.height = Math.round(TW * DPR); tx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+    // Words are drawn once, large, onto their own small canvases and then placed as pictures: a picture glides between pixels, where type would step.
+    const sprites = new Map();
+    function sprite(text, serif, px, color) {
+      const key = (serif ? 's' : 'n') + px.toFixed(1) + color + text;
+      let sp = sprites.get(key);
+      if (!sp) {
+        const K = DPR * 2, c = document.createElement('canvas'), g = c.getContext('2d'), font = (serif ? '500 ' : '600 ') + px.toFixed(1) + 'px ' + (serif ? '"EB Garamond", Georgia, serif' : '"Source Sans 3", system-ui, sans-serif');
+        g.font = font;
+        const w = Math.ceil(g.measureText(text).width) + 8, h = Math.ceil(px * 1.5);
+        c.width = Math.ceil(w * K); c.height = Math.ceil(h * K);
+        g.setTransform(K, 0, 0, K, 0, 0); g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgb(' + color + ')'; g.fillText(text, w / 2, h / 2);
+        sp = { c, w, h }; sprites.set(key, sp);
+      }
+      return sp;
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => sprites.clear());   // redraw the words once the real typefaces have arrived
+    sizeTetra = () => { TW = tc.getBoundingClientRect().width || 300; tc.width = tc.height = Math.round(TW * DPR); tx.setTransform(DPR, 0, 0, DPR, 0, 0); tx.imageSmoothingQuality = 'high'; sprites.clear(); };
     new IntersectionObserver(es => { T.seen = es[0].isIntersecting; }, { threshold: 0 }).observe(tc);
     tc.addEventListener('pointerdown', e => { if (e.button) return; T.drag = { x: e.clientX, y: e.clientY, moved: 0 }; tc.classList.add('dragging'); try { tc.setPointerCapture(e.pointerId); } catch (err) {} });
     tc.addEventListener('pointermove', e => {
@@ -979,31 +1013,38 @@
     drawTetra = t => {
       if (!T.seen || !TW) return;
       const theme = root.getAttribute('data-theme') || 'dark';
-      if (theme !== T.theme || !T.col) { T.theme = theme; T.col = rgb(cssVar('--accent', tc) || '#C9A24D'); }
+      if (theme !== T.theme || !T.col) { T.theme = theme; T.col = rgb(cssVar('--accent', tc) || '#C9A24D'); sprites.clear(); }
       if (!T.drag) { T.ay += T.vy; T.vy += ((reduced ? 0 : .0035) - T.vy) * .02; T.ax += (.3 - T.ax) * .012; }
       if (T.mixing) { T.mix += .014; if (T.mix >= .5 && nameBtn.dataset.sheet !== SHAPES[T.nxt].key) caption(T.nxt); if (T.mix >= 1) { T.mixing = false; T.cur = T.nxt; } }
       else if (!reduced && !T.drag && t - T.since > 13000) nextShape();   // left alone, it moves on to the next service by itself
       const tt = reduced ? 0 : t;   // with reduced motion the shapes hold still
       const m = T.mixing ? ease(clamp01(T.mix)) : 0, A = SHAPES[T.cur].frame(tt), B = T.mixing ? SHAPES[T.nxt].frame(tt) : null;
-      const ca = Math.cos(T.ax), sa = Math.sin(T.ax), sc = TW * .36;
-      // Most shapes turn all the way round; one that carries names only sways from side to side.
-      const placer = S => { const ay = S.sway ? Math.sin(T.ay) * .6 : T.ay, cb = Math.cos(ay), sb = Math.sin(ay); return q => {
+      const ca = Math.cos(T.ax), sa = Math.sin(T.ax), cb = Math.cos(T.ay), sb = Math.sin(T.ay), sc = TW * .4;
+      const place = q => {
         const p = q.p, x = p[0] * cb + p[2] * sb, z0 = -p[0] * sb + p[2] * cb, y = p[1] * ca - z0 * sa, z = p[1] * sa + z0 * ca, f = 3.4 / (3.4 - z);
         const o = { x: TW / 2 + x * f * sc, y: TW / 2 - y * f * sc, d: clamp01((z + 1) / 2) };
         if (q.a && q.f) { o.x = mixv(o.x, TW / 2 + q.f[0], q.a); o.y = mixv(o.y, TW / 2 + q.f[1], q.a); o.d = mixv(o.d, .85, q.a); }   // words that have left the cloud for the line
         return o;
-      }; };
-      const PA = A.pts.map(placer(SHAPES[T.cur])), PB = B ? B.pts.map(placer(SHAPES[T.nxt])) : null;
+      };
+      const PA = A.pts.map(place), PB = B ? B.pts.map(place) : null;
       const blend = (p, q) => ({ x: mixv(p.x, q.x, m), y: mixv(p.y, q.y, m), d: mixv(p.d, q.d, m) });
       const posA = i => PB ? blend(PA[i], PB[i % PB.length]) : PA[i], posB = i => blend(PA[i % PA.length], PB[i]);
       const col = T.col.r + ',' + T.col.g + ',' + T.col.b, tcol = pal.text.r + ',' + pal.text.g + ',' + pal.text.b;
       tx.clearRect(0, 0, TW, TW);
+      // A soft light behind the shape, breathing slowly, as behind the solid on the first screen.
+      const br = reduced ? .5 : .5 + .5 * Math.sin(t * .0006), grad = tx.createRadialGradient(TW / 2, TW / 2, sc * .2, TW / 2, TW / 2, sc * 1.25);
+      grad.addColorStop(0, 'rgba(' + col + ',' + ((pal.light ? .08 : .12) * br + .035).toFixed(3) + ')'); grad.addColorStop(1, 'rgba(' + col + ',0)');
+      tx.fillStyle = grad; tx.fillRect(0, 0, TW, TW);
       const paint = (S, pos, fade) => {
         if (fade <= .01) return;
-        tx.lineWidth = 1.2;
+        if (S.quads) {   // the sides of the box, faintly glazed
+          tx.fillStyle = 'rgba(' + col + ',' + (.05 * fade).toFixed(3) + ')';
+          for (const q of S.quads) { tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }
+        }
         for (const l of S.links) {
-          const a = pos(l[0]), b = pos(l[1]), al = (.2 + .6 * (a.d + b.d) / 2) * l[2] * fade;
+          const a = pos(l[0]), b = pos(l[1]), dep = (a.d + b.d) / 2, al = (.2 + .6 * dep) * l[2] * fade;
           if (al < .01) continue;
+          tx.lineWidth = .9 + .9 * dep;
           tx.strokeStyle = 'rgba(' + col + ',' + al.toFixed(3) + ')';
           tx.beginPath(); tx.moveTo(a.x, a.y); tx.lineTo(b.x, b.y); tx.stroke();
         }
@@ -1015,20 +1056,24 @@
           tx.fillStyle = 'rgba(' + tcol + ',' + ((.55 + .45 * Math.max(p.d, g)) * fade).toFixed(3) + ')';
           tx.beginPath(); tx.arc(p.x, p.y, r, 0, TAU); tx.fill();
         });
-        tx.textAlign = 'center'; tx.textBaseline = 'middle';
         for (const L of S.labels) {
-          const p = pos(L.i), al = L.alpha * (L.box === undefined ? .5 + .5 * p.d : 1) * fade;
-          if (al < .02) continue;
-          let lx = p.x + L.ox, ly = p.y + L.oy;
-          if (L.box !== undefined) {   // a block's name keeps clear of its block however the block has turned
-            let x1 = -1e9, y0 = 1e9, y1 = -1e9;
-            for (let k = 0; k < 8; k++) { const q = pos(L.box + k); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y); }
-            lx = mixv(p.x, x1 + 10 + L.tw / 2, L.side); ly = mixv(L.up ? y0 - L.size * .95 : y1 + L.size * .95, p.y, L.side);
+          const sp = sprite(L.text, L.serif, L.serif ? L.size * 1.12 : L.size, tcol);
+          if (L.face) {   // a name lying flat on the side of a block, shown only while that side faces us
+            const O = pos(L.face[0]), X = pos(L.face[1]), Y = pos(L.face[2]), wx = L.hx * sc, wy = L.hy * sc;
+            const facing = -((X.x - O.x) * (Y.y - O.y) - (X.y - O.y) * (Y.x - O.x)) / (wx * wy), al = L.alpha * clamp01((facing - .15) / .4) * fade;
+            if (al < .02) continue;
+            const k = Math.min(1, 2 * wx * .86 / sp.w, 2 * wy * .72 / sp.h);
+            tx.setTransform(DPR * (X.x - O.x) / wx, DPR * (X.y - O.y) / wx, DPR * (O.x - Y.x) / wy, DPR * (O.y - Y.y) / wy, DPR * O.x, DPR * O.y);
+            tx.globalAlpha = al; tx.drawImage(sp.c, -sp.w * k / 2, -sp.h * k / 2, sp.w * k, sp.h * k);
+          } else {   // a word in the cloud, a little larger as it comes nearer
+            const p = pos(L.i), al = L.alpha * (.5 + .5 * p.d) * fade;
+            if (al < .02) continue;
+            const k = (.82 + .3 * p.d) / 1.12;
+            tx.setTransform(DPR * k, 0, 0, DPR * k, DPR * p.x, DPR * p.y);
+            tx.globalAlpha = al; tx.drawImage(sp.c, -sp.w / 2, -sp.h / 2, sp.w, sp.h);
           }
-          tx.font = (L.serif ? '500 ' : '600 ') + (L.size * (L.serif ? .82 + .3 * p.d : 1)).toFixed(1) + 'px ' + (L.serif ? '"EB Garamond", Georgia, serif' : '"Source Sans 3", system-ui, sans-serif');
-          tx.fillStyle = 'rgba(' + tcol + ',' + al.toFixed(3) + ')';
-          tx.fillText(L.text, lx, ly);
         }
+        tx.setTransform(DPR, 0, 0, DPR, 0, 0); tx.globalAlpha = 1;
       };
       paint(A, posA, 1 - m);
       if (B) paint(B, posB, m);

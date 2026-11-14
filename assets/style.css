@@ -1083,3 +1083,8 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
   .sheet-body .dl-cards { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .sheet-body a.dl { transition: none; } .sheet-body a.dl:hover { transform: none; } }
+
+/* ---------- The maker's shapes, larger: the size of the solid on the first screen and a little more ---------- */
+.tetra { width: min(540px, 44vw, 64vh); max-width: 100%; }
+@media (max-width: 900px) { .tetra { width: min(420px, 74vw, 40svh); } }
+@media (max-width: 640px) { .tetra { width: min(320px, 80vw, 36svh); } }
