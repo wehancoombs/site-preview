@@ -79,19 +79,6 @@
     if (!coarse) { lantern.style.transform = 'translate(' + (e.clientX - 320) + 'px,' + (e.clientY - 320) + 'px)'; body.classList.add('lit'); }
   }, { passive: true });
   document.addEventListener('mouseleave', () => body.classList.remove('lit'));
-  // TEMPORARY: the footer switch for the dots-and-lines background, on by default and remembered in this browser.
-  // Remove this block, the button in the footer and the .no-stars rule together once Wehan has decided.
-  // The research constellation in Think is a separate drawing and is never affected.
-  const starsBtn = $('#stars-toggle');
-  let starsOn = true;
-  try { starsOn = localStorage.getItem('stars') !== 'off'; } catch (e) {}
-  function paintStars() {
-    root.classList.toggle('no-stars', !starsOn);
-    starsBtn.textContent = 'Stars: ' + (starsOn ? 'on' : 'off');
-    starsBtn.setAttribute('aria-pressed', starsOn ? 'true' : 'false');
-  }
-  starsBtn.addEventListener('click', () => { starsOn = !starsOn; try { localStorage.setItem('stars', starsOn ? 'on' : 'off'); } catch (e) {} paintStars(); });
-  paintStars();
   let pageVisible = true;
   document.addEventListener('visibilitychange', () => { pageVisible = !document.hidden; });
 
@@ -227,25 +214,53 @@
   function track(name) { try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: name, title: name, event: true }); } catch (e) {} }
   document.addEventListener('click', e => { const t = e.target.closest('[data-track]'); if (t) track(t.dataset.track); });
 
-  /* ---------- Which chapter are we in? (dots, accent colour) ---------- */
-  const chapters = $$('.chapter'), dots = $$('.dots a');
-  const chapIO = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (!e.isIntersecting) return;
-      body.dataset.chapter = e.target.id;
-      dots.forEach(d => { if (d.getAttribute('href') === '#' + e.target.id) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
-      pal.refresh();
-    });
-  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-  chapters.forEach(c => chapIO.observe(c));
-
-  // The scroll cue on the first screen goes once the visitor starts scrolling.
-  const cue = $('.cue');
-  if (cue) {
-    const hideCue = () => { if (scrollY > 40) { cue.classList.add('gone'); window.removeEventListener('scroll', hideCue); } };
-    window.addEventListener('scroll', hideCue, { passive: true });
-    hideCue();
+  /* ---------- The cabinets: a strip of full-screen panes; one is on screen at a time ---------- */
+  const strip = $('main'), panes = $$('.pane'), dots = $$('.dots a');
+  const prevBtn = $('#pane-prev'), nextBtn = $('#pane-next');
+  let cur = 0;
+  function markPane(i) {
+    cur = i;
+    const ch = panes[i].closest('section').id;
+    body.dataset.chapter = ch;
+    dots.forEach(d => { if (d.getAttribute('href') === '#' + ch) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    prevBtn.disabled = i === 0; nextBtn.disabled = i === panes.length - 1;
+    pal.refresh();
   }
+  // The pane that fills more than half the strip is the one we are in.
+  const paneIO = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) markPane(panes.indexOf(e.target)); }); }, { root: strip, threshold: .55 });
+  panes.forEach(p => paneIO.observe(p));
+  function showPane(i, instant) {
+    i = Math.max(0, Math.min(panes.length - 1, i));
+    if (i !== cur) panes[i].scrollTop = 0;
+    const left = panes[i].getBoundingClientRect().left - strip.getBoundingClientRect().left + strip.scrollLeft;
+    strip.scrollTo({ left: left, behavior: instant || reduced ? 'instant' : 'smooth' });
+    if (instant) markPane(i);
+  }
+  // A section's name leads to its case; a pane's own id leads to that pane.
+  function paneOf(el) { return el ? (el.classList.contains('pane') ? el : el.closest('.pane') || $('.pane', el)) : null; }
+  function showTarget(sel, instant) { let el = null; try { el = $(sel); } catch (e) {} const p = paneOf(el); if (!p) return false; showPane(panes.indexOf(p), instant); return true; }
+  prevBtn.addEventListener('click', () => showPane(cur - 1));
+  nextBtn.addEventListener('click', () => showPane(cur + 1));
+  const overlayOpen = () => body.classList.contains('locked');
+  document.addEventListener('keydown', e => {
+    if (overlayOpen() || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.id === 'solid') return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); showPane(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); showPane(cur - 1); }
+  });
+  // The mouse wheel: a pane scrolls inside itself first; at its top or foot the wheel turns to the next cabinet.
+  let wheelUntil = 0;
+  strip.addEventListener('wheel', e => {
+    if (overlayOpen() || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX) || Math.abs(e.deltaY) < 12) return;
+    const p = panes[cur], down = e.deltaY > 0;
+    if (down ? p.scrollTop + p.clientHeight < p.scrollHeight - 2 : p.scrollTop > 2) { wheelUntil = performance.now() + 500; return; }
+    const now = performance.now();
+    if (now < wheelUntil) return;
+    wheelUntil = now + 900;
+    showPane(cur + (down ? 1 : -1));
+  }, { passive: true });
+  window.addEventListener('resize', () => showPane(cur, true));
+  markPane(0);
 
   /* ---------- The star rating: filled as soon as the page loads; nothing on this page waits for a scroll ---------- */
   $$('.stars').forEach(el => { $('.stars-fg', el).style.width = ((+el.dataset.rating || 0) / 5 * 100).toFixed(1) + '%'; });
@@ -464,7 +479,7 @@
     if (!el) return;
     closeSheet(); closeMap();
     body.classList.remove('locked');
-    setTimeout(() => el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }), 60);
+    setTimeout(() => showTarget(sel), 60);
   }
 
   // One listener for every "open this" button on the page, in the map and inside sheets.
@@ -472,13 +487,17 @@
     const c = e.target.closest('[data-copy]');
     if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
     const s = e.target.closest('[data-sheet]');
-    if (s) { e.preventDefault(); const id = s.dataset.sheet, ch = library[id] && library[id].ch; const sec = ch && $('#' + ch); if (sec && map.classList.contains('on') && body.dataset.chapter !== ch) { sec.scrollIntoView({ behavior: 'auto', block: 'start' }); } openSheet(id); return; }
+    if (s) { e.preventDefault(); const id = s.dataset.sheet, ch = library[id] && library[id].ch; const sec = ch && $('#' + ch); if (sec && map.classList.contains('on') && body.dataset.chapter !== ch) showTarget('#' + ch, true); openSheet(id); return; }
     const g = e.target.closest('[data-goto]');
     if (g) { e.preventDefault(); goTo(g.dataset.goto); return; }
+    // Any other link to a place on this page (the dots, the W in the top bar) slides to that cabinet.
+    const a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').length > 1 && !a.getAttribute('href').startsWith('#s-') && paneOf($(a.getAttribute('href')))) { e.preventDefault(); goTo(a.getAttribute('href')); }
   });
   function openFromHash() {
     const h = location.hash || '';
-    if (h.startsWith('#s-')) { const id = h.slice(3); if (library[id]) { const ch = library[id].ch, sec = $('#' + ch); if (sec) sec.scrollIntoView({ behavior: 'auto', block: 'start' }); openSheet(id); } }
+    if (h.startsWith('#s-')) { const id = h.slice(3); if (library[id]) { showTarget('#' + library[id].ch, true); openSheet(id); } }
+    else if (h.length > 1) showTarget(h, true); // an address ending in #teach, #think, #make or #write opens on that cabinet
   }
   window.addEventListener('hashchange', openFromHash);
 
@@ -711,7 +730,7 @@
 
   /* ---------- Main loop ---------- */
   function loop(t) {
-    if (pageVisible) { if (starsOn) drawField(t); if (heroVisible) drawSolid(t); arcTick(t); }
+    if (pageVisible) { drawField(t); if (heroVisible) drawSolid(t); arcTick(t); }
     requestAnimationFrame(loop);
   }
   sizeField(); sizeSolid();

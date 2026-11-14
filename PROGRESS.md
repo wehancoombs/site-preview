@@ -433,3 +433,16 @@ Wehan brought a three-push redesign brief from a chat. This push changes the str
 - **Stars switch.** A button in the footer, Stars: on / off, hides the dots-and-lines canvas; on by default, remembered in the browser under the key stars, marked TEMPORARY in the HTML, CSS and script. The Think constellation is a separate drawing and stays.
 - **Left for later pushes.** The detail under each case is as it was, so Teach has a gap where the spines were and Think shows only the lectures and guides. Old first-screen styles are still in the stylesheet, unused. The label More on the case buttons is new wording and wants Wehan's word.
 - Assets at v=27. Checked at 375 by 812 and 1280 by 800, dark and light, stars on and off: no overflow, no console errors. A script compared every string with the live version; the differences are the ones listed here.
+
+---
+
+## 2026-11-14 (later): The Cabinet, take two. Cabinets side by side, not one long page
+
+Wehan saw push 1 and called it worse: the brief had asked for one page with buttons that scroll down, and that is what it was, a longer scrolling page. What he wants is separate cabinets, with More sliding sideways. He also said to keep the stars permanently. Rebuilt on the branch cabinet; committed, not published.
+
+- **A strip of eight panes.** The page itself no longer scrolls. The main element is a horizontal strip that snaps; each pane fills the screen. Order: home, Teach case, Teach detail, Think case, Think detail, Make case, Make detail, Write to me (with the footer inside it). A pane taller than the screen scrolls inside itself, which on a phone is every detail pane.
+- **Getting about.** The three home buttons and Write to me slide to their cabinet. More slides one pane to the right, into the detail. A pager at the foot of the screen has Previous, the five chapter dots and Next; it replaces the dots on the right edge and the scroll-down arrow. Arrow keys and Page Up and Down work. A swipe works on touch screens because the strip is a native scroller. The mouse wheel scrolls inside a pane first, and at its top or foot turns to the next cabinet.
+- **Addresses still work.** The five section ids are unchanged. An address ending in #teach, #think, #make or #write opens on that cabinet; a pop-up address such as #s-abbotts opens the pop-up over its cabinet; the Map, the W in the top bar and the dots all slide to the right pane.
+- **Stars are permanent.** The footer switch, its script and its styles are gone, and so is the stars key.
+- **More.** The case buttons now read More and an arrow to the right, the same words as the More button under the rotating quotations.
+- Assets at v=28. Checked at 375 by 812 and 1280 by 800: the home case fits both without scrolling, headshot included; at 1280 by 800 all eight panes fit one screen; no sideways overflow, no console errors.

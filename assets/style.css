@@ -764,7 +764,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
    The home case is the first of them. Cases follow the theme.
    ========================================================== */
 .chapter.cabinet { display: block; min-height: 0; padding: 0; }
-.cab { position: relative; box-sizing: border-box; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: clamp(78px, 11vh, 110px) 0 clamp(30px, 6vh, 64px); background: color-mix(in srgb, #000 58%, transparent); border-bottom: 1px solid var(--line); }
+.cab { position: relative; background: color-mix(in srgb, #000 58%, transparent); }
 :root[data-theme="light"] .cab { background: color-mix(in srgb, var(--surface) 62%, transparent); }
 .cab-grid { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(28px, 4vw, 64px); }
 .cab-grid.obj-wide { grid-template-columns: .85fr 1.15fr; }
@@ -775,7 +775,6 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 .cab .line { max-width: 34ch; }
 .cab-down { margin-top: clamp(18px, 3.4vh, 34px); }
 .cab-down span { display: inline-block; margin-left: 4px; }
-.cab-detail { padding: clamp(40px, 7vh, 80px) 0 clamp(56px, 10vh, 100px); scroll-margin-top: 64px; }
 .cab-detail .grid-2 { grid-template-columns: minmax(0, 560px); }
 .cab-detail .think-grid { grid-template-columns: minmax(0, 760px); }
 
@@ -789,7 +788,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 .cab-door { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px 13px; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 12px; color: var(--text); transition: transform .35s var(--ease), border-color .3s, background-color .3s; }
 .cab-door:hover, .cab-door:focus-visible { transform: translateY(-3px); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .cab-door b { font: 500 clamp(22px, 3.2vh, 28px)/1.05 var(--serif); }
-.cab-door b::after { content: " ↓"; font-size: .62em; color: var(--accent); }
+.cab-door b::after { content: " →"; font-size: .62em; color: var(--accent); }
 .cab-door small { font: 600 10px/1.35 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
 .cab-write { margin: clamp(14px, 2.4vh, 22px) 0 0; }
 .home #solid { width: min(430px, 36vw, 54vh); height: min(430px, 36vw, 54vh); }
@@ -801,20 +800,13 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 .cab .shelf-detail { min-height: 3.2em; }
 .cab-placeholder { width: min(320px, 60vw, 44vh); aspect-ratio: 1; margin-inline: auto; border: 1px dashed color-mix(in srgb, var(--accent) 60%, transparent); border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%); }
 
-/* TEMPORARY: the footer switch for the dots-and-lines background. Remove with the button and its script. */
-.stars-toggle { all: unset; cursor: pointer; font: 600 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--text-3); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 12px; transition: color .3s, border-color .3s; }
-.stars-toggle:hover, .stars-toggle:focus-visible { color: var(--accent); border-color: var(--accent); }
-.no-stars #field { display: none; }
-
 @media (max-width: 900px) {
   .cab-grid, .cab-grid.obj-wide, .cab-grid.obj-wider { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .cab-object { order: -1; }
-  .home #solid { width: min(220px, 52vw, 24svh); height: min(220px, 52vw, 24svh); }
+  .home #solid { width: min(220px, 52vw, 19svh); height: min(220px, 52vw, 19svh); }
   .cab .shelf { height: 206px; }
 }
 @media (max-width: 640px) {
-  .cab { padding: 70px 0 22px; }
-  .cab.home { padding-bottom: 14px; }
   .cab.home .cab-grid { gap: 10px; }
   .home .solid-wrap { gap: 4px; }
   .home .solid-label { font-size: 16px; }
@@ -829,4 +821,44 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .cab-door small { font-size: 9.5px; letter-spacing: .1em; }
   .cab-write { margin-top: 12px; }
   .cab .sky { aspect-ratio: auto; }
+}
+
+/* ==========================================================
+   The Cabinet, take two: cabinets side by side, one on screen at a time.
+   The page itself no longer scrolls. <main> is a strip of full-screen panes that slides sideways
+   and snaps; a pane taller than the screen scrolls inside itself.
+   Order: home, Teach case, Teach detail, Think case, Think detail, Make case, Make detail, Write to me.
+   ========================================================== */
+html, body { height: 100%; overflow: hidden; }
+main { display: flex; height: 100vh; height: 100svh; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; }
+main::-webkit-scrollbar { display: none; }
+.chapter.cabinet { display: flex; flex: none; align-items: stretch; min-height: 0; padding: 0; }
+.pane { position: relative; box-sizing: border-box; flex: 0 0 100vw; width: 100vw; height: 100vh; height: 100svh; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; padding: clamp(74px, 10vh, 100px) 0 64px; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+.pane > .wrap { margin-block: auto; flex: none; }
+.cab-detail + .pane, .pane + .pane { border-left: 1px solid var(--line); }
+.write-pane { padding-bottom: 0; }
+.write-pane footer { margin-top: 28px; padding: 22px 0 62px; flex: none; }
+
+/* The pager: where you are, and the way to the next cabinet */
+.pager { position: fixed; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 45; display: flex; align-items: center; gap: 14px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(8px); }
+.pager .dots { position: static; transform: none; flex-direction: row; gap: 14px; right: auto; top: auto; }
+.pager .dots a span { right: auto; left: 50%; top: auto; bottom: 22px; transform: translateX(-50%) translateY(4px); }
+.pager .dots a:hover span, .pager .dots a:focus-visible span { transform: translateX(-50%); }
+.pager-btn { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 500 17px/1 var(--sans); color: var(--text-2); transition: color .3s, background-color .3s, opacity .3s; }
+.pager-btn:hover, .pager-btn:focus-visible { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.pager-btn:disabled { opacity: .25; cursor: default; background: none; color: var(--text-3); }
+
+@media (max-width: 640px) {
+  .pane { padding: 70px 0 58px; }
+  .cab.home.pane { padding-bottom: 54px; }
+  .write-pane { padding-bottom: 0; }
+  .pager { bottom: 8px; gap: 12px; padding: 4px 8px; }
+  .pager .dots { gap: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  main { scroll-behavior: auto; }
+}
+@media (max-width: 900px) {
+  /* In a stacked heading the lead takes only the room it needs */
+  .cab-detail .ch-lead { flex: none; width: 100%; }
 }

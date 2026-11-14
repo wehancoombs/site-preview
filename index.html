@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=27">
+<link rel="stylesheet" href="assets/style.css?v=28">
 </head>
 <body data-chapter="threshold">
 
@@ -50,13 +50,17 @@
   </div>
 </header>
 
-<nav class="dots" aria-label="Chapters">
-  <a href="#threshold"><span>Begin</span></a>
-  <a href="#teach"><span>Teach</span></a>
-  <a href="#think"><span>Think</span></a>
-  <a href="#make"><span>Make</span></a>
-  <a href="#write"><span>Contact</span></a>
-</nav>
+<div class="pager">
+  <button class="pager-btn" id="pane-prev" type="button" aria-label="Previous">←</button>
+  <nav class="dots" aria-label="Chapters">
+    <a href="#threshold"><span>Begin</span></a>
+    <a href="#teach"><span>Teach</span></a>
+    <a href="#think"><span>Think</span></a>
+    <a href="#make"><span>Make</span></a>
+    <a href="#write"><span>Contact</span></a>
+  </nav>
+  <button class="pager-btn" id="pane-next" type="button" aria-label="Next">→</button>
+</div>
 
 <!-- ===================== The map (slides in from the left) ===================== -->
 <div class="scrim" id="scrim" hidden></div>
@@ -161,7 +165,7 @@
 
 <!-- ===================== 1. Threshold ===================== -->
 <section id="threshold" class="chapter cabinet">
-  <div class="cab home">
+  <div class="cab home pane">
     <div class="wrap cab-grid">
       <div class="cab-words">
         <p class="eyebrow">Pretoria East · South Africa</p>
@@ -188,18 +192,17 @@
       </div>
     </div>
   </div>
-  <a class="cue" href="#teach" aria-label="Scroll down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></a>
 </section>
 
 <!-- ===================== 3. Teach ===================== -->
 <section id="teach" class="chapter compact cabinet">
-  <div class="cab">
+  <div class="cab pane">
     <div class="wrap cab-grid obj-wide">
       <div class="cab-words">
         <p class="eyebrow">For schools</p>
         <h2 class="display">Teach</h2>
         <p class="line">Learners do their best thinking when they feel known and respected.</p>
-        <a class="btn cab-down" href="#teach-detail" data-goto="#teach-detail" data-track="down-teach">More <span aria-hidden="true">↓</span></a>
+        <a class="btn cab-down" href="#teach-detail" data-goto="#teach-detail" data-track="down-teach">More →</a>
       </div>
       <div class="cab-object">
         <p class="eyebrow">What I taught in 2026 · tap a spine</p>
@@ -215,7 +218,8 @@
       </div>
     </div>
   </div>
-  <div class="wrap cab-detail" id="teach-detail">
+  <div class="pane cab-detail" id="teach-detail">
+  <div class="wrap">
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="teach" aria-label="What people say about my teaching"></div>
@@ -266,17 +270,18 @@
       </figure>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===================== 4. Think ===================== -->
 <section id="think" class="chapter compact cabinet">
-  <div class="cab">
+  <div class="cab pane">
     <div class="wrap cab-grid obj-wider">
       <div class="cab-words">
         <p class="eyebrow">For universities</p>
         <h2 class="display">Think</h2>
         <p class="line">I believe philosophy is much more than academic discourse.</p>
-        <a class="btn cab-down" href="#think-detail" data-goto="#think-detail" data-track="down-think">More <span aria-hidden="true">↓</span></a>
+        <a class="btn cab-down" href="#think-detail" data-goto="#think-detail" data-track="down-think">More →</a>
       </div>
       <div class="cab-object">
       <div class="sky-wrap">
@@ -288,7 +293,8 @@
       </div>
     </div>
   </div>
-  <div class="wrap cab-detail" id="think-detail">
+  <div class="pane cab-detail" id="think-detail">
+  <div class="wrap">
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="think" aria-label="What students and colleagues say"></div>
@@ -362,24 +368,26 @@
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===================== 5. Make ===================== -->
 <section id="make" class="chapter compact cabinet">
-  <div class="cab">
+  <div class="cab pane">
     <div class="wrap cab-grid">
       <div class="cab-words">
         <p class="eyebrow">For students &amp; clients</p>
         <h2 class="display">Make</h2>
         <p class="line">Tutoring, editing, learning design, and philosophical and AI consulting. Pretoria East, or online anywhere.</p>
-        <a class="btn cab-down" href="#make-detail" data-goto="#make-detail" data-track="down-make">More <span aria-hidden="true">↓</span></a>
+        <a class="btn cab-down" href="#make-detail" data-goto="#make-detail" data-track="down-make">More →</a>
       </div>
       <div class="cab-object">
         <div class="cab-placeholder" aria-hidden="true"></div>
       </div>
     </div>
   </div>
-  <div class="wrap cab-detail" id="make-detail">
+  <div class="pane cab-detail" id="make-detail">
+  <div class="wrap">
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="make" aria-label="What students say about working with me"></div>
@@ -501,10 +509,12 @@
       </article>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===================== 7. Write ===================== -->
-<section id="write" class="chapter">
+<section id="write" class="chapter cabinet">
+  <div class="pane write-pane">
   <div class="wrap">
     <p class="eyebrow">Contact</p>
     <h2 class="display">Write<br><em>to me.</em></h2>
@@ -565,18 +575,17 @@
       <a href="https://docs.google.com/document/d/1uBnQTpyejNyltP889HYTxGxJh2-pD4FMiTWkkgGSCeg/view">Full resume in Google Docs</a>
     </p>
   </div>
+  <footer>
+    <div class="wrap">
+      <button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button>
+      <span>© 2026 Wehan M. Coombs</span>
+    </div>
+  </footer>
+  </div>
 </section>
 
 </main>
 
-<footer>
-  <div class="wrap">
-    <button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button>
-    <!-- TEMPORARY: a switch for the dots-and-lines background, while Wehan decides whether to keep it. -->
-    <button class="stars-toggle" id="stars-toggle" type="button" aria-pressed="true">Stars: on</button>
-    <span>© 2026 Wehan M. Coombs</span>
-  </div>
-</footer>
 
 <!-- ===================== The library: everything the sheets can show ===================== -->
 <div id="library" hidden>
@@ -1248,7 +1257,7 @@
 
 </div>
 
-<script src="assets/main.js?v=27"></script>
+<script src="assets/main.js?v=28"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
