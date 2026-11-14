@@ -446,3 +446,15 @@ Wehan saw push 1 and called it worse: the brief had asked for one page with butt
 - **Stars are permanent.** The footer switch, its script and its styles are gone, and so is the stars key.
 - **More.** The case buttons now read More and an arrow to the right, the same words as the More button under the rotating quotations.
 - Assets at v=28. Checked at 375 by 812 and 1280 by 800: the home case fits both without scrolling, headshot included; at 1280 by 800 all eight panes fit one screen; no sideways overflow, no console errors.
+
+---
+
+## 2026-11-14 (evening): The Cabinet, take three. A vertical stack, with details from the right
+
+Wehan's correction to take two: the main cabinets should switch vertically, one per screen, and a detail should come in from the right when More is pressed. Rebuilt on the branch cabinet; committed, not published. This replaces the sideways strip of take two.
+
+- **The stack.** The page itself does not scroll. The main element is a vertical stack of five full-screen cabinets that snaps: home, Teach, Think, Make, Write to me (with the footer inside it). The mouse wheel turns one cabinet per turn; a swipe does the same on a touch screen; Arrow Up and Down and Page Up and Down work. A pager on the right edge has Previous, the five chapter dots and Next.
+- **The side rooms.** The three details moved out of the stack and sit after the main element as fixed panes with the class detail. More slides the stack away to the left and the detail in from the right. Each detail starts with a back button (an arrow and the chapter name); Escape, Arrow Left and, on a touch screen, a swipe from left to right also go back. Arrow Right on a cabinet opens its detail. A detail taller than the screen scrolls inside itself.
+- **Addresses.** #threshold, #teach, #think, #make and #write open on that cabinet; #teach-detail, #think-detail and #make-detail open that side room; pop-up addresses such as #s-abbotts open the pop-up over its cabinet. The Map, the W in the top bar and the dots all work, and choosing another chapter closes an open side room.
+- **Still to do, by Wehan's own word.** The detail pages are messy: they hold what was left when the spines and the constellation moved up into the cabinets. He is taking their design to a chat and will bring back a brief.
+- Assets at v=29. Checked at 375 by 812 and 1280 by 800: the home cabinet fits both without scrolling, headshot included; all five cabinets fit one screen on a laptop; no sideways overflow, no console errors.

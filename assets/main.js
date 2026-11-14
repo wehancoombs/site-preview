@@ -214,51 +214,91 @@
   function track(name) { try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: name, title: name, event: true }); } catch (e) {} }
   document.addEventListener('click', e => { const t = e.target.closest('[data-track]'); if (t) track(t.dataset.track); });
 
-  /* ---------- The cabinets: a strip of full-screen panes; one is on screen at a time ---------- */
-  const strip = $('main'), panes = $$('.pane'), dots = $$('.dots a');
+  /* ---------- The cabinets: a vertical stack of full-screen panes, and a side room of detail for three of them ---------- */
+  const strip = $('main'), panes = $$('main .pane'), details = $$('.detail'), dots = $$('.dots a');
   const prevBtn = $('#pane-prev'), nextBtn = $('#pane-next');
-  let cur = 0;
+  let cur = 0, room = null;
+  function paintPager() { prevBtn.disabled = cur === 0; nextBtn.disabled = cur === panes.length - 1; }
   function markPane(i) {
     cur = i;
     const ch = panes[i].closest('section').id;
     body.dataset.chapter = ch;
     dots.forEach(d => { if (d.getAttribute('href') === '#' + ch) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
-    prevBtn.disabled = i === 0; nextBtn.disabled = i === panes.length - 1;
+    paintPager();
     pal.refresh();
   }
-  // The pane that fills more than half the strip is the one we are in.
-  const paneIO = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) markPane(panes.indexOf(e.target)); }); }, { root: strip, threshold: .55 });
+  // The pane that fills more than half the screen is the one we are in.
+  const paneIO = new IntersectionObserver(es => { if (room) return; es.forEach(e => { if (e.isIntersecting) markPane(panes.indexOf(e.target)); }); }, { root: strip, threshold: .55 });
   panes.forEach(p => paneIO.observe(p));
   function showPane(i, instant) {
     i = Math.max(0, Math.min(panes.length - 1, i));
     if (i !== cur) panes[i].scrollTop = 0;
-    const left = panes[i].getBoundingClientRect().left - strip.getBoundingClientRect().left + strip.scrollLeft;
-    strip.scrollTo({ left: left, behavior: instant || reduced ? 'instant' : 'smooth' });
+    const top = panes[i].getBoundingClientRect().top - strip.getBoundingClientRect().top + strip.scrollTop;
+    strip.scrollTo({ top: top, behavior: instant || reduced ? 'instant' : 'smooth' });
     if (instant) markPane(i);
   }
-  // A section's name leads to its case; a pane's own id leads to that pane.
-  function paneOf(el) { return el ? (el.classList.contains('pane') ? el : el.closest('.pane') || $('.pane', el)) : null; }
-  function showTarget(sel, instant) { let el = null; try { el = $(sel); } catch (e) {} const p = paneOf(el); if (!p) return false; showPane(panes.indexOf(p), instant); return true; }
+  // A side room slides in from the right; the stack slides away to the left.
+  function openRoom(d) {
+    if (room === d) return;
+    if (room) room.classList.remove('on');
+    const home = $('#' + d.dataset.ch + ' .pane');
+    if (home && panes.indexOf(home) !== cur) showPane(panes.indexOf(home), true);
+    room = d; d.scrollTop = 0; d.classList.add('on'); body.classList.add('in-detail');
+    const back = $('.detail-back', d); if (back) back.focus({ preventScroll: true });
+  }
+  function closeRoom() {
+    if (!room) return;
+    const more = $('#' + room.dataset.ch + ' .cab-down');
+    room.classList.remove('on'); room = null; body.classList.remove('in-detail');
+    if (more) more.focus({ preventScroll: true });
+  }
+  // A section's name leads to its cabinet; a detail's id opens that side room.
+  function showTarget(sel, instant) {
+    let el = null; try { el = $(sel); } catch (e) {}
+    if (!el) return false;
+    const d = el.closest('.detail');
+    if (d) { openRoom(d); return true; }
+    const p = el.classList.contains('pane') ? el : el.closest('main .pane') || $('.pane', el);
+    if (!p || panes.indexOf(p) < 0) return false;
+    closeRoom(); showPane(panes.indexOf(p), instant);
+    return true;
+  }
+  const isPlace = sel => { let el = null; try { el = $(sel); } catch (e) {} return !!el && (!!el.closest('.detail') || el.classList.contains('chapter') || panes.indexOf(el) >= 0); };
   prevBtn.addEventListener('click', () => showPane(cur - 1));
   nextBtn.addEventListener('click', () => showPane(cur + 1));
   const overlayOpen = () => body.classList.contains('locked');
   document.addEventListener('keydown', e => {
     if (overlayOpen() || e.altKey || e.ctrlKey || e.metaKey) return;
-    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.id === 'solid') return;
-    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); showPane(cur + 1); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); showPane(cur - 1); }
+    const a = document.activeElement;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) || a.id === 'solid') return;
+    if (room) {
+      if (e.key === 'Escape' || e.key === 'ArrowLeft') { e.preventDefault(); closeRoom(); }
+      else if (e.key === 'ArrowDown') room.scrollBy({ top: 90 });
+      else if (e.key === 'ArrowUp') room.scrollBy({ top: -90 });
+      return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); showPane(cur + 1); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); showPane(cur - 1); }
+    else if (e.key === 'ArrowRight') { const d = $('#' + body.dataset.chapter + '-detail'); if (d) { e.preventDefault(); openRoom(d); } }
   });
-  // The mouse wheel: a pane scrolls inside itself first; at its top or foot the wheel turns to the next cabinet.
+  // The mouse wheel: one turn is one cabinet. A pane taller than the screen scrolls inside itself first.
   let wheelUntil = 0;
   strip.addEventListener('wheel', e => {
-    if (overlayOpen() || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX) || Math.abs(e.deltaY) < 12) return;
-    const p = panes[cur], down = e.deltaY > 0;
-    if (down ? p.scrollTop + p.clientHeight < p.scrollHeight - 2 : p.scrollTop > 2) { wheelUntil = performance.now() + 500; return; }
-    const now = performance.now();
-    if (now < wheelUntil) return;
-    wheelUntil = now + 900;
+    if (overlayOpen() || room || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const p = panes[cur], down = e.deltaY > 0, now = performance.now();
+    if (down ? p.scrollTop + p.clientHeight < p.scrollHeight - 2 : p.scrollTop > 2) { wheelUntil = now + 400; return; }
+    e.preventDefault();
+    if (now < wheelUntil) { wheelUntil = now + 250; return; } // the tail of the same turn of the wheel
+    if (Math.abs(e.deltaY) < 8) return;
+    wheelUntil = now + 700;
     showPane(cur + (down ? 1 : -1));
-  }, { passive: true });
+  }, { passive: false });
+  // On a touch screen, a swipe from left to right leaves a side room.
+  details.forEach(d => {
+    let t0 = null;
+    d.addEventListener('touchstart', e => { const t = e.touches[0]; t0 = e.target.closest('.sky, .shelf, .lectures') ? null : { x: t.clientX, y: t.clientY }; }, { passive: true });
+    d.addEventListener('touchend', e => { if (!t0) return; const t = e.changedTouches[0], dx = t.clientX - t0.x, dy = t.clientY - t0.y; t0 = null; if (dx > 70 && Math.abs(dy) < 50) closeRoom(); }, { passive: true });
+  });
   window.addEventListener('resize', () => showPane(cur, true));
   markPane(0);
 
@@ -492,7 +532,7 @@
     if (g) { e.preventDefault(); goTo(g.dataset.goto); return; }
     // Any other link to a place on this page (the dots, the W in the top bar) slides to that cabinet.
     const a = e.target.closest('a[href^="#"]');
-    if (a && a.getAttribute('href').length > 1 && !a.getAttribute('href').startsWith('#s-') && paneOf($(a.getAttribute('href')))) { e.preventDefault(); goTo(a.getAttribute('href')); }
+    if (a && a.getAttribute('href').length > 1 && !a.getAttribute('href').startsWith('#s-') && isPlace(a.getAttribute('href'))) { e.preventDefault(); goTo(a.getAttribute('href')); }
   });
   function openFromHash() {
     const h = location.hash || '';

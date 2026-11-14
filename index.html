@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=28">
+<link rel="stylesheet" href="assets/style.css?v=29">
 </head>
 <body data-chapter="threshold">
 
@@ -51,7 +51,7 @@
 </header>
 
 <div class="pager">
-  <button class="pager-btn" id="pane-prev" type="button" aria-label="Previous">←</button>
+  <button class="pager-btn" id="pane-prev" type="button" aria-label="Previous">↑</button>
   <nav class="dots" aria-label="Chapters">
     <a href="#threshold"><span>Begin</span></a>
     <a href="#teach"><span>Teach</span></a>
@@ -59,7 +59,7 @@
     <a href="#make"><span>Make</span></a>
     <a href="#write"><span>Contact</span></a>
   </nav>
-  <button class="pager-btn" id="pane-next" type="button" aria-label="Next">→</button>
+  <button class="pager-btn" id="pane-next" type="button" aria-label="Next">↓</button>
 </div>
 
 <!-- ===================== The map (slides in from the left) ===================== -->
@@ -218,8 +218,125 @@
       </div>
     </div>
   </div>
-  <div class="pane cab-detail" id="teach-detail">
+</section>
+
+<!-- ===================== 4. Think ===================== -->
+<section id="think" class="chapter compact cabinet">
+  <div class="cab pane">
+    <div class="wrap cab-grid obj-wider">
+      <div class="cab-words">
+        <p class="eyebrow">For universities</p>
+        <h2 class="display">Think</h2>
+        <p class="line">I believe philosophy is much more than academic discourse.</p>
+        <a class="btn cab-down" href="#think-detail" data-goto="#think-detail" data-track="down-think">More →</a>
+      </div>
+      <div class="cab-object">
+      <div class="sky-wrap">
+        <p class="eyebrow">My research, constellated · tap a star</p>
+        <div class="sky">
+          <svg id="sky" viewBox="0 0 1040 450" role="group" aria-label="A constellation of my research interests. Each star opens a short note."></svg>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. Make ===================== -->
+<section id="make" class="chapter compact cabinet">
+  <div class="cab pane">
+    <div class="wrap cab-grid">
+      <div class="cab-words">
+        <p class="eyebrow">For students &amp; clients</p>
+        <h2 class="display">Make</h2>
+        <p class="line">Tutoring, editing, learning design, and philosophical and AI consulting. Pretoria East, or online anywhere.</p>
+        <a class="btn cab-down" href="#make-detail" data-goto="#make-detail" data-track="down-make">More →</a>
+      </div>
+      <div class="cab-object">
+        <div class="cab-placeholder" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. Write ===================== -->
+<section id="write" class="chapter cabinet">
+  <div class="pane write-pane">
   <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2 class="display">Write<br><em>to me.</em></h2>
+    <p class="mail-row"><a class="mail" href="mailto:wehancoombs@gmail.com">wehancoombs@gmail.com</a><button class="copy" type="button" data-copy="wehancoombs@gmail.com">Copy</button></p>
+    <p class="index">
+      <button type="button" data-sheet="request-any">Request a service</button>
+      <button type="button" data-sheet="book" data-track="book-contact">Book an intro call</button>
+      <button type="button" data-sheet="referees">Referees</button>
+      <button type="button" data-sheet="resume">The full resume</button>
+    </p>
+    <p class="index">
+      <button type="button" data-sheet="about">About me</button>
+      <button type="button" data-sheet="qualifications">Qualifications</button>
+      <button type="button" data-sheet="why">Why I teach</button>
+    </p>
+    <div class="seals">
+      <a class="seal" href="cv/Wehan-Coombs-CV.pdf" data-track="cv-general" target="_blank" rel="noopener">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="sp-g2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle class="seal-ring" cx="60" cy="60" r="56"/>
+          <text class="seal-text"><textPath href="#sp-g2">General CV · PDF · General CV · PDF · </textPath></text>
+          <text class="seal-letter" x="60" y="75">W</text>
+        </svg>
+        <span class="seal-label">General CV<small>two pages, all of it</small></span>
+      </a>
+      <a class="seal teach" href="cv/Wehan-Coombs-FET-CV.pdf" data-track="cv-teaching" target="_blank" rel="noopener">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="sp-t2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle class="seal-ring" cx="60" cy="60" r="56"/>
+          <text class="seal-text"><textPath href="#sp-t2">Teaching CV · PDF · Teaching CV · PDF · </textPath></text>
+          <text class="seal-letter" x="60" y="75">T</text>
+        </svg>
+        <span class="seal-label">Teaching CV<small>for schools</small></span>
+      </a>
+      <a class="seal think" href="cv/Wehan-Coombs-PhD-CV.pdf" data-track="cv-academic" target="_blank" rel="noopener">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="sp-a2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle class="seal-ring" cx="60" cy="60" r="56"/>
+          <text class="seal-text"><textPath href="#sp-a2">Academic CV · PDF · Academic CV · PDF · </textPath></text>
+          <text class="seal-letter" x="60" y="75">Φ</text>
+        </svg>
+        <span class="seal-label">Academic CV<small>for universities</small></span>
+      </a>
+      <a class="seal make" href="cv/Wehan-Coombs-Freelance-CV.pdf" data-track="cv-freelance" target="_blank" rel="noopener">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="sp-f2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle class="seal-ring" cx="60" cy="60" r="56"/>
+          <text class="seal-text"><textPath href="#sp-f2">Freelance CV · PDF · Freelance CV · PDF · </textPath></text>
+          <text class="seal-letter" x="60" y="75">F</text>
+        </svg>
+        <span class="seal-label">Freelance CV<small>for clients</small></span>
+      </a>
+    </div>
+    <p class="write-links">
+      <a href="https://www.linkedin.com/in/wehan-coombs">LinkedIn</a> ·
+      <a href="https://orcid.org/0000-0001-9151-7344">ORCID</a> ·
+      <a href="https://www.researchgate.net/profile/Wehan-Coombs">ResearchGate</a> ·
+      <a href="https://docs.google.com/document/d/1uBnQTpyejNyltP889HYTxGxJh2-pD4FMiTWkkgGSCeg/view">Full resume in Google Docs</a>
+    </p>
+  </div>
+  <footer>
+    <div class="wrap">
+      <button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button>
+      <span>© 2026 Wehan M. Coombs</span>
+    </div>
+  </footer>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== The details: side rooms that slide in from the right ===================== -->
+<div class="pane detail cab-detail compact" id="teach-detail" data-ch="teach">
+  <div class="wrap">
+    <button class="detail-back textlink" type="button" data-goto="#teach">← Teach</button>
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="teach" aria-label="What people say about my teaching"></div>
@@ -270,31 +387,11 @@
       </figure>
     </div>
   </div>
-  </div>
-</section>
+</div>
 
-<!-- ===================== 4. Think ===================== -->
-<section id="think" class="chapter compact cabinet">
-  <div class="cab pane">
-    <div class="wrap cab-grid obj-wider">
-      <div class="cab-words">
-        <p class="eyebrow">For universities</p>
-        <h2 class="display">Think</h2>
-        <p class="line">I believe philosophy is much more than academic discourse.</p>
-        <a class="btn cab-down" href="#think-detail" data-goto="#think-detail" data-track="down-think">More →</a>
-      </div>
-      <div class="cab-object">
-      <div class="sky-wrap">
-        <p class="eyebrow">My research, constellated · tap a star</p>
-        <div class="sky">
-          <svg id="sky" viewBox="0 0 1040 450" role="group" aria-label="A constellation of my research interests. Each star opens a short note."></svg>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-  <div class="pane cab-detail" id="think-detail">
+<div class="pane detail cab-detail compact" id="think-detail" data-ch="think">
   <div class="wrap">
+    <button class="detail-back textlink" type="button" data-goto="#think">← Think</button>
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="think" aria-label="What students and colleagues say"></div>
@@ -368,26 +465,11 @@
       </div>
     </div>
   </div>
-  </div>
-</section>
+</div>
 
-<!-- ===================== 5. Make ===================== -->
-<section id="make" class="chapter compact cabinet">
-  <div class="cab pane">
-    <div class="wrap cab-grid">
-      <div class="cab-words">
-        <p class="eyebrow">For students &amp; clients</p>
-        <h2 class="display">Make</h2>
-        <p class="line">Tutoring, editing, learning design, and philosophical and AI consulting. Pretoria East, or online anywhere.</p>
-        <a class="btn cab-down" href="#make-detail" data-goto="#make-detail" data-track="down-make">More →</a>
-      </div>
-      <div class="cab-object">
-        <div class="cab-placeholder" aria-hidden="true"></div>
-      </div>
-    </div>
-  </div>
-  <div class="pane cab-detail" id="make-detail">
+<div class="pane detail cab-detail compact" id="make-detail" data-ch="make">
   <div class="wrap">
+    <button class="detail-back textlink" type="button" data-goto="#make">← Make</button>
     <div class="ch-head">
       <div class="ch-lead">
         <div class="voices" data-set="make" aria-label="What students say about working with me"></div>
@@ -509,82 +591,7 @@
       </article>
     </div>
   </div>
-  </div>
-</section>
-
-<!-- ===================== 7. Write ===================== -->
-<section id="write" class="chapter cabinet">
-  <div class="pane write-pane">
-  <div class="wrap">
-    <p class="eyebrow">Contact</p>
-    <h2 class="display">Write<br><em>to me.</em></h2>
-    <p class="mail-row"><a class="mail" href="mailto:wehancoombs@gmail.com">wehancoombs@gmail.com</a><button class="copy" type="button" data-copy="wehancoombs@gmail.com">Copy</button></p>
-    <p class="index">
-      <button type="button" data-sheet="request-any">Request a service</button>
-      <button type="button" data-sheet="book" data-track="book-contact">Book an intro call</button>
-      <button type="button" data-sheet="referees">Referees</button>
-      <button type="button" data-sheet="resume">The full resume</button>
-    </p>
-    <p class="index">
-      <button type="button" data-sheet="about">About me</button>
-      <button type="button" data-sheet="qualifications">Qualifications</button>
-      <button type="button" data-sheet="why">Why I teach</button>
-    </p>
-    <div class="seals">
-      <a class="seal" href="cv/Wehan-Coombs-CV.pdf" data-track="cv-general" target="_blank" rel="noopener">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="sp-g2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-          <circle class="seal-ring" cx="60" cy="60" r="56"/>
-          <text class="seal-text"><textPath href="#sp-g2">General CV · PDF · General CV · PDF · </textPath></text>
-          <text class="seal-letter" x="60" y="75">W</text>
-        </svg>
-        <span class="seal-label">General CV<small>two pages, all of it</small></span>
-      </a>
-      <a class="seal teach" href="cv/Wehan-Coombs-FET-CV.pdf" data-track="cv-teaching" target="_blank" rel="noopener">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="sp-t2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-          <circle class="seal-ring" cx="60" cy="60" r="56"/>
-          <text class="seal-text"><textPath href="#sp-t2">Teaching CV · PDF · Teaching CV · PDF · </textPath></text>
-          <text class="seal-letter" x="60" y="75">T</text>
-        </svg>
-        <span class="seal-label">Teaching CV<small>for schools</small></span>
-      </a>
-      <a class="seal think" href="cv/Wehan-Coombs-PhD-CV.pdf" data-track="cv-academic" target="_blank" rel="noopener">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="sp-a2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-          <circle class="seal-ring" cx="60" cy="60" r="56"/>
-          <text class="seal-text"><textPath href="#sp-a2">Academic CV · PDF · Academic CV · PDF · </textPath></text>
-          <text class="seal-letter" x="60" y="75">Φ</text>
-        </svg>
-        <span class="seal-label">Academic CV<small>for universities</small></span>
-      </a>
-      <a class="seal make" href="cv/Wehan-Coombs-Freelance-CV.pdf" data-track="cv-freelance" target="_blank" rel="noopener">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="sp-f2" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-          <circle class="seal-ring" cx="60" cy="60" r="56"/>
-          <text class="seal-text"><textPath href="#sp-f2">Freelance CV · PDF · Freelance CV · PDF · </textPath></text>
-          <text class="seal-letter" x="60" y="75">F</text>
-        </svg>
-        <span class="seal-label">Freelance CV<small>for clients</small></span>
-      </a>
-    </div>
-    <p class="write-links">
-      <a href="https://www.linkedin.com/in/wehan-coombs">LinkedIn</a> ·
-      <a href="https://orcid.org/0000-0001-9151-7344">ORCID</a> ·
-      <a href="https://www.researchgate.net/profile/Wehan-Coombs">ResearchGate</a> ·
-      <a href="https://docs.google.com/document/d/1uBnQTpyejNyltP889HYTxGxJh2-pD4FMiTWkkgGSCeg/view">Full resume in Google Docs</a>
-    </p>
-  </div>
-  <footer>
-    <div class="wrap">
-      <button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button>
-      <span>© 2026 Wehan M. Coombs</span>
-    </div>
-  </footer>
-  </div>
-</section>
-
-</main>
+</div>
 
 
 <!-- ===================== The library: everything the sheets can show ===================== -->
@@ -1257,7 +1264,7 @@
 
 </div>
 
-<script src="assets/main.js?v=28"></script>
+<script src="assets/main.js?v=29"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
