@@ -306,8 +306,41 @@
   $$('.stars').forEach(el => { $('.stars-fg', el).style.width = ((+el.dataset.rating || 0) / 5 * 100).toFixed(1) + '%'; });
 
   /* ---------- The library, the sheet and the map ---------- */
+  // A large faint drawing in each pop-up's header, named by data-art on the pop-up
+  const ART = {
+    quill: '<path d="M8 40c6-2 10-6 14-12 4-6 8-10 18-16-4 10-8 14-14 18-6 4-10 6-18 10z"/><path d="M8 40l10-10"/>',
+    scroll: '<path d="M10 8h24l6 6v26H10z"/><path d="M34 8v6h6"/><path d="M16 20h16M16 26h16M16 32h10"/>',
+    school: '<path d="M6 40V20l10-8 10 8v20"/><path d="M26 40V24l8-6 8 6v16"/><path d="M6 40h36"/>',
+    lamp: '<path d="M18 34c-6-3-9-8-9-14a15 15 0 0 1 30 0c0 6-3 11-9 14"/><path d="M18 34v4h12v-4M20 42h8"/>',
+    book: '<path d="M8 10h14a4 4 0 0 1 4 4v26a4 4 0 0 0-4-4H8z"/><path d="M40 10H26a4 4 0 0 0-4 4v26a4 4 0 0 1 4-4h14z"/>',
+    quote: '<path d="M10 28a8 8 0 0 1 8-8v-8a16 16 0 0 0-16 16v12h16V28z"/><path d="M28 28a8 8 0 0 1 8-8v-8a16 16 0 0 0-16 16v12h16V28z"/>',
+    person: '<circle cx="24" cy="16" r="8"/><path d="M8 42c0-10 7-16 16-16s16 6 16 16"/>',
+    people: '<circle cx="17" cy="16" r="6"/><circle cx="33" cy="18" r="5"/><path d="M5 40c0-8 5-13 12-13s12 5 12 13M30 28c7-1 13 4 13 12"/>',
+    compass: '<circle cx="24" cy="24" r="17"/><path d="M31 17l-4 10-10 4 4-10z"/>',
+    crown: '<path d="M10 36L7 16l10 9 7-13 7 13 10-9-3 20z"/><path d="M10 41h28"/>',
+    ship: '<path d="M24 6v20M24 9l12 14H24M24 13l-9 10h9"/><path d="M6 31c4-4 8-4 12 0s8 4 12 0 8-4 12 0M6 39c4-4 8-4 12 0s8 4 12 0 8-4 12 0"/>',
+    bubble: '<path d="M8 10h32v22H22l-8 8v-8H8z"/><path d="M14 18h20M14 24h12"/>',
+    shirt: '<path d="M16 8L6 16l5 7 5-3v20h16V20l5 3 5-7-10-8c-1 4-4 6-8 6s-7-2-8-6z"/>',
+    leaf: '<path d="M10 38C10 20 22 10 40 8c-2 18-12 30-30 30z"/><path d="M10 38l16-16M18 30h8M20 22v6"/>',
+    pilcrow: '<path d="M30 8v32M22 8v32M36 8H20a9 9 0 0 0 0 18h2"/>',
+    film: '<path d="M6 10h36v28H6zM12 10v28M36 10v28M6 17h6M6 24h6M6 31h6M36 17h6M36 24h6M36 31h6"/><path d="M21 18l8 6-8 6z"/>',
+    temple: '<path d="M6 16L24 6l18 10zM10 16v20M19 16v20M29 16v20M38 16v20M8 36h32M6 41h36"/>',
+    spark: '<path d="M22 8c1 9 6 14 15 15-9 1-14 6-15 15-1-9-6-14-15-15 9-1 14-6 15-15z"/><path d="M38 6c0 4 2 6 6 6-4 0-6 2-6 6 0-4-2-6-6-6 4 0 6-2 6-6z"/>',
+    cap: '<path d="M4 18l20-9 20 9-20 9z"/><path d="M12 22v10c3 4 8 6 12 6s9-2 12-6V22M44 18v12"/>',
+    board: '<path d="M6 8h36v24H6zM24 32v8M16 40h16M12 16h14M12 22h8"/>',
+    play: '<circle cx="24" cy="24" r="17"/><path d="M20 16l12 8-12 8z"/>',
+    mic: '<path d="M18 8h12v18a6 6 0 0 1-12 0z"/><path d="M12 24a12 12 0 0 0 24 0M24 36v6M16 42h16"/>',
+    blocks: '<path d="M6 26h14v14H6zM22 26h20v14H22zM6 8h22v14H6zM30 8h12v14H30z"/>',
+    check: '<path d="M10 6h28v36H10z"/><path d="M16 16l3 3 5-6M28 16h6M16 28l3 3 5-6M28 28h6"/>',
+    heart: '<path d="M24 40S6 29 6 17a9 9 0 0 1 18-3 9 9 0 0 1 18 3c0 12-18 23-18 23z"/>',
+    calendar: '<path d="M8 12h32v28H8zM8 20h32M16 6v10M32 6v10"/><path d="M19 30l4 4 7-8"/>',
+    edit: '<path d="M8 12h26M8 20h18M8 28h10"/><path d="M40 18L24 34l-6 2 2-6 16-16z"/>',
+    dots: '<circle cx="24" cy="9" r="2.6"/><circle cx="19" cy="19" r="2.6"/><circle cx="29" cy="19" r="2.6"/><circle cx="14" cy="29" r="2.6"/><circle cx="24" cy="29" r="2.6"/><circle cx="34" cy="29" r="2.6"/><circle cx="9" cy="39" r="2.6"/><circle cx="19" cy="39" r="2.6"/><circle cx="29" cy="39" r="2.6"/><circle cx="39" cy="39" r="2.6"/>',
+    envelope: '<path d="M6 12h36v26H6z"/><path d="M6 12l18 14 18-14"/>',
+    star: '<path d="M24 6l5 13h13l-10.5 8 4 13L24 32l-11.5 8 4-13L6 19h13z"/>'
+  };
   const library = {};
-  $$('#library article').forEach(a => { library[a.id.replace(/^s-/, '')] = { title: a.dataset.title, ch: a.dataset.ch, html: a.innerHTML, read: a.hasAttribute('data-read') }; });
+  $$('#library article').forEach(a => { library[a.id.replace(/^s-/, '')] = { title: a.dataset.title, ch: a.dataset.ch, html: a.innerHTML, read: a.hasAttribute('data-read'), art: a.dataset.art, tone: a.dataset.tone }; });
   library.evaluations = library.said = library.testimonials; // old links still open the testimonials
 
   /* ---------- Request sheets: a drafted message you can send from your email app, from Gmail, or copy ---------- */
@@ -379,7 +412,7 @@
   const ORDER = {};
   $$('.map-group').forEach(g => { ORDER[g.dataset.ch] = $$('[data-sheet]', g).map(b => b.dataset.sheet); });
 
-  const scrim = $('#scrim'), sheet = $('#sheet'), sheetCh = $('#sheet-ch'), sheetTitle = $('#sheet-title'), sheetBody = $('#sheet-body'), sheetWhere = $('#sheet-where');
+  const scrim = $('#scrim'), sheet = $('#sheet'), sheetCh = $('#sheet-ch'), sheetTitle = $('#sheet-title'), sheetBody = $('#sheet-body'), sheetWhere = $('#sheet-where'), sheetArt = $('#sheet-art');
   const map = $('#map'), mapBtn = $('#map-btn');
   let openId = null, lastFocus = null, sheetTimer = null, mapTimer = null;
 
@@ -431,6 +464,24 @@
     }
     const lede = $$(':scope > *', container).slice(0, 4).find(k => k.tagName === 'P' && !k.className);
     if (lede && lede.textContent.length > 80) lede.classList.add('lede');
+    // Links that leave the pop-up (a file, a Drive document) become cards, in the link's own words
+    $$('.more', container).forEach(more => {
+      const links = $$('a[href]:not(.btn)', more);
+      if (!links.length) return;
+      const cards = document.createElement('div'); cards.className = 'dl-cards';
+      links.forEach(a => {
+        const href = a.getAttribute('href'), words = a.textContent.replace(/\s*\u2197\s*$/, '').trim();
+        const local = !/^https?:/.test(href);
+        const kind = /\.pdf$/i.test(href) ? 'PDF' : /drive\.google/.test(href) ? 'Google Drive' : /docs\.google/.test(href) ? 'Google Docs' : '';
+        const said = kind && new RegExp(kind.split(' ').pop(), 'i').test(words);
+        a.className = 'dl';
+        a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (local ? '<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>' : '<path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5M9 13h6M9 17h6"/>') + '</svg><b></b>' + (kind && !said ? '<span>' + kind + '</span>' : '');
+        a.querySelector('b').textContent = words;
+        cards.appendChild(a);
+      });
+      more.parentNode.insertBefore(cards, more);
+      if (!more.textContent.trim()) more.remove();
+    });
     let lastYear = null;
     $$('.timeline li', container).forEach(li => {
       const b = $('b', li);
@@ -471,6 +522,9 @@
     if (!sheet.classList.contains('on')) lastFocus = document.activeElement;
     openId = id;
     sheet.dataset.ch = item.ch;
+    if (item.tone) sheet.dataset.tone = item.tone; else delete sheet.dataset.tone;
+    const art = item.art || (id.indexOf('request-') === 0 ? 'envelope' : id.indexOf('star-') === 0 ? 'star' : '');
+    sheetArt.innerHTML = ART[art] ? '<svg viewBox="0 0 48 48">' + ART[art] + '</svg>' : '';
     sheetCh.textContent = CH_LABEL[item.ch] || '';
     sheetTitle.textContent = item.title;
     sheetBody.innerHTML = item.html;

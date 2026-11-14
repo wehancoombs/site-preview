@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=36">
+<link rel="stylesheet" href="assets/style.css?v=37">
 </head>
 <body data-chapter="threshold">
 
@@ -147,6 +147,7 @@
 <!-- ===================== The sheet (slides in from the right) ===================== -->
 <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
   <div class="sheet-head">
+    <span class="sheet-art" id="sheet-art" aria-hidden="true"></span>
     <p class="eyebrow" id="sheet-ch">Teach</p>
     <h3 id="sheet-title" tabindex="-1">Title</h3>
     <button class="close" id="sheet-close" type="button" aria-label="Close">×</button>
@@ -562,7 +563,7 @@
 <!-- ===================== The library: everything the sheets can show ===================== -->
 <div id="library" hidden>
 
-  <article id="s-about" data-ch="threshold" data-title="About me">
+  <article id="s-about" data-art="person" data-ch="threshold" data-title="About me">
     <p>I joined the Department of Philosophy at the University of Pretoria as a tutor in 2010 and stayed on as assistant lecturer and then head lecturer, teaching first-year classes of around five hundred students and designing four modules from scratch. From 2024 to 2026 I held a postdoctoral research fellowship at the University of Johannesburg on Platonic and African esotericism.</p>
     <p>In 2026 I turned to the school classroom. During my Postgraduate Certificate in Education I taught Grade 10 and 11 English at Abbotts College Pretoria East and Hoërskool Garsfontein, and found the same pleasure there that I had found in the lecture hall: watching a room of people start to think together.</p>
     <p>Alongside teaching I tutor, edit, build study materials and simple web tools for learning, and think things through with people who need a philosopher in the room.</p>
@@ -593,7 +594,7 @@
     <p class="more"><button type="button" data-sheet="qualifications">Qualifications in full →</button> <button type="button" data-sheet="why">Why I teach →</button></p>
   </article>
 
-  <article id="s-qualifications" data-ch="threshold" data-title="Qualifications">
+  <article id="s-qualifications" data-art="scroll" data-ch="threshold" data-title="Qualifications">
     <ul class="list">
       <li><strong>Postgraduate Certificate in Education (PGCE), FET Phase</strong><br>University of Pretoria · in progress, 2026</li>
       <li><strong>PhD in Philosophy</strong><br>University of Pretoria · 2023<br>Thesis: <a href="https://repository.up.ac.za/handle/2263/89290" target="_blank" rel="noopener"><em>Ainigma: Plato’s Esotericism in Context</em></a></li>
@@ -610,13 +611,13 @@
     </ul>
   </article>
 
-  <article id="s-why" data-ch="threshold" data-title="Why I teach">
+  <article id="s-why" data-art="lamp" data-ch="threshold" data-title="Why I teach">
     <p>I teach because I have seen what happens when students realise they can think for themselves, and that transformation carries into the rest of their lives. I bring fifteen years of teaching experience to any school or department, along with a collaborative spirit, high professional standards and genuine care. Above all, I keep learning from the people I teach.</p>
     <p class="motto-line"><em>Docendo discimus.</em> By teaching, we learn.</p>
     <p class="more"><button type="button" data-sheet="philosophy">My teaching philosophy, at length →</button></p>
   </article>
 
-  <article id="s-approach" data-ch="teach" data-title="Teaching approach">
+  <article id="s-approach" data-art="compass" data-ch="teach" data-title="Teaching approach">
     <blockquote>Learners do their best thinking when they feel known and respected. I start from what they already know, then set a challenge they reason through together in discussion, and end by applying the new skill to their own lives, so they leave with ideas they can call their own.</blockquote>
     <p>I plan most lessons as a three-part arc. First, I activate what learners already know, often through a vivid scenario or a playful dilemma resonant with their own lives. Then we move to an application phase, a scaffolded exercise that requires them to try something new and potentially fail. Finally, the newly developed skill is actualised by connecting it to some concrete project or real issue in the world that they can apply it to.</p>
     <p>Ten weeks in charge of classes in 2026: three at Hoërskool Garsfontein in May, seven at Abbotts College Pretoria East from July to September. Learners at this age respond very well to being treated as intellectual partners, much as I treat my university students, with age-appropriate content and careful scaffolding towards curriculum outcomes.</p>
@@ -625,7 +626,7 @@
     <p class="more"><button type="button" data-sheet="abbotts">Abbotts College →</button> <button type="button" data-sheet="garsfontein">Hoërskool Garsfontein →</button> <button type="button" data-sheet="ai">Teaching in the age of AI →</button></p>
   </article>
 
-  <article id="s-abbotts" data-ch="teach" data-title="Abbotts College Pretoria East">
+  <article id="s-abbotts" data-art="school" data-ch="teach" data-title="Abbotts College Pretoria East">
     <p class="when">PGCE teaching practicum · July to September 2026 · seven weeks · mentor teacher Eben van Dien</p>
     <ul class="facts"><li><b>95</b> <span>out of 100, mentor assessment</span></li><li><b>98</b> <span>out of 100, observed lesson</span></li><li><b>7</b> <span>weeks in charge of classes</span></li></ul>
     <ul class="list">
@@ -642,7 +643,7 @@
     <p class="more"><button type="button" data-sheet="garsfontein">Hoërskool Garsfontein →</button> <button type="button" data-sheet="approach">How I plan a lesson →</button></p>
   </article>
 
-  <article id="s-garsfontein" data-ch="teach" data-title="Hoërskool Garsfontein">
+  <article id="s-garsfontein" data-art="school" data-ch="teach" data-title="Hoërskool Garsfontein">
     <p class="when">PGCE teaching practicum · May 2026 · three weeks · mentor teacher Heloïse van der Spuy</p>
     <ul class="facts"><li><b>3</b> <span>weeks in charge of classes</span></li><li><b>2</b> <span>poems, three lessons each</span></li><li><b>8</b> <span>hours of community engagement</span></li></ul>
     <ul class="list">
@@ -653,7 +654,7 @@
     <p class="more"><button type="button" data-sheet="abbotts">Abbotts College →</button> <button type="button" data-sheet="beyond">Beyond the classroom →</button></p>
   </article>
 
-  <article id="s-macbeth" data-ch="teach" data-title="Macbeth">
+  <article id="s-macbeth" data-art="crown" data-tone="mac" data-ch="teach" data-title="Macbeth">
     <p class="when">Grade 10 English Home Language · Abbotts College · three classes · August 2026 · Acts 1 to 3</p>
     <p class="board">AMBITION → DECEPTION → GUILT</p>
     <p>The hook for Act 2 was the night after the murder: horses that broke their stalls and ate each other. From there to Jacobean witch panic, the divine right of kings, and what it means for nature itself to revolt when a king is killed.</p>
@@ -677,7 +678,7 @@
     <p class="more"><a href="materials/macbeth-revision-sheet.pdf" target="_blank" rel="noopener">Open the revision sheet (PDF) ↗</a> <button type="button" data-sheet="tempest">The Tempest →</button></p>
   </article>
 
-  <article id="s-tempest" data-ch="teach" data-title="The Tempest">
+  <article id="s-tempest" data-art="ship" data-tone="temp" data-ch="teach" data-title="The Tempest">
     <p class="when">Grade 11 English Home Language · Abbotts College · five classes · July and September 2026</p>
     <p>We started with Act 2 Scene 1, where Antonio and Sebastian mock Gonzalo: puns, asides and character foils, read as a study in how clever people bully sincere ones. Then, after the poems and the film study, a scene a day through Act 3.</p>
     <ul class="list">
@@ -700,7 +701,7 @@
     <p class="more"><button type="button" data-sheet="macbeth">Macbeth →</button> <button type="button" data-sheet="poems">The poems →</button></p>
   </article>
 
-  <article id="s-poems" data-ch="teach" data-title="Five poems">
+  <article id="s-poems" data-art="book" data-tone="poet" data-ch="teach" data-title="Five poems">
     <p>Two at Hoërskool Garsfontein with Grade 10 First Additional Language learners, three at Abbotts College with Grade 11 Home Language learners. Each one opens here.</p>
     <ul class="list">
       <li><button type="button" class="inline" data-sheet="poem-words"><em>Too Many Words</em>, Bernard Levinson</button> · Grade 10 · May</li>
@@ -713,7 +714,7 @@
     <p>Read it quietly, then one voice reads it aloud. Guess from the title. A hook from the learners’ own lives. Then the rule I kept repeating: it is not enough to spot a poetic device, you must say what it does in this poem. Groups annotate, I walk the room and check every page.</p>
   </article>
 
-  <article id="s-poem-words" data-ch="teach" data-title="Too Many Words">
+  <article id="s-poem-words" data-art="bubble" data-tone="words" data-ch="teach" data-title="Too Many Words">
     <p class="when">Bernard Levinson · Grade 10 English First Additional Language · Hoërskool Garsfontein · May 2026 · three lessons</p>
     <p>A free-verse poem about the limits of language: how words can exhaust us and act as a veil. The class guessed what it was about from the title, one volunteer read it aloud, and we worked line by line through its imagery by Socratic questioning, treating the poem as something with depth rather than a comprehension exercise.</p>
     <p>By the third lesson the learners could identify the devices, explain what they do, and connect the poem’s theme to the way they talk, text and listen.</p>
@@ -729,7 +730,7 @@
     <p class="more"><button type="button" data-sheet="poem-clothes">The Clothes →</button> <button type="button" data-sheet="poems">All five →</button></p>
   </article>
 
-  <article id="s-poem-clothes" data-ch="teach" data-title="The Clothes">
+  <article id="s-poem-clothes" data-art="shirt" data-tone="clothes" data-ch="teach" data-title="The Clothes">
     <p class="when">Mongane Wally Serote · Grade 10 English First Additional Language · Hoërskool Garsfontein · May 2026 · three lessons</p>
     <p>An elegy from the apartheid years. Before we read, I asked each learner to picture someone they love, the clothes that person always wears, and coming home to find those clothes hanging, knowing the person will never return. Then the poem.</p>
     <ul class="list">
@@ -750,7 +751,7 @@
     <p class="more"><button type="button" data-sheet="poem-oompiet">For Oom Piet →</button> <button type="button" data-sheet="poems">All five →</button></p>
   </article>
 
-  <article id="s-poem-oompiet" data-ch="teach" data-title="For Oom Piet">
+  <article id="s-poem-oompiet" data-art="book" data-tone="oompiet" data-ch="teach" data-title="For Oom Piet">
     <p class="when">Finuala Dowling · Grade 11 English Home Language · Abbotts College · July 2026 · two lessons</p>
     <p class="board">XENIA</p>
     <p>XENIA on the board. The hook was Christopher Nolan’s new film of <em>The Odyssey</em> and the Greek sacred duty of hospitality; the second day it was THEOXENY, being kind to a stranger because they might be a god in disguise. A poem about a toddler leading her unhappy mother across the road to a neighbour who makes tea and says “foeitog”.</p>
@@ -772,7 +773,7 @@
     <p class="more"><button type="button" data-sheet="poem-herb">The Herb Garden →</button> <button type="button" data-sheet="poems">All five →</button></p>
   </article>
 
-  <article id="s-poem-herb" data-ch="teach" data-title="The Herb Garden">
+  <article id="s-poem-herb" data-art="leaf" data-tone="herb" data-ch="teach" data-title="The Herb Garden">
     <p class="when">Stephen Gray · Grade 11 English Home Language · Abbotts College · August 2026 · two lessons</p>
     <p class="board">RESIDUE</p>
     <p>RESIDUE on the board, from the Latin for what stays behind. The learners told stories of memories with a strong smell or taste in them while a small bag of lavender went round the room. Then I read the poem aloud and asked them to listen for the senses.</p>
@@ -794,7 +795,7 @@
     <p class="more"><button type="button" data-sheet="poem-poet">The Poet →</button> <button type="button" data-sheet="poems">All five →</button></p>
   </article>
 
-  <article id="s-poem-poet" data-ch="teach" data-title="The Poet">
+  <article id="s-poem-poet" data-art="quill" data-tone="poet" data-ch="teach" data-title="The Poet">
     <p class="when">William Shakespeare, from <em>A Midsummer Night’s Dream</em>, Act 5 Scene 1 · Grade 11 · Abbotts College · August 2026</p>
     <p class="board">POIESIS</p>
     <p>POIESIS on the board before they walked in, and a promise: a break from assessments to study one beautiful poem. It opened with a time-crunch quiz, groups racing to find two devices every few lines, scores held back to build suspense.</p>
@@ -816,7 +817,7 @@
     <p class="more"><button type="button" data-sheet="poems">All five →</button> <button type="button" data-sheet="enrichment">Philosophy for teenagers →</button></p>
   </article>
 
-  <article id="s-grammar" data-ch="teach" data-title="Grammar">
+  <article id="s-grammar" data-art="pilcrow" data-tone="gram" data-ch="teach" data-title="Grammar">
     <p class="when">Grade 10 English First Additional Language · Hoërskool Garsfontein · May 2026</p>
     <p class="board quote">“If I were…”, not “If I was…”</p>
     <p>Language structures taught inside meaningful situations rather than as isolated rules, so that what is learnt can actually be used.</p>
@@ -838,7 +839,7 @@
     <p class="more"><button type="button" data-sheet="garsfontein">Hoërskool Garsfontein →</button> <button type="button" data-sheet="poems">The poems →</button></p>
   </article>
 
-  <article id="s-film" data-ch="teach" data-title="Film study">
+  <article id="s-film" data-art="film" data-tone="film" data-ch="teach" data-title="Film study">
     <p class="when">English Home Language · Abbotts College · August 2026 · Grade 11 (five classes) and Grade 10 (three classes)</p>
     <p class="board">FRAME</p>
     <p>Visual literacy as a language: every detail on a screen was put there on purpose by someone, to tell you something.</p>
@@ -865,7 +866,7 @@
     <p class="more"><button type="button" data-sheet="tempest">The Tempest →</button> <button type="button" data-sheet="enrichment">Philosophy for teenagers →</button></p>
   </article>
 
-  <article id="s-enrichment" data-ch="teach" data-title="Philosophy for teenagers">
+  <article id="s-enrichment" data-art="temple" data-tone="phil" data-ch="teach" data-title="Philosophy for teenagers">
     <p class="when">Grade 11 English enrichment · Abbotts College · four lessons, taught to five classes · September 2026</p>
     <p>In my last month at Abbotts I gave the Grade 11s the tools I give first-years.</p>
     <ul class="list">
@@ -886,7 +887,7 @@
     <p class="more"><button type="button" data-sheet="film">Film study →</button> <button type="button" data-sheet="philosophy">How I teach at university →</button></p>
   </article>
 
-  <article id="s-ai" data-ch="teach" data-title="Teaching in the age of AI">
+  <article id="s-ai" data-art="spark" data-ch="teach" data-title="Teaching in the age of AI">
     <p>Generative AI can now write the kind of essay most classrooms use to teach and to assess. The usual response has been reactive: bans, detection software, policing. That leaves the real question open. If a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?</p>
     <p>My answer comes from Plato. In the <em>Phaedrus</em> he warned that writing cannot answer for itself: ask a text a question and it only repeats what it says. Philosophy, for him, was dialogue, question and answer between people, which changes the people who take part. That is the part no model can do for a learner, and it is the part I teach.</p>
     <h4>In my classrooms</h4>
@@ -903,7 +904,7 @@
     <p class="more"><button type="button" data-sheet="approach">How I plan a lesson →</button> <button type="button" data-sheet="consulting">AI consulting for schools and teams →</button></p>
   </article>
 
-  <article id="s-beyond" data-ch="teach" data-title="Beyond the classroom">
+  <article id="s-beyond" data-art="people" data-ch="teach" data-title="Beyond the classroom">
     <h4>Strengths</h4>
     <div class="pills">
       <span>Dynamic, engaged classrooms</span><span>Question-led discussion</span><span>Close reading of literature and poetry</span>
@@ -927,7 +928,7 @@
     <p>SACE provisional registration as a student teacher (2026).</p>
   </article>
 
-  <article id="s-posts" data-ch="think" data-title="Academic posts">
+  <article id="s-posts" data-art="cap" data-ch="think" data-title="Academic posts">
     <ul class="facts"><li><b>2010</b> <span>tutor at the University of Pretoria</span></li><li><b>500</b> <span>students in a first-year class</span></li><li><b>2024</b> <span>postdoctoral fellow at UJ</span></li></ul>
     <ul class="list">
       <li><strong>University of Johannesburg</strong><br>Postdoctoral Research Fellow: Platonic and African Esotericism · April 2024 to April 2026 · hosted and mentored by Dr Asheel Singh</li>
@@ -955,7 +956,7 @@
     </ul>
   </article>
 
-  <article id="s-courses" data-ch="think" data-title="Courses designed and taught">
+  <article id="s-courses" data-art="board" data-ch="think" data-title="Courses designed and taught">
     <ul class="facts"><li><b>4,000+</b> <span>students lectured</span></li><li><b>4</b> <span>modules designed from scratch</span></li><li><b>1</b> <span>partly redesigned</span></li></ul>
     <p class="note">How many students? Counting only the years I lectured and the class sizes on record, the figure is more than 4,000: first-year classes of 485 to 500 in 2017 and 2019 to 2021, two first-year modules in 2014, large second-year ethics classes in 2016 and 2018, a Philosophy of Medicine class of several hundred in 2023, and the smaller honours and second-year groups since. Four years of tutorials before that are not counted.</p>
     <h4>Designed from scratch</h4>
@@ -980,7 +981,7 @@
     <p class="more"><button type="button" data-sheet="curriculum">How I designed them →</button> <button type="button" data-sheet="guides">Study guides and readers →</button></p>
   </article>
 
-  <article id="s-guides" data-ch="think" data-title="Study guides and readers">
+  <article id="s-guides" data-art="book" data-ch="think" data-title="Study guides and readers">
     <p>Every module I designed came with its own study guide, written from scratch: outcomes, week-by-week structure, readings, assessment plans and student support. Five of them are here to read.</p>
     <ul class="covers">
       <li><button type="button" data-sheet="guide-c5"><img src="materials/covers/guide-c5.jpg" alt="" width="560" height="793" loading="lazy"><span>FIL710 and FIL810 · Philosophy as a Rite of Rebirth (2026)</span></button></li>
@@ -998,42 +999,42 @@
     </ul>
   </article>
 
-  <article id="s-guide-c5" data-ch="think" data-title="Philosophy as a Rite of Rebirth">
+  <article id="s-guide-c5" data-art="book" data-tone="g5" data-ch="think" data-title="Philosophy as a Rite of Rebirth">
     <p class="when">FIL710 and FIL810 · honours study guide · 2026</p>
     <p>The course asks what the point of philosophy is, through a close reading of Algis Uždavinys’ <em>Philosophy as a Rite of Rebirth</em> (2008). My most experimental course to date: demanding weekly in-person symposiums, assessments ranging from video essays and podcasts to written work, and a final sit-down essay on the role of philosophy in a world where AI can produce high-quality philosophical content. In the university’s module evaluation, students gave it an average of 4.81 out of 5.</p>
     <div class="embed doc" data-src="https://drive.google.com/file/d/1Eu6NeDbt9xU-XZNqjaGcfgWHtjBX06i5/preview"></div>
     <p class="more"><a href="https://drive.google.com/file/d/1Eu6NeDbt9xU-XZNqjaGcfgWHtjBX06i5/view" target="_blank" rel="noopener">Open in Google Drive ↗</a> <button type="button" data-sheet="guides">All the guides →</button></p>
   </article>
 
-  <article id="s-guide-c3" data-ch="think" data-title="The (Secret) History of Thought">
+  <article id="s-guide-c3" data-art="book" data-tone="g3" data-ch="think" data-title="The (Secret) History of Thought">
     <p class="when">FIL710 · honours study guide · 2024, taught again in 2025</p>
     <p>An introduction to philosophical esotericism, literary and ideological. The curriculum introduces different types of esotericism, engages students in close readings of secondary texts on theories of esotericism, and then examines the phenomenon in depth as it appears in the philosophy of Plato.</p>
     <div class="embed doc" data-src="https://drive.google.com/file/d/1c4J7zTjLbuyQUBImKBFnVQAToZjma-1k/preview"></div>
     <p class="more"><a href="https://drive.google.com/file/d/1c4J7zTjLbuyQUBImKBFnVQAToZjma-1k/view" target="_blank" rel="noopener">Open in Google Drive ↗</a> <button type="button" data-sheet="guides">All the guides →</button></p>
   </article>
 
-  <article id="s-guide-c4" data-ch="think" data-title="The Good Life">
+  <article id="s-guide-c4" data-art="book" data-tone="g4" data-ch="think" data-title="The Good Life">
     <p class="when">FIL220 · second-year study guide · 2024 · a class of 59</p>
     <p>An undergraduate ethics course on theories of human flourishing, structured around weekly themes such as Gratification, Community, Nature, Salvation and Purpose, and drawing on Greek philosophy, African communitarianism, non-dualism and contemporary virtue ethics. Supported by a custom reader, <em>The Flourishing Reader</em>, and a tutorial programme that develops philosophical writing and argumentation week by week.</p>
     <div class="embed doc" data-src="https://drive.google.com/file/d/1s0MkeIHtiM6fWMTTCvUHy6ZUCJWnCTWy/preview"></div>
     <p class="more"><a href="https://drive.google.com/file/d/1s0MkeIHtiM6fWMTTCvUHy6ZUCJWnCTWy/view" target="_blank" rel="noopener">Open in Google Drive ↗</a> <button type="button" data-sheet="guides">All the guides →</button></p>
   </article>
 
-  <article id="s-guide-c2" data-ch="think" data-title="Introduction to Metaphysics and Epistemology">
+  <article id="s-guide-c2" data-art="book" data-tone="g2" data-ch="think" data-title="Introduction to Metaphysics and Epistemology">
     <p class="when">FIL110 · first-year study guide · 2021 edition · a class of 485</p>
     <p>Created from scratch in 2019 and still in use at the University of Pretoria in 2026. The course traces the history of philosophy around the globe, from prehistoric times and ancient philosophy to contemporary traditions, with a special focus on metaphysics and epistemology: in my estimation an example of what a decolonised philosophy curriculum can look like in practice.</p>
     <div class="embed doc" data-src="https://drive.google.com/file/d/13TF79Pmrm2vzLXlY2qWeY7tKRKQqG3Kl/preview"></div>
     <p class="more"><a href="https://drive.google.com/file/d/13TF79Pmrm2vzLXlY2qWeY7tKRKQqG3Kl/view" target="_blank" rel="noopener">Open in Google Drive ↗</a> <button type="button" data-sheet="guides">All the guides →</button></p>
   </article>
 
-  <article id="s-guide-c1" data-ch="think" data-title="Introduction to Moral and Political Philosophy">
+  <article id="s-guide-c1" data-art="book" data-tone="g1" data-ch="think" data-title="Introduction to Moral and Political Philosophy">
     <p class="when">FIL251 · second-year study guide · 2018</p>
     <p>My first foray into curriculum design. The course introduces business students to major ethical theories, including utilitarianism, virtue ethics, Ubuntu and social contract theory, and then immerses them in case studies where those theories meet real life. Two introductory weeks examine ethics and business ethics through South African examples of corruption and State Capture.</p>
     <div class="embed doc" data-src="https://drive.google.com/file/d/1PyHxx5P82uR4scggzbXyaiEwtKlkTex6/preview"></div>
     <p class="more"><a href="https://drive.google.com/file/d/1PyHxx5P82uR4scggzbXyaiEwtKlkTex6/view" target="_blank" rel="noopener">Open in Google Drive ↗</a> <button type="button" data-sheet="guides">All the guides →</button></p>
   </article>
 
-  <article id="s-lectures" data-ch="think" data-title="Recorded live online lectures">
+  <article id="s-lectures" data-art="play" data-ch="think" data-title="Recorded live online lectures">
     <p>Online, I present live and encourage students to chat in the comments as much as they like. The live-stream feel resonates with students, makes the recordings livelier for those watching later, and gives me an easy way to gauge engagement as I teach. I bought my own software and equipment so that my slides and I appear on screen together in good quality.</p>
     <h4>First-year metaphysics · FIL110 · 4 May 2021 · a class of 485</h4>
     <div class="embed vid" data-src="https://drive.google.com/file/d/1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ/preview"></div>
@@ -1042,7 +1043,7 @@
     <p class="more"><a href="https://drive.google.com/file/d/1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ/view" target="_blank" rel="noopener">Lecture one in Drive ↗</a> <a href="https://drive.google.com/file/d/1JqwCuWJwbXZ4gx45t1xbDxAtxvrOAqL3/view" target="_blank" rel="noopener">Lecture two in Drive ↗</a></p>
   </article>
 
-  <article id="s-testimonials" data-ch="think" data-title="Testimonials" data-read>
+  <article id="s-testimonials" data-art="quote" data-ch="think" data-title="Testimonials" data-read>
     <p class="when">Students, mentors, examiners and colleagues, in their own words, with the numbers behind them.</p>
     <h4>Students</h4>
     <p><strong>4.5 out of 5</strong> is my average rating across the eight university courses that had a numerical student evaluation, from a first-year class of 485 to an honours seminar of six. Weighted by the number of students who answered it is 4.3; the large second-year ethics class of 2018 pulls it down.</p>
@@ -1093,7 +1094,7 @@
     <p class="more"><button type="button" data-sheet="referees">Referees →</button> <button type="button" data-sheet="ai">Teaching in the age of AI →</button></p>
   </article>
 
-  <article id="s-publications" data-ch="think" data-title="Research and publications">
+  <article id="s-publications" data-art="scroll" data-ch="think" data-title="Research and publications">
     <h4>Research interests</h4>
     <div class="pills">
       <span>Plato and the Platonic tradition</span><span>Neoplatonism and theurgy</span><span>Philosophical esotericism</span>
@@ -1114,7 +1115,7 @@
     <p class="more"><button type="button" data-sheet="papers">Conference papers →</button> <button type="button" data-sheet="funding">Funding and collaboration →</button></p>
   </article>
 
-  <article id="s-papers" data-ch="think" data-title="Conference papers">
+  <article id="s-papers" data-art="mic" data-ch="think" data-title="Conference papers">
     <p>Thirteen papers at conferences, colloquia and workshops since 2012.</p>
     <ol class="timeline">
       <li><b>2026</b> Is Philosophy A(gnostic)? Post-disciplinary Interventions in the Time of Metacrisis · PSSA Annual Conference, University of Cape Town · co-presented with Mitchell Black</li>
@@ -1138,7 +1139,7 @@
     </ul>
   </article>
 
-  <article id="s-funding" data-ch="think" data-title="Funding and collaboration">
+  <article id="s-funding" data-art="people" data-ch="think" data-title="Funding and collaboration">
     <h4>Research funding</h4>
     <ul class="list">
       <li><strong>UJ Postdoctoral Fellowship</strong> · Platonic and African Esotericism · 2024 to 2026</li>
@@ -1154,7 +1155,7 @@
     </ul>
   </article>
 
-  <article id="s-philosophy" data-ch="think" data-title="Teaching philosophy" data-read>
+  <article id="s-philosophy" data-art="temple" data-ch="think" data-title="Teaching philosophy" data-read>
     <p>I have been teaching philosophy at university, from tutoring to full lectureships, for more than fifteen years, and my teaching philosophy has evolved a great deal in that time. Since I first encountered philosophy in my teens, I have been drawn to a wider view of the subject than the heavily Western curriculum taught at most modern universities, and it was always a dream of mine to create a broader introduction to philosophy for novice students. The turning point came when the #FeesMustFall movement of 2016 to 2018 raised demands for free and decolonised education at South African universities. Moved by my own commitments and the legitimate concerns of these students, I leapt at the opportunity to create a more inclusive and diverse introductory module at the University of Pretoria in 2019. Students responded overwhelmingly positively to it, I kept improving it each year I taught it, and the University still uses it as of 2026.</p>
     <h4>Teaching style</h4>
     <p>My teaching style is relaxed and engaging. I want students to feel what it is like to <em>do</em> philosophy, not only to learn a historical outline of influential ideas. My curricula give them a broad, global overview of that history, and alongside it they work through thought experiments together. For example, early in the semester, I might ask groups to “prove to me that the person sitting next to you exists”. After a few minutes I hear their answers and point out what works and where they run into issues. Exercises like this let students practise metaphysics and epistemology for themselves: alongside seeing how famous philosophers have tackled the same questions, they feel part of a tradition of thought from the start, rather than outsiders peering into some esoteric domain of inscrutable theory. These exercises also make dialogue the standard way of working in my classroom, and that habit of dialogue is what affords students a real grounding in philosophy. When students speak up, they can count on encouragement. I can critique a position without making anyone feel attacked, and I almost always start with what is worthwhile and clever in a comment, drawing out connections the student may not have seen.</p>
@@ -1170,26 +1171,26 @@
     <p class="more"><button type="button" data-sheet="curriculum">Curriculum design →</button> <button type="button" data-sheet="assessment">Assessment →</button> <button type="button" data-sheet="support">Student support →</button></p>
   </article>
 
-  <article id="s-curriculum" data-ch="think" data-title="Curriculum and course development" data-read>
+  <article id="s-curriculum" data-art="blocks" data-ch="think" data-title="Curriculum and course development" data-read>
     <p>My first foray into curriculum design was in 2018, when I redesigned FIL251: Introduction to Moral and Political Philosophy, an enrichment course at the University of Pretoria. The course introduces business students to major ethical theories, including utilitarianism, virtue ethics, Ubuntu and social contract theory, and was built around presenting a theory and then immediately immersing students in case studies where its application to real-life scenarios could be explored. Two introductory weeks focused on understanding the study of ethics and morality in general, and business ethics in particular, through pertinent South African examples of corruption and State Capture. Reports from lecturers in later years have confirmed the continuing efficacy of combining theory with practical, topical examples. <button type="button" class="inline" data-sheet="guide-c1">Study guide</button></p>
     <p>In 2019 I was given the opportunity to create my own introductory philosophy curriculum from scratch, and so created FIL110: Introduction to Metaphysics and Epistemology, a course still in use at the University of Pretoria today. It traces the history of philosophy around the globe from prehistoric times and ancient philosophy to contemporary traditions, with a special focus on metaphysics and epistemology. The course has been hugely successful and popular, and is in my estimation an excellent example of what a decolonised philosophy curriculum may look like in practice. For it I also collaborated with Prof Emma Ruttkamp-Bloem on a custom reader for 2019 and 2020 (<em>Lovers of Wisdom</em>, Cengage), and in 2021 created a bespoke course package of freely available encyclopaedia entries and primary readings, <em>Living Philosophy</em>. <button type="button" class="inline" data-sheet="guide-c2">Study guide</button></p>
     <p>In 2023 I designed two more courses. FIL710: The (Secret) History of Thought: Introduction to Philosophical Esotericism is a postgraduate course exploring the concept of esotericism, both literary and ideological, within philosophy: different types of esotericism, close readings of theories of esotericism, and then the phenomenon in depth as it appears in Plato. FIL220: The Good Life is an undergraduate ethics course on theories of human flourishing, structured around weekly themes such as Gratification, Community, Nature, Salvation and Purpose, and introducing a wide range of traditions, from Greek philosophy and African communitarianism to non-dualism and contemporary virtue ethics. It is supported by a custom reader, <em>The Flourishing Reader</em>, and a structured tutorial programme that develops philosophical writing and argumentation week by week. Both courses are designed around active engagement with primary and secondary texts, and encourage students to examine and develop their own conceptions of meaning, value, and the role of philosophy in life. <button type="button" class="inline" data-sheet="guide-c3">FIL710 guide</button> · <button type="button" class="inline" data-sheet="guide-c4">FIL220 guide</button></p>
     <p>In 2026 I designed and presented a further honours seminar, FIL710 and FIL810: Philosophy as a Rite of Rebirth: From Ancient Egypt to Neoplatonism. The course asks what the point of philosophy is, through a close reading of Algis Uždavinys’ <em>Philosophy as a Rite of Rebirth</em> (2008). It was my most experimental course to date, with demanding weekly in-person symposiums, punctuated by assessments that included multimodal outputs ranging from video essays and podcasts to written work, and a final sit-down essay that asked students an unseen question about the role of philosophy in a world where AI can produce high-quality philosophical content. In the university’s module evaluation, students gave the course an average of 4.81 out of 5. <button type="button" class="inline" data-sheet="guide-c5">Study guide</button></p>
   </article>
 
-  <article id="s-assessment" data-ch="think" data-title="Assessment practices" data-read>
+  <article id="s-assessment" data-art="check" data-ch="think" data-title="Assessment practices" data-read>
     <p>In preparing assessments, I follow best practice based on the core outcomes of modules in philosophy. For introductory courses this means training students in analysis and synthesis: memorising and understanding core concepts and facts, and interpreting that information to deliver insightful answers to difficult questions. I use a three-pronged approach. Practical skills in argumentation are taught in tutorials by tutors I coach closely; short questions test insight; and essay questions ask students to explain philosophers’ theories and arguments in their own words. Readings are chosen to give context to the lectures, and I encourage students to read before class, come with questions, review before assessments and practise their reasoning in tutorials.</p>
     <p>For small postgraduate groups I set longer essays and regular smaller assessments on the readings, and I take each student’s participation in discussion into account. My long-form postgraduate seminars, usually a weekly three-hour session, encourage direct participation and close reading of difficult material, resulting in lively discussion where I play less the part of a lecturer and more that of a philosophical peer, guiding students to their own insights while illuminating the finer aspects of each reading and the intertextual intricacies that arise from a deliberately curated reading list.</p>
     <p>Students are continually reminded that success in philosophy requires not only learning but understanding, and that understanding makes all the difference in their assessments. They are given clear instructions on what assessments entail and what is expected, and have ample opportunities for feedback from me and from the tutor teams I manage. In the high school classroom I rely on continual informal assessment: quick questioning, short written tasks and quizzes such as Kahoot, which my mentor at Abbotts singled out as a strength. This lets me adjust a lesson while it is still happening.</p>
     <p class="more"><button type="button" data-sheet="macbeth">A revision sheet I made for Grade 10 →</button></p>
   </article>
 
-  <article id="s-support" data-ch="think" data-title="Student support, mentoring and coaching" data-read>
+  <article id="s-support" data-art="heart" data-ch="think" data-title="Student support, mentoring and coaching" data-read>
     <p>The university experience can be challenging, and I firmly believe in giving students every opportunity to succeed. I use a diversified approach to student support, mentoring and coaching outside contact lectures. My study guides always contain detailed information on all available support structures at the university, as well as the relevant grievance procedures. I make myself available during ample consultation hours, am always available before and after lectures, and am happy to chat to students should they see me outside those times.</p>
     <p>For every course I have designed I have set up dedicated email addresses for administrative enquiries, more recently supplemented with dedicated support forums online. I engage regularly with elected class representatives, making sure that students have good representation and various extracurricular avenues of peer engagement, such as social media groups and instant messaging services. Finally, I track student progress through learning-platform analytics that flag students at risk, weekly meetings and regular contact with my tutor teams, so that students who are struggling can be contacted early.</p>
   </article>
 
-  <article id="s-book" data-ch="make" data-title="Book a free intro call">
+  <article id="s-book" data-art="calendar" data-ch="make" data-title="Book a free intro call">
     <p class="when">Twenty minutes · Tuesday to Thursday · Google Meet · no Google account needed</p>
     <p>Pick a time that suits you. We talk through what you need, and afterwards I send a plan, a rate and a start date.</p>
     <div class="embed doc tall cal" data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ11pU0NRSw__vUJWAweRPa2YJCnNXR6dOgexH-VRCX0PfJg78W8FIM9bO59qfqQOc2UBE0PDRxP?gv=true"></div>
@@ -1197,7 +1198,7 @@
     <p class="note">Mornings 09:00 to 12:00 and afternoons 14:00 to 16:00, South African time. If nothing suits, write to me instead.</p>
   </article>
 
-  <article id="s-tutoring" data-ch="make" data-title="Tutoring and TEFL">
+  <article id="s-tutoring" data-art="quill" data-ch="make" data-title="Tutoring and TEFL">
     <p class="rate">From R350 an hour · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1228,7 +1229,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-tutoring">Request tutoring</button> <button type="button" data-sheet="working">How it works →</button></p>
   </article>
 
-  <article id="s-editing" data-ch="make" data-title="Editing and writing support">
+  <article id="s-editing" data-art="edit" data-ch="make" data-title="Editing and writing support">
     <p class="rate">From R0.30 a word, or R450 an hour · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1259,7 +1260,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-editing">Request editing</button> <button type="button" data-sheet="guides">See the study guides →</button></p>
   </article>
 
-  <article id="s-design" data-ch="make" data-title="Learning design and tools">
+  <article id="s-design" data-art="blocks" data-ch="make" data-title="Learning design and tools">
     <p class="rate">Quoted per project, after a free intro call · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1284,7 +1285,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-design">Request a design</button> <button type="button" data-sheet="guides">See the study guides →</button> <button type="button" data-sheet="lectures">Watch a lecture →</button></p>
   </article>
 
-  <article id="s-consulting" data-ch="make" data-title="Philosophical and AI consulting">
+  <article id="s-consulting" data-art="dots" data-ch="make" data-title="Philosophical and AI consulting">
     <p class="rate">Quoted per project, after a free intro call · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1311,7 +1312,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-consulting">Request consulting</button> <button type="button" data-sheet="working">How it works →</button></p>
   </article>
 
-  <article id="s-working" data-ch="make" data-title="Working with me">
+  <article id="s-working" data-art="envelope" data-ch="make" data-title="Working with me">
     <h4>How it works</h4>
     <ul class="list">
       <li>Press a Request button anywhere on this page. It drafts a message with the right questions in it, which you send from your own email app or from Gmail, or copy and send however you like.</li>
@@ -1342,7 +1343,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-any">Write to me</button></p>
   </article>
 
-  <article id="s-referees" data-ch="write" data-title="Referees">
+  <article id="s-referees" data-art="people" data-ch="write" data-title="Referees">
     <ul class="list refs">
       <li><strong>Prof Emma Ruttkamp-Bloem</strong><br>Head of the Department of Philosophy, University of Pretoria<br><a href="mailto:emma.ruttkamp-bloem@up.ac.za">emma.ruttkamp-bloem@up.ac.za</a></li>
       <li><strong>Prof John F. Finamore</strong><br>University of Iowa<br><a href="mailto:john-finamore@uiowa.edu">john-finamore@uiowa.edu</a></li>
@@ -1353,7 +1354,7 @@
     </ul>
   </article>
 
-  <article id="s-resume" data-ch="write" data-title="The full resume">
+  <article id="s-resume" data-art="scroll" data-ch="write" data-title="The full resume">
     <p>Every module taught, every paper, the complete teaching portfolio and the addenda, kept up to date as a Google Doc.</p>
     <div class="embed doc tall" data-src="https://docs.google.com/document/d/1uBnQTpyejNyltP889HYTxGxJh2-pD4FMiTWkkgGSCeg/preview"></div>
     <p class="more"><a href="https://docs.google.com/document/d/1uBnQTpyejNyltP889HYTxGxJh2-pD4FMiTWkkgGSCeg/view" target="_blank" rel="noopener">Open in Google Docs ↗</a></p>
@@ -1361,7 +1362,7 @@
 
 </div>
 
-<script src="assets/main.js?v=36"></script>
+<script src="assets/main.js?v=37"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
