@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=33">
+<link rel="stylesheet" href="assets/style.css?v=34">
 </head>
 <body data-chapter="threshold">
 
@@ -260,7 +260,11 @@
         <a class="btn cab-down" href="#make-detail" data-goto="#make-detail" data-track="down-make">More →</a>
       </div>
       <div class="cab-object">
-        <canvas class="tetra" id="tetra" tabindex="0" aria-label="A slowly turning tetraktys: ten points in a pyramid. Drag to turn it."></canvas>
+        <div class="solid-wrap maker">
+          <canvas class="tetra" id="tetra" tabindex="0" aria-label="A slowly turning shape, one for each service. Drag to turn it, press Enter to change it."></canvas>
+          <p class="solid-label"><button class="maker-name" id="maker-name" type="button" data-sheet="tutoring" data-track="maker-open">Tutoring</button> · <span id="maker-what">Quill</span></p>
+          <p class="solid-hint">drag to turn · tap to change</p>
+        </div>
       </div>
     </div>
   </div>
@@ -1267,7 +1271,7 @@
 
 </div>
 
-<script src="assets/main.js?v=33"></script>
+<script src="assets/main.js?v=34"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

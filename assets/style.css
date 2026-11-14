@@ -1006,7 +1006,7 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 @media (max-width: 640px) { .room .svc .svc-vis { height: 64px; margin-bottom: 6px; } }
 
 /* ---------- The tetraktys on the Make cabinet: ten points in a pyramid, drawn by main.js ---------- */
-.tetra { display: block; width: min(400px, 64vw, 52vh); aspect-ratio: 1; margin-inline: auto; cursor: grab; touch-action: pan-y; border-radius: 50%; }
+.tetra { display: block; width: min(400px, 64vw, 52vh); aspect-ratio: 1; margin-inline: auto; cursor: grab; touch-action: pan-y; }
 .tetra.dragging { cursor: grabbing; }
 .tetra:focus-visible { outline: 1px dashed var(--accent); outline-offset: 8px; }
 @media (max-width: 640px) { .tetra { width: min(260px, 62vw, 34svh); } }
@@ -1018,3 +1018,10 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .room .svc:hover .tetractys circle, .room .svc:focus-within .tetractys circle { animation-name: breathe; }
 .room .svc .typer .caret { visibility: hidden; }
 .room .svc:hover .typer .caret, .room .svc:focus-within .typer .caret { visibility: visible; }
+
+/* ---------- The maker's shapes: the caption under the Make cabinet's object ---------- */
+.maker { gap: 8px; }
+.maker-name { all: unset; cursor: pointer; color: var(--accent); border-bottom: 1px dotted color-mix(in srgb, var(--accent) 60%, transparent); transition: border-color .3s; }
+.maker-name:hover, .maker-name:focus-visible { border-bottom-style: solid; border-color: var(--accent); }
+.maker-name:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+@media (max-width: 640px) { .maker .solid-label { font-size: 16px; } .tetra { width: min(250px, 60vw, 30svh); } }

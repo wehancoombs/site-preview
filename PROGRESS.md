@@ -500,3 +500,11 @@ Pushed live on 2026-11-14, straight to main, at Wehan's request, so that the liv
 - **Tetraktys.** A canvas (id tetra) drawn by main.js with no library: the four corners of a tetrahedron and the middle of each of its six edges, ten points in layers of one, three and six, joined to their neighbours, in the Make colour. It turns slowly, a drag turns it, the left and right arrow keys turn it when it has focus, and vertical swipes still change cabinet. It will be replaced by the desk.
 - **Make cards.** The quill, the typewriter line, the blocks and the ten dots now move only while the pointer is over their card or focus is inside it. At rest the quill is fully drawn, the typewriter shows To write well, read closely., the blocks hold their first layout and the dots are still.
 - Assets at v=33.
+
+---
+
+## 2026-11-14 (night): the maker's shapes on the Make cabinet (step 1 of 3)
+
+Committed on main, not pushed. Wehan liked the stopgap tetraktys and dropped the three.js desk (parked as a WIP commit on the branch desk; do not merge). The Make cabinet now carries one canvas object in the style of the home dodecahedron that morphs through four wireframes, one per service, with a title under it: Tutoring, a quill; Editing, the words of the first editing sentence drifting in a cloud, then the kept words gathering into the shorter sentence; Learning design, the four stages of the lesson on The Poet as blocks as long as their minutes, a row that reassembles into a staircase and back (it sways instead of spinning, so its names stay readable); Philosophical and AI consulting, the tetraktys with single points lighting and dimming. A drag turns it, a tap or Enter changes it, left alone it moves on every 13 seconds, and the title is a button that opens that service. With reduced motion the shapes hold still and change at once. New words under the object: Quill, Words, Lesson stages, Tetraktys, and the names and minutes of the four stages (from the portfolio). Assets at v=34.
+
+Next, steps 2 and 3: the portfolio's lesson layout (badges, hook question, lesson-at-a-glance bar, download cards, reflection) for the lesson pop-ups, using the lesson plans in Drive under PGCE, WIL; then the header, badges and cards across the other pop-ups.
