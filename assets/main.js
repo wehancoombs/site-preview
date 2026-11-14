@@ -452,6 +452,17 @@
       if (v) li.style.setProperty('--v', (v / 5).toFixed(3));
     })));
   }
+  // The lesson at a glance: tap a stage in the bar and read that stage.
+  function initStages(container) {
+    $$('.lesson-bar', container).forEach(bar => {
+      const steps = bar.parentElement.querySelector('ol.steps'); if (!steps) return;
+      const segs = $$('span', bar), items = $$('li', steps);
+      bar.classList.add('staged'); steps.classList.add('staged');
+      const pick = i => { segs.forEach((s, k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-pressed', k === i ? 'true' : 'false'); }); items.forEach((li, k) => { li.dataset.n = k + 1; li.classList.toggle('on', k === i); }); };
+      segs.forEach((s, i) => { s.setAttribute('role', 'button'); s.setAttribute('tabindex', '0'); s.addEventListener('click', () => pick(i)); s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(i); } }); });
+      pick(0);
+    });
+  }
   function openSheet(id) {
     const item = library[id];
     if (!item) return;
@@ -467,7 +478,7 @@
     sheet.classList.toggle('read', !!item.read);
     dressSheet(sheetBody);
     if (item.read) addContents(sheetBody);
-    activateEmbeds(sheetBody); activateRequest(sheetBody); activateRatings(sheetBody);
+    activateEmbeds(sheetBody); activateRequest(sheetBody); activateRatings(sheetBody); initStages(sheetBody);
     if (sheetBody.querySelector('.blocks')) layout(lk); // the design blocks, laid out in the copy that just opened
     const order = ORDER[item.ch] || [], i = order.indexOf(id);
     $('#sheet-prev').disabled = !(i > 0); $('#sheet-next').disabled = !(i >= 0 && i < order.length - 1);

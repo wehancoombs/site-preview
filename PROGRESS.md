@@ -508,3 +508,13 @@ Pushed live on 2026-11-14, straight to main, at Wehan's request, so that the liv
 Committed on main, not pushed. Wehan liked the stopgap tetraktys and dropped the three.js desk (parked as a WIP commit on the branch desk; do not merge). The Make cabinet now carries one canvas object in the style of the home dodecahedron that morphs through four wireframes, one per service, with a title under it: Tutoring, a quill; Editing, the words of the first editing sentence drifting in a cloud, then the kept words gathering into the shorter sentence; Learning design, the four stages of the lesson on The Poet as blocks as long as their minutes, a row that reassembles into a staircase and back (it sways instead of spinning, so its names stay readable); Philosophical and AI consulting, the tetraktys with single points lighting and dimming. A drag turns it, a tap or Enter changes it, left alone it moves on every 13 seconds, and the title is a button that opens that service. With reduced motion the shapes hold still and change at once. New words under the object: Quill, Words, Lesson stages, Tetraktys, and the names and minutes of the four stages (from the portfolio). Assets at v=34.
 
 Next, steps 2 and 3: the portfolio's lesson layout (badges, hook question, lesson-at-a-glance bar, download cards, reflection) for the lesson pop-ups, using the lesson plans in Drive under PGCE, WIL; then the header, badges and cards across the other pop-ups.
+
+---
+
+## 2026-11-14 (late night): the lesson at a glance (step 2 of 3, the two lessons with data)
+
+Committed on main, not pushed. The Macbeth and The Poet pop-ups gain the portfolio's lesson-at-a-glance bar: four stages as wide as their minutes; tapping a stage shows its description; under it, one line of reflection. Every word is from the PGCE portfolio's two lesson pop-outs (The Poet: Hook 5, Device hunt 10, Poiesis 15, The dilemma 15; Macbeth: Hook 10, Ambition 10, The blame debate 20, PEEL 5). The script initStages runs when a pop-up opens. Assets at v=35.
+
+The lesson plans in Drive (WORK, 0 - PGCE and TEACHING, Archive, WIL: 9 plans from Garsfontein, 22 from Abbotts, as filled-in PDF forms) record an introduction, a body and a consolidation for each lesson, and a 45-minute duration, but no minutes per stage and no stage names. So the timed bar exists only for the two lessons the portfolio already broke down. For The Tempest, For Oom Piet, The Herb Garden, Grammar, Film study and Philosophy for teenagers the choice is Wehan's: give stage names and minutes, or accept a three-part bar (Introduction, Body, Consolidation) in the plans' own words with no minutes.
+
+Portfolio patterns still to carry over (step 3): a tinted header with a large faint icon per pop-up, download cards, a colour per lesson.
