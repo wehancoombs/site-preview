@@ -484,3 +484,9 @@ Wehan's three instructions: Write to me is still messy; unlink the PGCE portfoli
 - **PGCE portfolio.** Both links to it are gone: the one under How I work in the Teach detail and the one at the foot of the Abbotts College pop-up. Still there, flagged to Wehan: the micro-lesson video in the Teaching approach pop-up plays from the portfolio's address, and its caption ends with the words from my PGCE portfolio.
 - **Published.** The branch cabinet was merged into main and pushed on 2026-11-14, with the tags before-cabinet and before-details. Assets at v=31.
 - **Next.** The Make cabinet still shows a dashed circle. The plan put to Wehan is a maker's desk: the four small drawings that used to sit on the service cards (quill, typewriter line, blocks, tetractys) set out on a desk, each opening its service.
+
+---
+
+## 2026-11-14 (last): video out, animations back on the Make cards
+
+On main, committed, not pushed. The micro-lesson video and its caption are removed from the Teaching approach pop-up, so nothing on the site points at or plays from the PGCE portfolio any more. The four service animations (quill, typewriter line, blocks, ten dots) are back on the Make detail cards at Wehan's request; the service pop-ups keep the sub-line, the three points and the proof line. Assets at v=32. Wehan wants an interactive 3D object on the Make cabinet; which object is still open.

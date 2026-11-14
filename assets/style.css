@@ -998,3 +998,9 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
   .write-side .seals .seal-label small { font-size: 11.5px; }
   .write-pane footer { margin-top: 14px; padding: 14px 0 18px; }
 }
+
+/* The four service animations are back on the Make cards */
+.room .svc .svc-vis { position: static; inset: auto; height: clamp(70px, 11vh, 96px); margin: 0 0 12px; opacity: 1 !important; }
+.room .svc .blocks { transform: scale(.7); }
+.svc-summary { grid-template-columns: 1fr; }
+@media (max-width: 640px) { .room .svc .svc-vis { height: 64px; margin-bottom: 6px; } }
