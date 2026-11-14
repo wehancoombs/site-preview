@@ -1046,3 +1046,6 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .sheet-body ol.steps.staged li { display: none; }
 .sheet-body ol.steps.staged li.on { display: block; animation: fadein .3s; }
 .sheet-body ol.steps.staged li::before { content: attr(data-n); }
+/* Every stage is at least as wide as its name; the minutes share out the rest of the bar */
+.lesson-bar span { min-width: fit-content; }
+@media (max-width: 640px) { .lesson-bar { gap: 3px; } .lesson-bar span { padding: 9px 7px 7px; font-size: 11px; } .lesson-bar b { font-size: 19px; } }

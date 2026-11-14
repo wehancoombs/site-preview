@@ -518,3 +518,24 @@ Committed on main, not pushed. The Macbeth and The Poet pop-ups gain the portfol
 The lesson plans in Drive (WORK, 0 - PGCE and TEACHING, Archive, WIL: 9 plans from Garsfontein, 22 from Abbotts, as filled-in PDF forms) record an introduction, a body and a consolidation for each lesson, and a 45-minute duration, but no minutes per stage and no stage names. So the timed bar exists only for the two lessons the portfolio already broke down. For The Tempest, For Oom Piet, The Herb Garden, Grammar, Film study and Philosophy for teenagers the choice is Wehan's: give stage names and minutes, or accept a three-part bar (Introduction, Body, Consolidation) in the plans' own words with no minutes.
 
 Portfolio patterns still to carry over (step 3): a tinted header with a large faint icon per pop-up, download cards, a colour per lesson.
+
+---
+
+## 2026-11-15: timed bars for eight more lessons, from the WIL lesson plans
+
+Steps 1 and 2 (the maker's shapes; the bars for Macbeth and The Poet) were pushed live on 2026-11-14. This entry is committed on main, not pushed.
+
+Wehan said the times are in the lesson plan form answers, and they are. The plans are flattened PDF forms; what he typed is 12pt Arial, and each plan has four timed stages named by the form: Hook, Introduction, Body, Consolidation. A script (scratchpad, lessonplans/extract.py) reads them by position. All 31 plans have times; one has no consolidation time.
+
+The lesson at a glance now also appears in eight pop-ups, each for one lesson, with the date under the heading:
+
+- The Tempest: Abbotts plan 18, Act 3 Scene 3, 4 September 2026 (5, 5, 25, 5)
+- Too Many Words: Garsfontein plan 2, 11 May 2026 (5, 5, 15, 5)
+- The Clothes: Garsfontein plan 7, 18 May 2026 (5, 5, 15, 5)
+- For Oom Piet: Abbotts plan 2, 30 July 2026 (5, 10, 25, 5)
+- The Herb Garden: Abbotts plan 5, 6 August 2026 (5, 10, 20, 5)
+- Grammar: Garsfontein plan 1, conditionals, 11 May 2026 (5, 10, 15, 5)
+- Film study: Abbotts plan 9, Spirited Away and FRAME, 20 August 2026 (15, 5, 20, 5)
+- Philosophy for teenagers: Abbotts plan 13, 31 August 2026 (5, 10, 20, 5)
+
+Each stage's description is what Wehan wrote in that part of the plan (the teacher's column; the SMART task notes are left out). Only spelling slips and quotation marks were tidied; nothing was reworded, so the register is that of a lesson plan and the tense varies. One fix: in the Grammar plan two form lines overlap, and a stray tail was removed from the Hook. The stage names for these eight are the form's four; Macbeth and The Poet keep the portfolio's own names. Each stage in a bar is now at least as wide as its name. Assets at v=36.
