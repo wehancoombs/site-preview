@@ -1004,3 +1004,17 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .room .svc .blocks { transform: scale(.7); }
 .svc-summary { grid-template-columns: 1fr; }
 @media (max-width: 640px) { .room .svc .svc-vis { height: 64px; margin-bottom: 6px; } }
+
+/* ---------- The tetraktys on the Make cabinet: ten points in a pyramid, drawn by main.js ---------- */
+.tetra { display: block; width: min(400px, 64vw, 52vh); aspect-ratio: 1; margin-inline: auto; cursor: grab; touch-action: pan-y; border-radius: 50%; }
+.tetra.dragging { cursor: grabbing; }
+.tetra:focus-visible { outline: 1px dashed var(--accent); outline-offset: 8px; }
+@media (max-width: 640px) { .tetra { width: min(260px, 62vw, 34svh); } }
+
+/* ---------- The Make cards' animations run only while the pointer is over the card (or focus is inside it) ---------- */
+.room .svc .quill > path { animation-name: none; stroke-dashoffset: 0; }
+.room .svc:hover .quill > path, .room .svc:focus-within .quill > path { animation-name: draw; }
+.room .svc .tetractys circle { animation-name: none; opacity: .85; }
+.room .svc:hover .tetractys circle, .room .svc:focus-within .tetractys circle { animation-name: breathe; }
+.room .svc .typer .caret { visibility: hidden; }
+.room .svc:hover .typer .caret, .room .svc:focus-within .typer .caret { visibility: visible; }

@@ -270,7 +270,7 @@
   document.addEventListener('keydown', e => {
     if (overlayOpen() || e.altKey || e.ctrlKey || e.metaKey) return;
     const a = document.activeElement;
-    if (/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) || a.id === 'solid') return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) || a.id === 'solid' || a.id === 'tetra') return;
     if (room) {
       if (e.key === 'Escape' || e.key === 'ArrowLeft') { e.preventDefault(); closeRoom(); }
       else if (e.key === 'ArrowDown') room.scrollBy({ top: 90 });
@@ -740,20 +740,36 @@
     ['Due to the fact that Macbeth is ambitious, he kills the king.', 'Ambition drives Macbeth to kill the king.']
   ];
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  (async function runTyper() {
-    let i = 0;
-    for (;;) {
-      const a = PAIRS[i % PAIRS.length][0], b = PAIRS[i % PAIRS.length][1]; i++;
-      for (let k = 1; k <= a.length; k++) { typeTo(a.slice(0, k)); await wait(26); }
-      await wait(1400);
-      for (let k = a.length; k >= 0; k--) { typeTo(a.slice(0, k)); await wait(11); }
-      await wait(260);
-      for (let k = 1; k <= b.length; k++) { typeTo(b.slice(0, k)); await wait(38); }
-      await wait(3000);
-      for (let k = b.length; k >= 0; k--) { typeTo(b.slice(0, k)); await wait(9); }
-      await wait(500);
+  // At rest the card shows one finished sentence. The typing runs only while the pointer is over the card, or focus is inside it.
+  let typing = 0;
+  async function runTyper(id) {
+    const live = () => typing === id;
+    for (let i = 0; live(); i++) {
+      const a = PAIRS[i % PAIRS.length][0], b = PAIRS[i % PAIRS.length][1];
+      for (let k = 1; k <= a.length && live(); k++) { typeTo(a.slice(0, k)); await wait(26); }
+      if (live()) await wait(1400);
+      for (let k = a.length; k >= 0 && live(); k--) { typeTo(a.slice(0, k)); await wait(11); }
+      if (live()) await wait(260);
+      for (let k = 1; k <= b.length && live(); k++) { typeTo(b.slice(0, k)); await wait(38); }
+      if (live()) await wait(3000);
+      for (let k = b.length; k >= 0 && live(); k--) { typeTo(b.slice(0, k)); await wait(9); }
+      if (live()) await wait(500);
     }
-  })();
+  }
+  const restTyper = () => typeTo(PAIRS[0][1]);
+  restTyper();
+  // Run fn(true) while the pointer is over a card or focus is inside it, fn(false) when both have left.
+  function whileOver(card, fn) {
+    if (!card) return;
+    let over = false, within = false, on = false;
+    const set = () => { const now = over || within; if (now !== on) { on = now; fn(on); } };
+    card.addEventListener('pointerenter', () => { over = true; set(); });
+    card.addEventListener('pointerleave', () => { over = false; set(); });
+    card.addEventListener('focusin', () => { within = true; set(); });
+    card.addEventListener('focusout', () => { within = false; set(); });
+  }
+  const typerEl = $('.typer');
+  whileOver(typerEl && typerEl.closest('.svc'), on => { typing++; if (on) runTyper(typing); else restTyper(); });
 
   /* ---------- The design blocks ---------- */
   const LAYOUTS = [
@@ -764,16 +780,77 @@
   ];
   function layout(k) { $$('.blocks').forEach(box => { const bs = $$('i', box); LAYOUTS[k].forEach((r, i) => { const b = bs[i]; if (!b) return; b.style.transform = 'translate(' + r[0] + 'px,' + r[1] + 'px)'; b.style.width = r[2] + 'px'; b.style.height = r[3] + 'px'; }); }); }
   let lk = 0; layout(0);
-  setInterval(() => { lk = (lk + 1) % LAYOUTS.length; layout(lk); }, 2800);
+  // The blocks rearrange themselves only while their card is pointed at; at rest they hold the first layout.
+  let blocksTimer = null;
+  const blocksEl = $('.blocks');
+  whileOver(blocksEl && blocksEl.closest('.svc'), on => {
+    clearInterval(blocksTimer); blocksTimer = null;
+    if (on) { const step = () => { lk = (lk + 1) % LAYOUTS.length; layout(lk); }; step(); blocksTimer = setInterval(step, 1800); }
+    else { lk = 0; layout(0); }
+  });
+
+  /* ---------- The tetraktys on the Make cabinet: ten points in a pyramid; it turns slowly, and a drag turns it ---------- */
+  // Four corners of a tetrahedron and the middle of each of its six edges: ten points in layers of one, three and six.
+  const tc = $('#tetra');
+  let drawTetra = () => {}, sizeTetra = () => {};
+  if (tc) {
+    const tx = tc.getContext('2d');
+    const R = Math.sqrt(8 / 9), V = [[0, 1, 0], [R, -1 / 3, 0], [-R / 2, -1 / 3, R * Math.sqrt(3) / 2], [-R / 2, -1 / 3, -R * Math.sqrt(3) / 2]];
+    const P = V.slice();
+    for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) P.push(V[a].map((v, n) => (v + V[b][n]) / 2));
+    const gap = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]), nearest = gap(P[0], P[4]);
+    const LINKS = [];   // every pair of neighbouring points
+    for (let a = 0; a < P.length; a++) for (let b = a + 1; b < P.length; b++) if (Math.abs(gap(P[a], P[b]) - nearest) < 1e-6) LINKS.push([a, b]);
+    const T = { ax: .32, ay: .6, vx: 0, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '' };
+    let TW = 0;
+    sizeTetra = () => { TW = tc.getBoundingClientRect().width || 300; tc.width = tc.height = Math.round(TW * DPR); tx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+    new IntersectionObserver(es => { T.seen = es[0].isIntersecting; }, { threshold: 0 }).observe(tc);
+    tc.addEventListener('pointerdown', e => { if (e.button) return; T.drag = { x: e.clientX, y: e.clientY }; tc.classList.add('dragging'); try { tc.setPointerCapture(e.pointerId); } catch (err) {} });
+    tc.addEventListener('pointermove', e => {
+      if (!T.drag) return;
+      const dx = e.clientX - T.drag.x, dy = e.clientY - T.drag.y; T.drag.x = e.clientX; T.drag.y = e.clientY;
+      T.ay += dx * .008; T.ax = Math.max(-1.2, Math.min(1.2, T.ax + dy * .008)); T.vy = dx * .0012; T.vx = 0;
+    });
+    const endTetra = () => { T.drag = null; tc.classList.remove('dragging'); };
+    tc.addEventListener('pointerup', endTetra); tc.addEventListener('pointercancel', endTetra);
+    tc.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { T.ay -= .2; e.preventDefault(); } else if (e.key === 'ArrowRight') { T.ay += .2; e.preventDefault(); } });
+    drawTetra = () => {
+      if (!T.seen || !TW) return;
+      const theme = root.getAttribute('data-theme') || 'dark';
+      if (theme !== T.theme || !T.col) { T.theme = theme; T.col = rgb(cssVar('--accent', tc) || '#C9A24D'); }
+      if (!T.drag) { T.ay += T.vy; T.vy += ((reduced ? 0 : .0035) - T.vy) * .02; T.ax += (.32 - T.ax) * .012; }
+      const ca = Math.cos(T.ax), sa = Math.sin(T.ax), cb = Math.cos(T.ay), sb = Math.sin(T.ay);
+      const pts = P.map(p => {
+        const x = p[0] * cb + p[2] * sb, z0 = -p[0] * sb + p[2] * cb, y = p[1] * ca - z0 * sa, z = p[1] * sa + z0 * ca, f = 3.4 / (3.4 - z);
+        return { x: TW / 2 + x * f * TW * .36, y: TW / 2 - (y - .12) * f * TW * .36, d: (z + 1) / 2 };
+      });
+      const col = T.col.r + ',' + T.col.g + ',' + T.col.b, tcol = pal.text.r + ',' + pal.text.g + ',' + pal.text.b;
+      tx.clearRect(0, 0, TW, TW);
+      tx.lineWidth = 1.2;
+      for (const l of LINKS) {
+        const a = pts[l[0]], b = pts[l[1]];
+        tx.strokeStyle = 'rgba(' + col + ',' + (.22 + .6 * (a.d + b.d) / 2).toFixed(3) + ')';
+        tx.beginPath(); tx.moveTo(a.x, a.y); tx.lineTo(b.x, b.y); tx.stroke();
+      }
+      for (const p of pts.slice().sort((a, b) => a.d - b.d)) {
+        const r = TW * (.011 + .013 * p.d);
+        tx.fillStyle = 'rgba(' + col + ',' + (.16 + .2 * p.d).toFixed(3) + ')';
+        tx.beginPath(); tx.arc(p.x, p.y, r * 2.6, 0, TAU); tx.fill();
+        tx.fillStyle = 'rgba(' + tcol + ',' + (.6 + .4 * p.d).toFixed(3) + ')';
+        tx.beginPath(); tx.arc(p.x, p.y, r, 0, TAU); tx.fill();
+      }
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(() => sizeTetra()).observe(tc);
+  }
 
   /* ---------- Main loop ---------- */
   function loop(t) {
-    if (pageVisible) { drawField(t); if (heroVisible) drawSolid(t); arcTick(t); }
+    if (pageVisible) { drawField(t); if (heroVisible) drawSolid(t); arcTick(t); drawTetra(); }
     requestAnimationFrame(loop);
   }
-  sizeField(); sizeSolid();
+  sizeField(); sizeSolid(); sizeTetra();
   let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { sizeField(); sizeSolid(); if (reduced) { drawField(0); drawSolid(performance.now()); } }, 120); });
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { sizeField(); sizeSolid(); sizeTetra(); if (reduced) { drawField(0); drawSolid(performance.now()); } }, 120); });
   requestAnimationFrame(loop);
   if ('ResizeObserver' in window) new ResizeObserver(() => sizeSolid()).observe(sc);
   openFromHash();

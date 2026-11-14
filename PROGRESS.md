@@ -490,3 +490,13 @@ Wehan's three instructions: Write to me is still messy; unlink the PGCE portfoli
 ## 2026-11-14 (last): video out, animations back on the Make cards
 
 On main, committed, not pushed. The micro-lesson video and its caption are removed from the Teaching approach pop-up, so nothing on the site points at or plays from the PGCE portfolio any more. The four service animations (quill, typewriter line, blocks, ten dots) are back on the Make detail cards at Wehan's request; the service pop-ups keep the sub-line, the three points and the proof line. Assets at v=32. Wehan wants an interactive 3D object on the Make cabinet; which object is still open.
+
+---
+
+## 2026-11-14 (stopgap): a tetraktys on the Make cabinet, and card animations only on mouseover
+
+Pushed live on 2026-11-14, straight to main, at Wehan's request, so that the live Make cabinet is not an empty dashed circle while the 3D desk is being built on the branch desk.
+
+- **Tetraktys.** A canvas (id tetra) drawn by main.js with no library: the four corners of a tetrahedron and the middle of each of its six edges, ten points in layers of one, three and six, joined to their neighbours, in the Make colour. It turns slowly, a drag turns it, the left and right arrow keys turn it when it has focus, and vertical swipes still change cabinet. It will be replaced by the desk.
+- **Make cards.** The quill, the typewriter line, the blocks and the ten dots now move only while the pointer is over their card or focus is inside it. At rest the quill is fully drawn, the typewriter shows To write well, read closely., the blocks hold their first layout and the dots are still.
+- Assets at v=33.
