@@ -523,7 +523,7 @@ Portfolio patterns still to carry over (step 3): a tinted header with a large fa
 
 ## 2026-11-15: timed bars for eight more lessons, from the WIL lesson plans
 
-Steps 1 and 2 (the maker's shapes; the bars for Macbeth and The Poet) were pushed live on 2026-11-14. This entry is committed on main, not pushed.
+Steps 1 and 2 (the maker's shapes; the bars for Macbeth and The Poet) were pushed live on 2026-11-14. This entry was pushed live on Wehan's "Publish" (v=36, checked on the live site: ten lesson bars).
 
 Wehan said the times are in the lesson plan form answers, and they are. The plans are flattened PDF forms; what he typed is 12pt Arial, and each plan has four timed stages named by the form: Hook, Introduction, Body, Consolidation. A script (scratchpad, lessonplans/extract.py) reads them by position. All 31 plans have times; one has no consolidation time.
 
