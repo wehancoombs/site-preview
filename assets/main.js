@@ -79,6 +79,19 @@
     if (!coarse) { lantern.style.transform = 'translate(' + (e.clientX - 320) + 'px,' + (e.clientY - 320) + 'px)'; body.classList.add('lit'); }
   }, { passive: true });
   document.addEventListener('mouseleave', () => body.classList.remove('lit'));
+  // TEMPORARY: the footer switch for the dots-and-lines background, on by default and remembered in this browser.
+  // Remove this block, the button in the footer and the .no-stars rule together once Wehan has decided.
+  // The research constellation in Think is a separate drawing and is never affected.
+  const starsBtn = $('#stars-toggle');
+  let starsOn = true;
+  try { starsOn = localStorage.getItem('stars') !== 'off'; } catch (e) {}
+  function paintStars() {
+    root.classList.toggle('no-stars', !starsOn);
+    starsBtn.textContent = 'Stars: ' + (starsOn ? 'on' : 'off');
+    starsBtn.setAttribute('aria-pressed', starsOn ? 'true' : 'false');
+  }
+  starsBtn.addEventListener('click', () => { starsOn = !starsOn; try { localStorage.setItem('stars', starsOn ? 'on' : 'off'); } catch (e) {} paintStars(); });
+  paintStars();
   let pageVisible = true;
   document.addEventListener('visibilitychange', () => { pageVisible = !document.hidden; });
 
@@ -226,29 +239,6 @@
   }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
   chapters.forEach(c => chapIO.observe(c));
 
-  /* ---------- Settle on a whole chapter ---------- */
-  // You scroll freely. When you stop, the page eases to the nearest place where one chapter fills the screen.
-  // A chapter taller than the screen scrolls freely inside itself; the foot of the page is a resting place too.
-  // Phones and tablets (touch screens, or anything up to 1024px wide) are left alone: their own momentum scrolling fights it.
-  let settleTimer = null;
-  function settle() {
-    if (body.classList.contains('locked')) return;
-    if (coarse || innerWidth <= 1024) return; // phones and tablets scroll freely
-    const y = scrollY, vh = innerHeight, max = Math.max(0, document.documentElement.scrollHeight - vh);
-    const targets = [max];
-    for (const c of chapters) {
-      const top = Math.round(c.getBoundingClientRect().top + y), h = c.offsetHeight;
-      if (top <= y + 2 && top + h >= y + vh - 2) return; // one chapter already fills the screen
-      targets.push(top);
-      if (h > vh) targets.push(top + h - vh);
-    }
-    let best = -1, bd = Infinity;
-    for (const t of targets) { const d = Math.abs(t - y); if (d < bd) { bd = d; best = t; } }
-    if (best < 0 || bd < 2 || bd > vh * .3) return;
-    window.scrollTo({ top: best, behavior: reduced ? 'auto' : 'smooth' });
-  }
-  window.addEventListener('scroll', () => { clearTimeout(settleTimer); settleTimer = setTimeout(settle, 450); }, { passive: true });
-
   // The scroll cue on the first screen goes once the visitor starts scrolling.
   const cue = $('.cue');
   if (cue) {
@@ -257,42 +247,8 @@
     hideCue();
   }
 
-  /* ---------- Reveal on scroll ---------- */
-  const revIO = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revIO.unobserve(e.target); } }); }, { threshold: .12 });
-  const onScreen = el => { const r = el.getBoundingClientRect(); return r.top < innerHeight * .95 && r.bottom > 0; };
-  $$('.reveal').forEach(el => {
-    if (onScreen(el)) { el.classList.add('in'); return; }
-    const sib = Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'));
-    el.style.transitionDelay = (sib.indexOf(el) * 110) + 'ms';
-    revIO.observe(el);
-  });
-  setTimeout(() => $$('.reveal').forEach(el => { if (onScreen(el) && !el.classList.contains('in')) { el.style.transition = 'none'; el.classList.add('in'); } }), 2500);
-
-  /* ---------- Counting numbers and the star rating ---------- */
-  const cntIO = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (!e.isIntersecting) return;
-      cntIO.unobserve(e.target);
-      const el = e.target, to = +el.dataset.count, suf = el.dataset.suffix || '', dec = +(el.dataset.decimals || 0), group = !!el.dataset.group, t0 = performance.now(), dur = 1600;
-      const fmt = v => (dec ? v.toFixed(dec) : (group ? Math.round(v).toLocaleString('en-US') : String(Math.round(v)))) + suf;
-      if (reduced) { el.textContent = fmt(to); return; }
-      (function step(t) {
-        const p = Math.min(1, (t - t0) / dur), v = to * (1 - Math.pow(1 - p, 3));
-        el.textContent = fmt(v);
-        if (p < 1) requestAnimationFrame(step);
-      })(t0);
-    });
-  }, { threshold: .6 });
-  $$('[data-count]').forEach(el => { if (!reduced) el.textContent = '0' + (el.dataset.suffix || ''); cntIO.observe(el); });
-  const starIO = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (!e.isIntersecting) return;
-      starIO.unobserve(e.target);
-      const r = +e.target.dataset.rating || 0;
-      requestAnimationFrame(() => { $('.stars-fg', e.target).style.width = (r / 5 * 100).toFixed(1) + '%'; });
-    });
-  }, { threshold: .6 });
-  $$('.stars').forEach(el => starIO.observe(el));
+  /* ---------- The star rating: filled as soon as the page loads; nothing on this page waits for a scroll ---------- */
+  $$('.stars').forEach(el => { $('.stars-fg', el).style.width = ((+el.dataset.rating || 0) / 5 * 100).toFixed(1) + '%'; });
 
   /* ---------- The library, the sheet and the map ---------- */
   const library = {};
@@ -755,7 +711,7 @@
 
   /* ---------- Main loop ---------- */
   function loop(t) {
-    if (pageVisible) { drawField(t); if (heroVisible) drawSolid(t); arcTick(t); }
+    if (pageVisible) { if (starsOn) drawField(t); if (heroVisible) drawSolid(t); arcTick(t); }
     requestAnimationFrame(loop);
   }
   sizeField(); sizeSolid();
