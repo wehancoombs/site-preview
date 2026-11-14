@@ -976,3 +976,25 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
   .room .lecture { aspect-ratio: 5 / 4; }
   .room .lecture .play { top: 30%; width: 36px; height: 36px; }
 }
+
+/* ---------- Write to me, in the same form as the other cabinets ---------- */
+.write-grid { grid-template-columns: 1fr 1fr; }
+#write .display { font-size: clamp(48px, min(7.6vw, 12vh), 108px); }
+.write-acts { display: flex; flex-wrap: wrap; gap: 10px; margin: clamp(18px, 3.2vh, 32px) 0 0; }
+.write-side .seals { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2.4vh, 22px) 24px; margin: 0; }
+.write-side .seals .seal { margin-top: 0; }
+.write-side .seals .seal svg { width: clamp(56px, 8vh, 78px); height: clamp(56px, 8vh, 78px); }
+#write .write-side .index { margin: clamp(18px, 3.2vh, 30px) 0 0; padding-top: clamp(14px, 2.4vh, 22px); border-top: 1px solid var(--line); gap: 6px 20px; }
+.write-side .write-links { margin: clamp(10px, 1.8vh, 18px) 0 0; line-height: 1.8; }
+@media (max-width: 900px) {
+  .write-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  #write .display { font-size: 46px; }
+  .write-side .seals { gap: 12px 10px; }
+  .write-side .seals .seal { gap: 8px; }
+  .write-side .seals .seal svg { width: 50px; height: 50px; }
+  .write-side .seals .seal-label { font-size: 10px; letter-spacing: .12em; }
+  .write-side .seals .seal-label small { font-size: 11.5px; }
+  .write-pane footer { margin-top: 14px; padding: 14px 0 18px; }
+}

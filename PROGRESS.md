@@ -473,3 +473,14 @@ Brief from Wehan's chat. The structure is untouched (vertical stack, details fro
 - **New words, as allowed.** Where I taught, How I work, Teaching, Research.
 - **Fit.** At 1280 by 800 all three details fit one screen with room to spare. Quotations on a laptop: all five in Teach are one or two lines; in Think two of nine run to three lines; in Make one of five does. On a phone the quotations are three or four lines. Tapping the Poems spine opens a fan of five cards, which makes the Teach detail taller than a laptop screen until another spine is tapped.
 - Assets at v=30. Checked at 375 by 812 and 1280 by 800: no sideways overflow, no console errors; rates, booking link, form, counter, the four CVs and the CV menu unchanged.
+
+---
+
+## 2026-11-14 (late): Write to me tidied, the PGCE portfolio unlinked, and The Cabinet is published
+
+Wehan's three instructions: Write to me is still messy; unlink the PGCE portfolio; then publish.
+
+- **Write to me.** Same form as the other cabinets. Left: Contact, the title, the email address with Copy, and two buttons (Request a service, solid; Book an intro call, outline). Right: the four CV seals in a two-by-two grid, then one row of links (About me, Qualifications, Why I teach, Referees, The full resume), then LinkedIn, ORCID, ResearchGate and the full resume in Google Docs. The footer sits at the foot of the cabinet. It fits one screen at 1280 by 800 and at 375 by 812. No wording changed.
+- **PGCE portfolio.** Both links to it are gone: the one under How I work in the Teach detail and the one at the foot of the Abbotts College pop-up. Still there, flagged to Wehan: the micro-lesson video in the Teaching approach pop-up plays from the portfolio's address, and its caption ends with the words from my PGCE portfolio.
+- **Published.** The branch cabinet was merged into main and pushed on 2026-11-14, with the tags before-cabinet and before-details. Assets at v=31.
+- **Next.** The Make cabinet still shows a dashed circle. The plan put to Wehan is a maker's desk: the four small drawings that used to sit on the service cards (quill, typewriter line, blocks, tetractys) set out on a desk, each opening its service.
