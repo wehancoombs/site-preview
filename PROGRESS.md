@@ -542,7 +542,7 @@ Each stage's description is what Wehan wrote in that part of the plan (the teach
 
 ## 2026-11-15: the portfolio's pop-out look on every pop-up (step 3), and the maker's shapes, second pass
 
-Committed on main, not pushed. Local tag `before-popouts` marks the version before both changes. Assets at v=38.
+Pushed live on his "Publish" (v=38, checked on the live site). The tag `before-popouts` (also on GitHub) marks the version before both changes.
 
 **Pop-ups.** Every pop-up now has the PGCE portfolio's header: a tint of the chapter colour and a large faint drawing (a crown for Macbeth, a ship for The Tempest, a leaf for The Herb Garden, and so on; 44 pop-ups, named by `data-art` on each `article`, drawings in `ART` in main.js; request and star pop-ups get an envelope and a star). Each lesson and each study guide has its own colour (`data-tone`, matching its spine on the shelf), which also colours its lesson bar. The date chips are tinted. Links that leave a pop-up (the Macbeth revision sheet, the study guides, the lectures, the evaluations, the full resume) are drawn as cards by `dressSheet` when the pop-up opens, in the link's own words. No wording was changed.
 
