@@ -627,7 +627,15 @@
     detailFocus = document.activeElement;
     bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><div class="sheet-body bb-text"></div>';
     const title = $('.bb-title', bbDetail), text = $('.bb-text', bbDetail);
-    title.textContent = item.title; text.innerHTML = item.html;
+    title.textContent = item.title;
+    // A service with a summary shows short: its rate, its three lines, one quotation, and the ways on. The whole of it is one press away.
+    const full = document.createElement('div'); full.innerHTML = item.html;
+    const rate = $('.rate', full), sub = $('.svc-sub', full), proof = $('.proof', full), lines = $$('.svc-summary .deliv li', full);
+    if (lines.length && REQUESTS[id]) {
+      text.innerHTML = '<div class="bb-short"><div>' + (rate ? '<p class="bb-rate">' + rate.innerHTML + '</p>' : '') + (sub ? '<p class="svc-sub">' + sub.innerHTML + '</p>' : '') +
+        '<ul class="bb-lines">' + lines.map(li => '<li>' + li.innerHTML + '</li>').join('') + '</ul></div>' + (proof ? '<blockquote class="bb-proof">' + proof.innerHTML + '</blockquote>' : '') + '</div>' +
+        '<p class="more"><button class="btn solid" type="button" data-sheet="request-' + id + '">Request</button> <button class="btn" type="button" data-sheet="book">Book a free intro call</button> <button type="button" data-sheet="' + id + '">More →</button></p>';
+    } else text.innerHTML = item.html;
     dressSheet(text); activateEmbeds(text); activateRequest(text); activateRatings(text); initStages(text);
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
     svcStage.classList.add('detail-open');
@@ -1076,13 +1084,26 @@
     }
 
     /* A university: a star tetrahedron, two tetrahedra through one another, its eight points lighting and dimming in turn. */
-    const STAR = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]].map(v => v.map(x => x * .56)), STAR8 = STAR.concat(STAR.map(v => v.map(x => -x)));
-    const SLINKS = []; for (let h = 0; h < 2; h++) for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) SLINKS.push([h * 4 + a, h * 4 + b, 1]);
-    const sglow = STAR8.map(() => 0); let sSpark = 0;
+    const STAR = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]].map(v => v.map(x => x * .58)), STAR8 = STAR.concat(STAR.map(v => v.map(x => -x)));
+    const SP = STAR8.map(p => ({ p, r: 1 })), SLINKS = [], mids = [];
+    for (let h = 0; h < 2; h++) for (let a = 0; a < 4; a++) for (let c = a + 1; c < 4; c++) {   // seven small nodes along every edge
+      let prev = h * 4 + a; const A = STAR8[h * 4 + a], B = STAR8[h * 4 + c];
+      for (let k = 1; k < 8; k++) { SP.push({ p: A.map((v, n) => v + (B[n] - v) * k / 8), r: k === 4 ? .7 : .42 }); SLINKS.push([prev, SP.length - 1, 1]); prev = SP.length - 1; if (k === 4) mids.push(prev); }
+      SLINKS.push([prev, h * 4 + c, 1]);
+    }
+    // Where the two tetrahedra cross they mark out an octahedron: its edges are drawn too, each with three nodes of its own.
+    const sd = (i, k) => Math.hypot(SP[i].p[0] - SP[k].p[0], SP[i].p[1] - SP[k].p[1], SP[i].p[2] - SP[k].p[2]);
+    const core = mids.filter((m, n) => !mids.slice(0, n).some(o => sd(m, o) < 1e-6)), near = Math.min(...core.slice(1).map(m => sd(core[0], m)));
+    for (let a = 0; a < core.length; a++) for (let c = a + 1; c < core.length; c++) if (Math.abs(sd(core[a], core[c]) - near) < 1e-6) {
+      let prev = core[a]; const A = SP[core[a]].p, B = SP[core[c]].p;
+      for (let k = 1; k < 4; k++) { SP.push({ p: A.map((v, n) => v + (B[n] - v) * k / 4), r: .34 }); SLINKS.push([prev, SP.length - 1, .6]); prev = SP.length - 1; }
+      SLINKS.push([prev, core[c], .6]);
+    }
+    const sglow = SP.map(() => 0); let sSpark = 0;
     function merkaba(t) {
-      if (!reduced && t - sSpark > 430) { sSpark = t; sglow[Math.floor(Math.random() * 8)] = 1; }
-      for (let i = 0; i < 8; i++) sglow[i] *= .955;
-      return { pts: STAR8.map((p, i) => ({ p, r: 1 + sglow[i] * 1.1, g: sglow[i] })), links: SLINKS, labels: [] };
+      if (!reduced && t - sSpark > 70) { sSpark = t; sglow[Math.floor(Math.random() * SP.length)] = 1; }
+      for (let i = 0; i < sglow.length; i++) sglow[i] *= .95;
+      return { pts: SP.map((q, i) => ({ p: q.p, r: q.r * (1 + sglow[i] * 1.3), g: sglow[i] })), links: SLINKS, labels: [] };
     }
 
     /* 5. Classes: a ring of seats, one of them the teacher's. Talk crosses the ring between seats, not only to and from the front. */
