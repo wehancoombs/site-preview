@@ -698,3 +698,14 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - The description shown when the link is shared is the same as the search description.
 - Ten DRAFT-WEHAN placeholders in `index.html` now, plus the ten landing-word lines in `main.js`.
 - Site text written again; fresh Google Doc "Site text – three-cabinet site (fresh, v57)". The earlier one is renamed "OLD ...".
+
+## 2026-11-16: pop-ups folded in and removed (v=59 on `services`, on the staging site, not live)
+
+- v=58: the line from Ethics & politics to Plato put back, at his word.
+- From his chat notes: 38 pop-ups where there were 45.
+  - Folded in: Conference papers is now a section of Research and publications (before Profiles); the two assessment paragraphs on first-years and on honours groups are now a section "Assessment" at the end of Curriculum and course development. The third assessment paragraph (school classroom, Kahoot) was not moved; the same lines are already in Teaching approach.
+  - Removed: Teaching philosophy, Beyond the classroom, Funding and collaboration, Student support, Referees, with every button to them (Map, About me, and inside the pop-ups Why I teach, Hoërskool Garsfontein, Philosophy for teenagers, Testimonials, Research and publications).
+  - New lines, his: "My full teaching philosophy is in my resume." at the end of Teaching approach; "Referees are listed in my full resume." under the resume link on About me and at the end of Testimonials, where the Referees buttons were.
+  - About me has three buttons (About me, Qualifications, Why I teach) and four research links (Papers is gone, since the papers are inside Research). Five stars that had "Go further" to the papers now have only "Research and publications".
+  - The build stops if anything on the page still asks for a removed pop-up.
+- Site text written again; Google Doc "Site text – three-cabinet site (v59, 38 pop-ups)".
