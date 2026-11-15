@@ -59,7 +59,7 @@
   if (sysLight.addEventListener) sysLight.addEventListener('change', followSystem); else if (sysLight.addListener) sysLight.addListener(followSystem);
   paintTheme();
 
-  /* ---------- The CVs in the top bar: a dropdown on narrow screens ---------- */
+  /* ---------- The CVs in the top bar: one dropdown, at every width ---------- */
   const cvs = $('#cvs'), cvsBtn = $('#cvs-btn');
   function closeCvs() { if (!cvs.classList.contains('on')) return; cvs.classList.remove('on'); cvsBtn.setAttribute('aria-expanded', 'false'); }
   cvsBtn.addEventListener('click', e => { e.stopPropagation(); const on = cvs.classList.toggle('on'); cvsBtn.setAttribute('aria-expanded', on ? 'true' : 'false'); });
@@ -268,7 +268,7 @@
   // Addresses from the earlier versions of the site still lead somewhere: the old Teach and Make cabinets to My services,
   // the old Think cabinet and the old side rooms to About me, and #write to the contact panel.
   const ALIAS = {
-    '#top': ['#threshold'], '#board': ['#services'], '#teach': ['#services', 'board', 'teach'], '#make': ['#services'], '#make-detail': ['#services'],
+    '#top': ['#threshold'], '#board': ['#services'], '#teach': ['#services', 'board', 'teach'], '#design': ['#services', 'board', 'design'], '#consult': ['#services', 'board', 'consult'], '#make': ['#services'], '#make-detail': ['#services'],
     '#think': ['#about'], '#think-detail': ['#about'], '#teach-detail': ['#about']
   };
   function showTarget(sel, instant) {
@@ -630,6 +630,7 @@
   function openTab(board, k) {
     if (!board || board.dataset.open === k) return;
     board.dataset.open = k;
+    pal.refresh();   // the cabinet takes the colour of the open tab, and the stars behind it follow
     $$('.tabs [data-tab]', board).forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === k ? 'true' : 'false'));
     if (board === svcBoard) { closeDetail(); showShapes(k); }
     track('tab-' + board.id + '-' + k);
@@ -1234,7 +1235,8 @@
       T.mixing = true; T.mix = 0;
     }
     function nextShape() { const set = SETS[T.set]; goShape(set[(set.indexOf(T.want) + 1) % set.length]); }
-    showShapes = (tab, i) => { T.set = tab; goShape(i === undefined ? SETS[tab][0] : i); };
+    showShapes = (tab, i) => { if (tab !== T.set) T.col = null;   // a new tab, a new colour for the object
+      T.set = tab; goShape(i === undefined ? SETS[tab][0] : i); };
     caption(0);
 
     // Words are drawn once, large, onto their own small canvases and then placed as pictures: a picture glides between pixels, where type would step.

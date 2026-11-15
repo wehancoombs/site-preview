@@ -1103,8 +1103,30 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .pane { padding-bottom: calc(var(--bar-h) + var(--pane-pad)); }
 .pager { top: calc(50% - var(--bar-h) / 2); }
 
-/* ---------- 1. The landing page: two buttons pointing down ---------- */
+/* ---------- The three colours: Teach green, Design orange, Consult purple ---------- */
+:root { --c-teach: #7CC58C; --c-design: #EC9A4A; --c-consult: #B79CF0; }
+:root[data-theme="light"] { --c-teach: #2F7A48; --c-design: #A85514; --c-consult: #6A4AA6; }
+.bb[data-open="teach"], .tabs [data-tab="teach"], .cab-door[data-door="teach"] { --accent: var(--c-teach); }
+.bb[data-open="design"], .tabs [data-tab="design"], .cab-door[data-door="design"] { --accent: var(--c-design); }
+.bb[data-open="consult"], .tabs [data-tab="consult"], .cab-door[data-door="consult"] { --accent: var(--c-consult); }
+/* The whole services cabinet (the stars, the bar, the top bar) takes the colour of the open tab */
+body[data-chapter="services"]:has(#board[data-open="teach"]) { --accent: var(--c-teach); }
+body[data-chapter="services"]:has(#board[data-open="design"]) { --accent: var(--c-design); }
+body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(--c-consult); }
+
+/* ---------- The CVs: one dropdown in the top bar, at every width ---------- */
+.cvs-btn { display: inline-flex; }
+.cvs-menu { display: none; position: absolute; right: 0; top: calc(100% + 8px); flex-direction: column; gap: 4px; padding: 8px; min-width: 210px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 40px -24px #000; }
+.cvs.on .cvs-menu { display: flex; }
+.cvs-menu .pill { background: transparent; border-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; justify-content: flex-start; padding: 10px 12px; }
+.cvs-menu .pill:hover { border-color: var(--line-2); }
+.cvs-menu .cv-link i { display: inline; }
+
+/* ---------- 1. The landing page: four boxes, two by two (Teach, Design, Consult in their colours; About me in gold) ---------- */
 .cab-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 470px; }
+.cab-door { border-color: color-mix(in srgb, var(--accent) 75%, transparent); background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.cab-door:hover, .cab-door:focus-visible { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.cab-door[data-door] b { color: var(--accent); }
 
 /* ---------- 2. My services ---------- */
 .svc-pane > .wrap, .about-pane > .wrap { width: min(1240px, 100% - 104px); margin-block: 0; flex: 1 0 auto; }
@@ -1121,8 +1143,9 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .stage > .bb { margin-right: calc(var(--me-w) - 46px); }
 .tabs { flex: none; display: flex; gap: clamp(18px, 2.4vw, 34px); padding: 0 clamp(16px, 1.8vw, 26px); border-bottom: 1px solid var(--line); }
 .tabs button { all: unset; cursor: pointer; padding: clamp(10px, 1.8vh, 16px) 0 clamp(8px, 1.5vh, 13px); margin-bottom: -1px; font: 500 clamp(22px, min(2.2vw, 3.8vh), 32px)/1 var(--serif); color: var(--text-3); border-bottom: 2px solid transparent; transition: color .3s, border-color .3s; }
-.tabs button:hover { color: var(--text-2); }
-.tabs button[aria-pressed="true"] { color: var(--text); border-bottom-color: var(--accent); }
+.tabs button { color: color-mix(in srgb, var(--accent) 48%, var(--text-3)); }
+.tabs button:hover { color: color-mix(in srgb, var(--accent) 80%, var(--text-3)); }
+.tabs button[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
 .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 3px; }
 .bb-body { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: var(--menu-w) minmax(0, 1fr); transition: grid-template-columns .5s var(--ease); }
 
@@ -1325,6 +1348,9 @@ html.first-visit .me.in { opacity: 1; }
   .ab-side .eyebrow { margin-bottom: 8px; }
   .ab-panel { padding: 14px; gap: 18px; }
   .ab-main .sky { height: auto; aspect-ratio: 1040 / 450; }
+  /* One column: who he is, the figures, the CVs and links; the constellation comes last and has a view to itself */
+  .ab-main { display: contents; }
+  .ab-side { order: 0; } .ab-figs { order: 1; } .ab-more { order: 2; } .ab-sky { order: 3; } .ab-main .index { order: 4; }
   .ab-figs { grid-template-columns: minmax(0, 1fr); }
   .ab-board .arc svg { max-height: 30vh; }
 }
@@ -1343,7 +1369,12 @@ html.first-visit .me.in { opacity: 1; }
   .cab.home.pane { padding-bottom: calc(var(--bar-h) + 8px); }
   .cab-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .cab-door b { font-size: 20px; }
-  .ab-main .sky { aspect-ratio: 360 / 524; }
+  .ab-main .sky { aspect-ratio: 360 / 524; max-height: calc(100vh - 250px); }
+  @supports (height: 100svh) { .ab-main .sky { max-height: calc(100svh - 250px); } }
+  .ab-side .eyebrow { display: none; }
+  .about-grid { gap: 12px; }
+  .ab-figs { gap: 8px; }
+  .ab-figs .stats b { font-size: 28px; }
   .ab-more .seals { gap: 12px 10px; }
 }
 @media (prefers-reduced-motion: reduce) {

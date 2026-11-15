@@ -637,3 +637,11 @@ Tried and taken out again: ten old words on the tetraktys points.
 
 Still open: the white-on-black drawing (his Todoist); nine placeholder lines plus the ten word lines; `../site-text.md` describes the site as it was before this evening's rounds and needs redoing once the design settles; nothing here has been seen on a real phone by me.
 
+## 2026-11-15, late: three colours, four boxes, one CVs menu (v=52 on `services`, on the staging site, not live)
+
+- Colours, at his word: Teach green, Design orange, Consult purple (`--c-teach`, `--c-design`, `--c-consult` in `style.css`, a dark and a light value each). The open tab colours the board, its object, the details card, and the whole services cabinet with it (stars, contact bar, the W). The pop-ups and the CV seals keep the older colours (schools terracotta, universities blue, services teal).
+- Landing page: four boxes, two by two: Teach, Design, Consult (each in its colour, each opening My services on that tab) and About me (gold). `#design` and `#consult` are new addresses beside `#teach`.
+- Top bar: the CVs are one dropdown at every width (it used to fold only under 1100px).
+- About me on a phone: one column in the order headshot, figures, CVs, links, motto, and then the constellation with a view to itself and the five research links under it. Nothing sits under the contact bar at 375x812.
+- "Edit" taken out of his own words, since he has no editing experience: the landing sentence now says "writing support" (his own phrase, from "Editing and writing support"), the About pop-up says "give feedback on writing", and the share description lost "editor". Both sentences are marked DRAFT-WEHAN (eleven placeholders in `index.html` now).
+- Left alone and flagged to him: the pop-up "Editing and writing support" (its title, "What I edit", "Request editing", "I edit for the argument first"), the Map entry "Editing & writing", and the rates list in "Working with me".
