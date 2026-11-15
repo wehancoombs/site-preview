@@ -574,5 +574,30 @@ Wehan briefed a rebuild as a plain services site: who he is, what he sells, what
 - The live site is tagged `before-services` (f07bae5, on GitHub). To go back he says: "Restore the site to before-services".
 - All new work is on the local branch `services`. `main` and the live site are untouched until he says "publish".
 - His drawing is saved as supplied at `assets/wehan-drawing.webp` (1024 x 1536, black lines on white). A see-through version that takes the text colour is still to be made from it.
-- Status: the list of pieces worth keeping and a short plan were given to him; waiting for his yes before building.
+- The list of pieces worth keeping and a short plan were given to him, and he said go ahead with three changes (below).
+
+## 2026-11-15: the services site built on `services` (v=41, not pushed, waiting for "publish")
+
+His three changes to the plan: Classes gets its own small pop-up (the placeholder line, then links to the six lessons); Lectures opens "Courses designed and taught", with the two recorded lectures added to that pop-up; the pop-up links from the old Map menu sit in About under a few short headings.
+
+What the page is now:
+
+- It scrolls. The cabinets, the side rooms, the Map menu and the side dots are gone. The top bar is the name, the CV menu and the light/dark switch.
+- First screen: his name and sentence, the line drawing, and the board (Teach, Design, Consult). Each item has a name, one line, a rate and a Details link. From 1100px wide and narrower the board is three tabs under a small drawing, Teach open.
+- The drawing: `assets/wehan-line.webp` is made from his `assets/wehan-drawing.webp` (white made see-through, cropped). It is used as a CSS mask, so the lines take the text colour. It fades in on the first visit only (a `seen` flag in the browser's storage).
+- The board's sizes hang off one unit (`--u`, the tighter of the screen's width and height), so the first screen fits from 1366 x 650 up to 1920 x 1080 without scrolling.
+- About: headshot, the six figures, the constellation, the two lectures, the study guide spines, the lesson spines, the arc of a lesson, three sets of quotations, the four CVs, the placeholder line, the grouped links, the outside links, the motto.
+- The constellation has a second, tall layout for phones (640px and narrower): all twelve stars and names fit, checked by measuring that no two names touch.
+- Contact: a bar fixed to the bottom (booking button, email with Copy, "Write to me"); on screens 760px and narrower it is one button. "Write to me" opens a small panel holding the existing form. Booking link, form address and visit counter are unchanged.
+- Light and dark follow the system setting until the switch is used; the switch is remembered. Dark keeps near-black and gold with a slate board; light is warm paper with a white board.
+- Old addresses: `#teach`, `#make` (and `#make-detail`) go to the board, `#think` (and both other `-detail` addresses) go to About, `#write` opens the contact panel, `#s-…` still opens that pop-up.
+- `?plain` on the address hides the three small heading animations, so that he can compare. Take it out once he has chosen.
+
+Nine placeholder lines are tagged `DRAFT-WEHAN` in `index.html` and listed at the top of `../site-text.md`.
+
+How it was built: `build_services.py` (in the session scratchpad) rebuilds `index.html`, `assets/main.js` and `assets/style.css` from the tag `before-services`, so nothing depends on hand edits. `style.css` still carries the old cabinet and room rules that nothing uses now; they can be pruned later. Preview pictures are in `.claude/services-preview/`, made by `.claude/shot.html` and headless Chrome.
+
+Left off the page (all still in the tag `before-services`): the Platonic solids, the four Make shapes at full size (only the tetraktys survives, small), the four Make card drawings, the star background and the glow that follows the mouse, the Map menu's opening line, the side dots, the three cabinet sentences (Teach, Think, Make), "Taking new clients for 2027" as a line on the page (it is still in every service pop-up), the Request buttons on the cards (still inside each service pop-up), "How I plan a lesson →" (a second label for the Teaching approach pop-up).
+
+Known rough edges: the small label at the top of each pop-up still says Begin, Teach, Think, Make or Contact; "Working with me" still says "Press a Request button anywhere on this page"; the tab title still reads "Teacher, philosopher, maker".
 
