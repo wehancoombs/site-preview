@@ -13,7 +13,9 @@
   const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
   const TAU = Math.PI * 2;
   $$('a[href$=".pdf"]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
-  const CH_LABEL = { threshold: 'Begin', teach: 'Teach', think: 'Think', make: 'Make', write: 'Contact' };
+  // The small label at the top of each pop-up, and the cabinet each kind of pop-up belongs to.
+  const CH_LABEL = { threshold: 'Begin', teach: 'For schools', think: 'For universities', make: 'My services', write: 'Contact' };
+  const CH_PLACE = { threshold: '#threshold', make: '#services', teach: '#about', think: '#about' };
 
   /* ---------- Colours (read from the CSS so both themes just work) ---------- */
   function cssVar(name, el) { return getComputedStyle(el || body).getPropertyValue(name).trim(); }
@@ -44,15 +46,16 @@
     pal.refresh();
     const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', cssVar('--bg'));
   }
+  const repaintStill = () => { if (reduced) { pal.accent = Object.assign({}, pal.target); drawField(0); drawSolid(performance.now()); } };
   themeBtn.addEventListener('click', () => {
     body.classList.add('theming');
     setTheme(!isLight());
     try { localStorage.setItem('theme', isLight() ? 'light' : 'dark'); } catch (e) {}
-    paintTheme();
+    paintTheme(); repaintStill();
     setTimeout(() => body.classList.remove('theming'), 1000);
   });
   // If the system setting changes while the page is open, follow it, unless the switch has been used.
-  const followSystem = () => { let saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {} if (saved !== 'light' && saved !== 'dark') { setTheme(sysLight.matches); paintTheme(); } };
+  const followSystem = () => { let saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {} if (saved !== 'light' && saved !== 'dark') { setTheme(sysLight.matches); paintTheme(); repaintStill(); } };
   if (sysLight.addEventListener) sysLight.addEventListener('change', followSystem); else if (sysLight.addListener) sysLight.addListener(followSystem);
   paintTheme();
 
@@ -62,17 +65,236 @@
   cvsBtn.addEventListener('click', e => { e.stopPropagation(); const on = cvs.classList.toggle('on'); cvsBtn.setAttribute('aria-expanded', on ? 'true' : 'false'); });
   document.addEventListener('click', closeCvs);
 
+  /* ---------- Background field: drifting stars joined by faint lines ---------- */
+  const field = $('#field'), fx = field.getContext('2d');
+  let FW = 0, FH = 0, parts = [];
+  const mouse = { x: .5, y: .5, tx: .5, ty: .5 };
+  function sizeField() {
+    FW = innerWidth; FH = innerHeight;
+    field.width = Math.round(FW * DPR); field.height = Math.round(FH * DPR);
+    fx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const n = Math.min(Math.round(FW * FH / 9000), coarse ? 70 : 170);
+    parts = Array.from({ length: n }, () => ({
+      x: Math.random() * FW, y: Math.random() * FH, z: .3 + Math.random() * .7,
+      vx: (Math.random() - .5) * .14, vy: (Math.random() - .5) * .14,
+      r: .6 + Math.random() * 1.3, p: Math.random() * TAU
+    }));
+  }
+  const lantern = $('#lantern');
+  window.addEventListener('mousemove', e => {
+    mouse.tx = e.clientX / FW; mouse.ty = e.clientY / FH;
+    if (!coarse) { lantern.style.transform = 'translate(' + (e.clientX - 320) + 'px,' + (e.clientY - 320) + 'px)'; body.classList.add('lit'); }
+  }, { passive: true });
+  document.addEventListener('mouseleave', () => body.classList.remove('lit'));
   let pageVisible = true;
   document.addEventListener('visibilitychange', () => { pageVisible = !document.hidden; });
+
+  function drawField(t) {
+    fx.clearRect(0, 0, FW, FH);
+    const a = pal.accent, k = reduced ? 1 : .04;
+    a.r += (pal.target.r - a.r) * k; a.g += (pal.target.g - a.g) * k; a.b += (pal.target.b - a.b) * k;
+    mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
+    const ox = (mouse.x - .5) * 50, oy = (mouse.y - .5) * 50;
+    const light = pal.light, tc = pal.text, pts = [];
+    for (const p of parts) {
+      {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -10) p.x = FW + 10; else if (p.x > FW + 10) p.x = -10;
+        if (p.y < -10) p.y = FH + 10; else if (p.y > FH + 10) p.y = -10;
+      }
+      const x = p.x + ox * p.z, y = p.y + oy * p.z;
+      const tw = .55 + .45 * Math.sin(t * .0012 + p.p);
+      pts.push({ x, y });
+      fx.beginPath(); fx.arc(x, y, p.r * p.z + .3, 0, TAU);
+      fx.fillStyle = 'rgba(' + tc.r + ',' + tc.g + ',' + tc.b + ',' + ((light ? .3 : .75) * tw).toFixed(3) + ')';
+      fx.fill();
+    }
+    const R = 120, R2 = R * R, base = light ? .18 : .2;
+    const col = (a.r | 0) + ',' + (a.g | 0) + ',' + (a.b | 0);
+    fx.lineWidth = 1;
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d2 = dx * dx + dy * dy;
+        if (d2 < R2) {
+          fx.strokeStyle = 'rgba(' + col + ',' + ((1 - Math.sqrt(d2) / R) * base).toFixed(3) + ')';
+          fx.beginPath(); fx.moveTo(pts[i].x, pts[i].y); fx.lineTo(pts[j].x, pts[j].y); fx.stroke();
+        }
+      }
+    }
+  }
+
+  /* ---------- The Platonic solids (after Timaeus) ---------- */
+  const PHI = (1 + Math.sqrt(5)) / 2;
+  function cubeV() { const v = []; for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) v.push([x, y, z]); return v; }
+  function icoV() { const v = []; for (const a of [-1, 1]) for (const b of [-1, 1]) { v.push([0, a, b * PHI]); v.push([a, b * PHI, 0]); v.push([a * PHI, 0, b]); } return v; }
+  function dodV() { const v = cubeV(); for (const a of [-1, 1]) for (const b of [-1, 1]) { v.push([0, a / PHI, b * PHI]); v.push([a / PHI, b * PHI, 0]); v.push([a * PHI, 0, b / PHI]); } return v; }
+  function build(name, el, verts) {
+    const v = verts.map(p => { const l = Math.hypot(p[0], p[1], p[2]); return [p[0] / l, p[1] / l, p[2] / l]; });
+    let min = 1e9;
+    for (let i = 0; i < v.length; i++) for (let j = i + 1; j < v.length; j++) {
+      const d = Math.hypot(v[i][0] - v[j][0], v[i][1] - v[j][1], v[i][2] - v[j][2]); if (d < min) min = d;
+    }
+    const e = [];
+    for (let i = 0; i < v.length; i++) for (let j = i + 1; j < v.length; j++) {
+      const d = Math.hypot(v[i][0] - v[j][0], v[i][1] - v[j][1], v[i][2] - v[j][2]); if (Math.abs(d - min) < 1e-4) e.push([i, j]);
+    }
+    return { name, el, v, e };
+  }
+  const SOLIDS = [
+    build('Tetrahedron', 'Fire', [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]]),
+    build('Cube', 'Earth', cubeV()),
+    build('Octahedron', 'Air', [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]),
+    build('Icosahedron', 'Water', icoV()),
+    build('Dodecahedron', 'The cosmos', dodV())
+  ];
+  const sc = $('#solid'), sx = sc.getContext('2d');
+  let SW = 0;
+  function sizeSolid() {
+    SW = sc.getBoundingClientRect().width || 300;
+    sc.width = Math.round(SW * DPR); sc.height = Math.round(SW * DPR);
+    sx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  const S = { cur: 4, nxt: -1, mix: 0, ax: .55, ay: .35, vx: 0, vy: 0, tx: 0, ty: 0, drag: null, last: performance.now(), lastSwitch: performance.now(), labelDone: false };
+  const elLabel = $('#solid-el'), nameLabel = $('#solid-name');
+  function setLabel(i) { elLabel.textContent = SOLIDS[i].el; nameLabel.textContent = SOLIDS[i].name; }
+  function switchSolid() { if (S.nxt >= 0) return; S.nxt = (S.cur + 1) % SOLIDS.length; S.mix = 0; S.labelDone = false; }
+  function rot(p, ax, ay) {
+    const cy = Math.cos(ax), sy = Math.sin(ax);
+    const y1 = p[1] * cy - p[2] * sy, z1 = p[1] * sy + p[2] * cy;
+    const cx = Math.cos(ay), sxx = Math.sin(ay);
+    return [p[0] * cx + z1 * sxx, y1, -p[0] * sxx + z1 * cx];
+  }
+  function drawOne(s, alpha, scale, cx, cy, R) {
+    const col = pal.gold, tc = pal.text, ax = S.ax + S.tx, ay = S.ay + S.ty;
+    const pts = s.v.map(p => { const q = rot(p, ax, ay); const f = 3.4 / (3.4 - q[2] * scale); return { x: cx + q[0] * scale * R * f, y: cy + q[1] * scale * R * f, z: q[2] }; });
+    for (const e of s.e) {
+      const A = pts[e[0]], B = pts[e[1]], z = (A.z + B.z) / 2, dep = (z + 1) / 2;
+      sx.strokeStyle = 'rgba(' + col.r + ',' + col.g + ',' + col.b + ',' + (alpha * (.2 + .6 * dep)).toFixed(3) + ')';
+      sx.lineWidth = .8 + .8 * dep;
+      sx.beginPath(); sx.moveTo(A.x, A.y); sx.lineTo(B.x, B.y); sx.stroke();
+    }
+    for (const p of pts) {
+      const dep = (p.z + 1) / 2, al = alpha * (.3 + .7 * dep);
+      sx.fillStyle = 'rgba(' + col.r + ',' + col.g + ',' + col.b + ',' + (al * .28).toFixed(3) + ')';
+      sx.beginPath(); sx.arc(p.x, p.y, 6.5, 0, TAU); sx.fill();
+      sx.fillStyle = 'rgba(' + tc.r + ',' + tc.g + ',' + tc.b + ',' + al.toFixed(3) + ')';
+      sx.beginPath(); sx.arc(p.x, p.y, 2.2, 0, TAU); sx.fill();
+    }
+  }
+  function drawSolid(t) {
+    const dt = Math.min(50, t - S.last); S.last = t;
+    sx.clearRect(0, 0, SW, SW);
+    if (!S.drag) { S.ax += .00016 * dt + S.vx; S.ay += .00026 * dt + S.vy; S.vx *= .94; S.vy *= .94; }
+    if (!coarse) { S.tx += ((mouse.y - .5) * .45 - S.tx) * .04; S.ty += ((mouse.x - .5) * .45 - S.ty) * .04; }
+    const cx = SW / 2, cy = SW / 2, R = SW * .36;
+    const br = .5 + .5 * Math.sin(t * .0006), g = pal.gold;
+    const grad = sx.createRadialGradient(cx, cy, R * .2, cx, cy, R * 1.5);
+    grad.addColorStop(0, 'rgba(' + g.r + ',' + g.g + ',' + g.b + ',' + ((pal.light ? .09 : .13) * br + .04).toFixed(3) + ')');
+    grad.addColorStop(1, 'rgba(' + g.r + ',' + g.g + ',' + g.b + ',0)');
+    sx.fillStyle = grad; sx.fillRect(0, 0, SW, SW);
+    if (S.nxt < 0 && !S.drag && t - S.lastSwitch > 9000) switchSolid();
+    if (S.nxt >= 0) {
+      S.mix = Math.min(1, S.mix + dt / 1500);
+      const m = S.mix < .5 ? 2 * S.mix * S.mix : 1 - Math.pow(-2 * S.mix + 2, 2) / 2;
+      drawOne(SOLIDS[S.cur], 1 - m, 1 + .14 * m, cx, cy, R);
+      drawOne(SOLIDS[S.nxt], m, .86 + .14 * m, cx, cy, R);
+      if (!S.labelDone && m > .5) { setLabel(S.nxt); S.labelDone = true; }
+      if (S.mix >= 1) { S.cur = S.nxt; S.nxt = -1; S.lastSwitch = t; }
+    } else {
+      drawOne(SOLIDS[S.cur], 1, 1, cx, cy, R);
+    }
+  }
+  sc.addEventListener('pointerdown', e => { S.drag = { x: e.clientX, y: e.clientY, moved: 0 }; sc.setPointerCapture(e.pointerId); sc.classList.add('dragging'); });
+  sc.addEventListener('pointermove', e => {
+    if (!S.drag) return;
+    const dx = e.clientX - S.drag.x, dy = e.clientY - S.drag.y;
+    S.drag.x = e.clientX; S.drag.y = e.clientY; S.drag.moved += Math.abs(dx) + Math.abs(dy);
+    S.ay += dx * .008; S.ax -= dy * .008; S.vy = dx * .0012; S.vx = -dy * .0012;
+  });
+  function endDrag() { if (!S.drag) return; const tap = S.drag.moved < 6; S.drag = null; sc.classList.remove('dragging'); if (tap) switchSolid(); }
+  sc.addEventListener('pointerup', endDrag); sc.addEventListener('pointercancel', endDrag);
+  sc.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchSolid(); } });
+  let heroVisible = true;
+  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }, { threshold: 0 }).observe(sc);
 
   /* ---------- Named clicks, counted only once a counter script is on the page ---------- */
   function track(name) { try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: name, title: name, event: true }); } catch (e) {} }
   document.addEventListener('click', e => { const t = e.target.closest('[data-track]'); if (t) track(t.dataset.track); });
 
+  /* ---------- The cabinets: a vertical stack of full-screen panes, one on screen at a time ---------- */
+  const strip = $('main'), panes = $$('main .pane'), dots = $$('.dots a');
+  const prevBtn = $('#pane-prev'), nextBtn = $('#pane-next');
+  let cur = 0;
+  function paintPager() { prevBtn.disabled = cur === 0; nextBtn.disabled = cur === panes.length - 1; }
+  function markPane(i) {
+    cur = i;
+    const ch = panes[i].closest('section').id;
+    body.dataset.chapter = ch;
+    dots.forEach(d => { if (d.getAttribute('href') === '#' + ch) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    paintPager();
+    pal.refresh();
+  }
+  // The pane that fills more than half the screen is the one we are in.
+  const paneIO = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) markPane(panes.indexOf(e.target)); }); }, { root: strip, threshold: .55 });
+  panes.forEach(p => paneIO.observe(p));
+  function showPane(i, instant) {
+    i = Math.max(0, Math.min(panes.length - 1, i));
+    if (i !== cur) panes[i].scrollTop = 0;
+    const top = panes[i].getBoundingClientRect().top - strip.getBoundingClientRect().top + strip.scrollTop;
+    strip.scrollTo({ top: top, behavior: instant || reduced ? 'instant' : 'smooth' });
+    if (instant) markPane(i);
+  }
+  // Addresses from the earlier versions of the site still lead somewhere: the old Teach and Make cabinets to My services,
+  // the old Think cabinet and the old side rooms to About me, and #write to the contact panel.
+  const ALIAS = {
+    '#top': ['#threshold'], '#board': ['#services'], '#teach': ['#services', 'board', 'teach'], '#make': ['#services'], '#make-detail': ['#services'],
+    '#think': ['#about', 'about-board', 'consult'], '#think-detail': ['#about', 'about-board', 'teach'], '#teach-detail': ['#about', 'about-board', 'teach']
+  };
+  function showTarget(sel, instant) {
+    if (sel === '#write') { openPanel(); return true; }
+    const a = ALIAS[sel];
+    if (a && a[1]) openTab($('#' + a[1]), a[2]);
+    let el = null; try { el = $(a ? a[0] : sel); } catch (e) {}
+    if (!el) return false;
+    const p = el.classList.contains('pane') ? el : el.closest('main .pane') || $('.pane', el);
+    if (!p || panes.indexOf(p) < 0) return false;
+    showPane(panes.indexOf(p), instant);
+    return true;
+  }
+  const isPlace = sel => { if (sel === '#write' || ALIAS[sel]) return true; let el = null; try { el = $(sel); } catch (e) {} return !!el && (el.classList.contains('chapter') || panes.indexOf(el) >= 0); };
+  prevBtn.addEventListener('click', () => showPane(cur - 1));
+  nextBtn.addEventListener('click', () => showPane(cur + 1));
+  const overlayOpen = () => body.classList.contains('locked');
+  document.addEventListener('keydown', e => {
+    if (overlayOpen() || e.altKey || e.ctrlKey || e.metaKey) return;
+    const a = document.activeElement;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) || a.id === 'solid' || a.id === 'tetra') return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); showPane(cur + 1); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); showPane(cur - 1); }
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const b = $('.bb', panes[cur]); if (b) { e.preventDefault(); stepTab(b, e.key === 'ArrowRight' ? 1 : -1); } }   // left and right change the tab
+  });
+  // The mouse wheel: one turn is one cabinet. Anything inside the cabinet that scrolls takes the wheel first.
+  let wheelUntil = 0;
+  strip.addEventListener('wheel', e => {
+    if (overlayOpen() || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const p = panes[cur], down = e.deltaY > 0, now = performance.now();
+    for (let n = e.target; n && n !== p && n !== strip; n = n.parentElement) {   // the details laid over the object keep the wheel while the pointer is over them
+      if (n.scrollHeight > n.clientHeight + 2 && /auto|scroll/.test(getComputedStyle(n).overflowY)) { wheelUntil = now + 400; return; }
+    }
+    if (down ? p.scrollTop + p.clientHeight < p.scrollHeight - 2 : p.scrollTop > 2) { wheelUntil = now + 400; return; }
+    e.preventDefault();
+    if (now < wheelUntil) { wheelUntil = now + 250; return; } // the tail of the same turn of the wheel
+    if (Math.abs(e.deltaY) < 8) return;
+    wheelUntil = now + 700;
+    showPane(cur + (down ? 1 : -1));
+  }, { passive: false });
+  window.addEventListener('resize', () => showPane(cur, true));
+  markPane(0);
+
   /* ---------- The star rating: filled as soon as the page loads; nothing on this page waits for a scroll ---------- */
   $$('.stars').forEach(el => { $('.stars-fg', el).style.width = ((+el.dataset.rating || 0) / 5 * 100).toFixed(1) + '%'; });
 
-  /* ---------- The library and the sheet ---------- */
+  /* ---------- The library, the sheet and the map ---------- */
   // A large faint drawing in each pop-up's header, named by data-art on the pop-up
   const ART = {
     quill: '<path d="M8 40c6-2 10-6 14-12 4-6 8-10 18-16-4 10-8 14-14 18-6 4-10 6-18 10z"/><path d="M8 40l10-10"/>',
@@ -176,22 +398,17 @@
       else copyText('To: ' + EMAIL + '\nSubject: ' + r.subject + '\n\n' + text).then(() => flash(b, 'Copied ✓'), () => flash(b, 'Could not copy'));
     });
   }
-  // The order Previous and Next step through, as the old Map menu had it.
-  const ORDER = {
-    threshold: ['about', 'qualifications', 'why'],
-    teach: ['approach', 'abbotts', 'garsfontein', 'macbeth', 'tempest', 'poems', 'grammar', 'film', 'enrichment', 'beyond', 'ai'],
-    think: ['posts', 'courses', 'guides', 'lectures', 'testimonials', 'publications', 'papers', 'funding', 'philosophy', 'curriculum', 'assessment', 'support'],
-    make: ['tutoring', 'editing', 'design', 'consulting', 'working', 'book'],
-    write: ['request-any', 'referees', 'resume']
-  };
+  const ORDER = {};
+  $$('.map-group').forEach(g => { ORDER[g.dataset.ch] = $$('[data-sheet]', g).map(b => b.dataset.sheet); });
 
   const scrim = $('#scrim'), sheet = $('#sheet'), sheetCh = $('#sheet-ch'), sheetTitle = $('#sheet-title'), sheetBody = $('#sheet-body'), sheetWhere = $('#sheet-where'), sheetArt = $('#sheet-art');
-  let openId = null, lastFocus = null, sheetTimer = null;
+  const map = $('#map'), mapBtn = $('#map-btn');
+  let openId = null, lastFocus = null, sheetTimer = null, mapTimer = null;
 
   function showScrim() { scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add('on')); }
-  function hideScrimIfIdle() { if (sheet.classList.contains('on')) return; scrim.classList.remove('on'); setTimeout(() => { if (!scrim.classList.contains('on')) scrim.hidden = true; }, 360); }
+  function hideScrimIfIdle() { if (sheet.classList.contains('on') || map.classList.contains('on')) return; scrim.classList.remove('on'); setTimeout(() => { if (!scrim.classList.contains('on')) scrim.hidden = true; }, 360); }
   function lock() { body.classList.add('locked'); }
-  function unlockIfIdle() { if (!sheet.classList.contains('on')) body.classList.remove('locked'); }
+  function unlockIfIdle() { if (!sheet.classList.contains('on') && !map.classList.contains('on')) body.classList.remove('locked'); }
 
   function activateEmbeds(container) {
     $$('.embed', container).forEach(e => {
@@ -290,6 +507,7 @@
     const item = library[id];
     if (!item) return;
     clearTimeout(sheetTimer);
+    if (map.classList.contains('on')) closeMap(true);
     closePanel();
     if (!sheet.classList.contains('on')) lastFocus = document.activeElement;
     openId = id;
@@ -305,6 +523,7 @@
     dressSheet(sheetBody);
     if (item.read) addContents(sheetBody);
     activateEmbeds(sheetBody); activateRequest(sheetBody); activateRatings(sheetBody); initStages(sheetBody);
+    if (sheetBody.querySelector('.blocks')) layout(lk); // the design blocks, laid out in the copy that just opened
     const order = ORDER[item.ch] || [], i = order.indexOf(id);
     $('#sheet-prev').disabled = !(i > 0); $('#sheet-next').disabled = !(i >= 0 && i < order.length - 1);
     sheetWhere.textContent = i >= 0 ? (i + 1) + ' of ' + order.length + ' · ' + (CH_LABEL[item.ch] || '') : '';
@@ -317,7 +536,7 @@
     sheet.classList.remove('on'); openId = null;
     sheetTimer = setTimeout(() => { sheet.hidden = true; sheetBody.innerHTML = ''; }, 460);
     unlockIfIdle(); hideScrimIfIdle();
-    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    try { history.replaceState(null, '', location.pathname + (body.dataset.chapter ? '#' + body.dataset.chapter : '')); } catch (e) {}
     if (lastFocus && lastFocus.focus) { lastFocus.focus({ preventScroll: true }); lastFocus = null; }
   }
   function stepSheet(d) {
@@ -331,20 +550,109 @@
   $('#sheet-prev').addEventListener('click', () => stepSheet(-1));
   $('#sheet-next').addEventListener('click', () => stepSheet(1));
 
-  scrim.addEventListener('click', closeSheet);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSheet(); closePanel(); closeCvs(); } });
+  function openMap() {
+    clearTimeout(mapTimer);
+    if (sheet.classList.contains('on')) closeSheet();
+    closePanel();
+    lastFocus = document.activeElement;
+    map.hidden = false; showScrim(); lock();
+    mapBtn.setAttribute('aria-expanded', 'true');
+    requestAnimationFrame(() => { map.classList.add('on'); $('#map-close').focus({ preventScroll: true }); });
+  }
+  function closeMap(keepLock) {
+    if (!map.classList.contains('on')) return;
+    map.classList.remove('on');
+    mapBtn.setAttribute('aria-expanded', 'false');
+    mapTimer = setTimeout(() => { map.hidden = true; }, 460);
+    if (!keepLock) { unlockIfIdle(); hideScrimIfIdle(); if (lastFocus && lastFocus.focus) { lastFocus.focus({ preventScroll: true }); lastFocus = null; } }
+  }
+  mapBtn.addEventListener('click', () => { if (map.classList.contains('on')) closeMap(); else openMap(); });
+  $('#map-close').addEventListener('click', () => closeMap());
+  scrim.addEventListener('click', () => { closeSheet(); closeMap(); });
+  // Escape closes the topmost thing: a pop-up, the Map, the contact panel, then the details on the board.
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (sheet.classList.contains('on')) closeSheet(); else if (map.classList.contains('on')) closeMap(); else if (panel.classList.contains('on')) closePanel(true); else closeDetail();
+    closeCvs();
+  });
 
-  /* ---------- The board's tabs (narrow screens) ---------- */
-  const board = $('#board'), tabs = $$('.tabs [data-tab]');
-  function openTab(k) { board.dataset.open = k; tabs.forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === k ? 'true' : 'false')); }
-  tabs.forEach(b => b.addEventListener('click', () => { openTab(b.dataset.tab); track('tab-' + b.dataset.tab); }));
+  function goTo(sel) {
+    if (!isPlace(sel)) return;
+    closeSheet(); closeMap();
+    body.classList.remove('locked');
+    setTimeout(() => showTarget(sel), 60);
+  }
+
+  // One listener for every "open this" button on the page, in the map and inside sheets.
+  document.addEventListener('click', e => {
+    const c = e.target.closest('[data-copy]');
+    if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
+    const s = e.target.closest('[data-sheet]');
+    if (s) { e.preventDefault(); const id = s.dataset.sheet, place = library[id] && CH_PLACE[library[id].ch]; if (place && map.classList.contains('on') && body.dataset.chapter !== place.slice(1)) showTarget(place, true); openSheet(id); return; }
+    const dt = e.target.closest('[data-detail]');
+    if (dt) { e.preventDefault(); openDetail(dt.dataset.detail); return; }
+    const g = e.target.closest('[data-goto]');
+    if (g) { e.preventDefault(); goTo(g.dataset.goto); return; }
+    // Any other link to a place on this page (the dots, the W in the top bar) slides to that cabinet.
+    const a = e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').length > 1 && !a.getAttribute('href').startsWith('#s-') && isPlace(a.getAttribute('href'))) { e.preventDefault(); goTo(a.getAttribute('href')); }
+  });
+  function openFromHash() {
+    const h = location.hash || '';
+    if (h.startsWith('#s-')) { const id = h.slice(3); if (library[id]) { const place = CH_PLACE[library[id].ch]; if (place) showTarget(place, true); openSheet(id); } }
+    else if (h.length > 1) showTarget(h, true); // an address ending in #services or #about (or an old one: #teach, #think, #make, #write) opens in that place
+  }
+  window.addEventListener('hashchange', openFromHash);
+
+  /* ---------- Tabs: the services board and the About board each show one of three sides at a time ---------- */
+  const svcBoard = $('#board'), svcStage = $('.stage');
+  function openTab(board, k) {
+    if (!board || board.dataset.open === k) return;
+    board.dataset.open = k;
+    $$('.tabs [data-tab]', board).forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === k ? 'true' : 'false'));
+    if (board === svcBoard) { closeDetail(); showShapes(k); }
+    track('tab-' + board.id + '-' + k);
+  }
+  function stepTab(board, d) { const ks = $$('.tabs [data-tab]', board).map(b => b.dataset.tab), k = ks[ks.indexOf(board.dataset.open) + d]; if (k) openTab(board, k); }
+  $$('.bb .tabs [data-tab]').forEach(b => b.addEventListener('click', () => openTab(b.closest('.bb'), b.dataset.tab)));
+  // Pointing at a service on the Teach list brings up its shape: the quills for tutoring, the words for writing.
+  $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => { if (svcBoard.dataset.open === 'teach') showShapes('teach', +li.dataset.shape); }));
+
+  /* ---------- Details: the list folds away into a chevron and the details are laid over the object, in place of a pop-up ---------- */
+  const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev');
+  let detailFocus = null;
+  function openDetail(id) {
+    const item = library[id];
+    if (!item) return;
+    detailFocus = document.activeElement;
+    bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><div class="sheet-body bb-text"></div>';
+    const title = $('.bb-title', bbDetail), text = $('.bb-text', bbDetail);
+    title.textContent = item.title; text.innerHTML = item.html;
+    dressSheet(text); activateEmbeds(text); activateRequest(text); activateRatings(text); initStages(text);
+    bbDetail.hidden = false; bbDetail.scrollTop = 0;
+    svcStage.classList.add('detail-open');
+    title.focus({ preventScroll: true });
+    track('detail-' + id);
+  }
+  function closeDetail() {
+    if (!svcStage.classList.contains('detail-open')) return;
+    svcStage.classList.remove('detail-open'); bbDetail.hidden = true; bbDetail.innerHTML = '';
+    if (detailFocus && detailFocus.focus && detailFocus.offsetParent) detailFocus.focus({ preventScroll: true });
+    detailFocus = null;
+  }
+  bbChev.addEventListener('click', closeDetail);
+  bbDetail.addEventListener('click', e => { if (e.target.closest('[data-detail-close]')) closeDetail(); });
+
+  /* ---------- The sketch fades in the first time the services cabinet comes into view, on a first visit only ---------- */
+  const meEl = $('.me');
+  if (meEl) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { meEl.classList.add('in'); io.disconnect(); } }, { threshold: .3 }).observe(meEl);
 
   /* ---------- The contact panel: the form, opened from the bar at the bottom ---------- */
   const panel = $('#panel'), panelBody = $('#panel-body'), panelBtns = [$('#bar-write'), $('#bar-one')];
   let panelTimer = null, panelFocus = null;
   function openPanel() {
     if (panel.classList.contains('on')) return;
-    clearTimeout(panelTimer); closeSheet(); closeCvs();
+    clearTimeout(panelTimer); closeSheet(); closeMap(); closeCvs();
     panelFocus = document.activeElement;
     if (!panelBody.firstChild) { panelBody.innerHTML = library['request-any'].html; activateRequest(panelBody); }   // filled once, so a half-written message survives closing the panel
     panel.hidden = false; panelBtns.forEach(b => b.setAttribute('aria-expanded', 'true'));
@@ -361,40 +669,6 @@
   panelBtns.forEach(b => b.addEventListener('click', e => { e.stopPropagation(); if (panel.classList.contains('on')) closePanel(true); else openPanel(); }));
   $('#panel-close').addEventListener('click', () => closePanel(true));
   document.addEventListener('click', e => { if (panel.classList.contains('on') && !e.target.closest('#panel')) closePanel(); });
-
-  /* ---------- Places on the page, and the addresses of the old site ---------- */
-  // #teach and #make were the service cabinets: they lead to the board. #think was the academic cabinet: it leads to About. #write opens the contact panel.
-  const PLACES = { '#top': 'top', '#threshold': 'top', '#board': 'top', '#teach': 'teach', '#make': 'top', '#make-detail': 'top', '#about': 'about', '#think': 'about', '#think-detail': 'about', '#teach-detail': 'about', '#write': 'panel' };
-  function goPlace(hash, instant) {
-    const p = PLACES[hash];
-    if (!p) return false;
-    closeSheet(); body.classList.remove('locked');
-    if (p === 'panel') { openPanel(); return true; }
-    closePanel();
-    if (p === 'teach') openTab('teach');
-    const how = instant || reduced ? 'auto' : 'smooth';
-    if (p === 'about') $('#about').scrollIntoView({ behavior: how, block: 'start' }); else window.scrollTo({ top: 0, behavior: how });
-    return true;
-  }
-
-  // One listener for every "open this" button on the page and inside the pop-ups.
-  document.addEventListener('click', e => {
-    const c = e.target.closest('[data-copy]');
-    if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
-    const s = e.target.closest('[data-sheet]');
-    if (s) { e.preventDefault(); openSheet(s.dataset.sheet); return; }
-    const a = e.target.closest('a[href^="#"]'), href = a && a.getAttribute('href');
-    if (href && PLACES[href]) {
-      e.preventDefault(); goPlace(href);
-      try { history.replaceState(null, '', PLACES[href] === 'top' || PLACES[href] === 'teach' ? location.pathname + location.search : href); } catch (err) {}
-    }
-  });
-  function openFromHash() {
-    const h = location.hash || '';
-    if (h.startsWith('#s-')) { const id = h.slice(3); if (library[id]) openSheet(id); }
-    else if (h.length > 1) goPlace(h, true);
-  }
-  window.addEventListener('hashchange', openFromHash);
 
   /* ---------- Voices: what students, mentors and colleagues say, one at a time ---------- */
   const VOICES = {
@@ -447,7 +721,7 @@
   });
 
   /* ---------- The arc of a lesson ---------- */
-  const arcPath = $('#arcpath'), runner = $('.arc .runner'), arcNodes = $$('.arc .node'), arcText = $('#arc-text');
+  const arcPath = $('#arcpath'), runner = $('.runner'), arcNodes = $$('.arc .node'), arcText = $('#arc-text');
   const arcLen = arcPath.getTotalLength();
   function fracAt(x, y) {
     let best = 0, bd = 1e12;
@@ -596,61 +870,324 @@
     });
   });
 
-  /* ---------- Beside the Teach heading: the lesson arc, small, with a point that runs along it ---------- */
-  const miniPath = $('#mini-arcpath'), miniRun = $('.mini-run');
-  function miniTick(t) {
-    if (!miniPath || reduced) return;
-    const len = miniPath.getTotalLength(); if (!len) return;   // nothing to do while the heading is hidden (narrow screens)
-    const s = (t % 7200) / 7200, p = miniPath.getPointAtLength(len * Math.min(1, s / .72));   // up the arc, then a short rest at the top
-    miniRun.setAttribute('cx', p.x.toFixed(2)); miniRun.setAttribute('cy', p.y.toFixed(2));
+  /* ---------- The editing typewriter ---------- */
+  const typeTo = s => $$('.typer .txt').forEach(el => { el.textContent = s; });
+  const PAIRS = [
+    ['In order to write well, one must first read closely.', 'To write well, read closely.'],
+    ['This essay will attempt to discuss the question of whether...', 'This essay argues that...'],
+    ['It is a very unique and quite interesting argument.', 'It is a striking argument.'],
+    ['Due to the fact that Macbeth is ambitious, he kills the king.', 'Ambition drives Macbeth to kill the king.']
+  ];
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  // At rest the card shows one finished sentence. The typing runs only while the pointer is over the card, or focus is inside it.
+  let typing = 0;
+  async function runTyper(id) {
+    const live = () => typing === id;
+    for (let i = 0; live(); i++) {
+      const a = PAIRS[i % PAIRS.length][0], b = PAIRS[i % PAIRS.length][1];
+      for (let k = 1; k <= a.length && live(); k++) { typeTo(a.slice(0, k)); await wait(26); }
+      if (live()) await wait(1400);
+      for (let k = a.length; k >= 0 && live(); k--) { typeTo(a.slice(0, k)); await wait(11); }
+      if (live()) await wait(260);
+      for (let k = 1; k <= b.length && live(); k++) { typeTo(b.slice(0, k)); await wait(38); }
+      if (live()) await wait(3000);
+      for (let k = b.length; k >= 0 && live(); k--) { typeTo(b.slice(0, k)); await wait(9); }
+      if (live()) await wait(500);
+    }
   }
+  const restTyper = () => typeTo(PAIRS[0][1]);
+  restTyper();
+  // Run fn(true) while the pointer is over a card or focus is inside it, fn(false) when both have left.
+  function whileOver(card, fn) {
+    if (!card) return;
+    let over = false, within = false, on = false;
+    const set = () => { const now = over || within; if (now !== on) { on = now; fn(on); } };
+    card.addEventListener('pointerenter', () => { over = true; set(); });
+    card.addEventListener('pointerleave', () => { over = false; set(); });
+    card.addEventListener('focusin', () => { within = true; set(); });
+    card.addEventListener('focusout', () => { within = false; set(); });
+  }
+  const typerEl = $('.typer');
+  whileOver(typerEl && typerEl.closest('.svc'), on => { typing++; if (on) runTyper(typing); else restTyper(); });
 
-  /* ---------- Beside the Consult heading: the tetraktys, small. Four corners of a tetrahedron and the middle of each edge:
-     ten points, turning slowly, with one lighting up now and then. ---------- */
-  const mt = $('#mini-tetra');
-  let drawMini = () => {};
-  if (mt) {
-    const mx = mt.getContext('2d'), K = Math.min(window.devicePixelRatio || 1, 2);
-    const R3 = Math.sqrt(8 / 9), V4 = [[0, 1, 0], [R3, -1 / 3, 0], [-R3 / 2, -1 / 3, R3 * Math.sqrt(3) / 2], [-R3 / 2, -1 / 3, -R3 * Math.sqrt(3) / 2]];
-    const P = V4.slice();
-    for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) P.push(V4[a].map((v, n) => (v + V4[b][n]) / 2));
-    const gap3 = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]), nearest = gap3(P[0], P[4]);
-    const LINKS = [];
-    for (let a = 0; a < P.length; a++) for (let b = a + 1; b < P.length; b++) if (Math.abs(gap3(P[a], P[b]) - nearest) < 1e-6) LINKS.push([a, b]);
-    const glow = P.map(() => 0);
-    let MW = 0, ay = -.35, lastSpark = 0, lastT = 0;
-    const sizeMini = () => { MW = mt.getBoundingClientRect().width; if (!MW) return; mt.width = mt.height = Math.round(MW * K); mx.setTransform(K, 0, 0, K, 0, 0); };
-    sizeMini();
-    if ('ResizeObserver' in window) new ResizeObserver(sizeMini).observe(mt);
-    drawMini = t => {
-      if (!MW) return;
-      const dt = Math.min(50, t - lastT); lastT = t;
-      if (!reduced) { ay += dt * .00055; if (t - lastSpark > 700) { lastSpark = t; glow[Math.floor(Math.random() * glow.length)] = 1; } }
-      for (let i = 0; i < glow.length; i++) glow[i] *= .965;
-      const ca = Math.cos(.3), sa = Math.sin(.3), cb = Math.cos(ay), sb = Math.sin(ay), sc = MW * .4, g = pal.gold, tc = pal.text;
-      const col = g.r + ',' + g.g + ',' + g.b, tcol = tc.r + ',' + tc.g + ',' + tc.b;
-      const pts = P.map(p => { const y0 = p[1] - .12, x = p[0] * cb + p[2] * sb, z0 = -p[0] * sb + p[2] * cb, y = y0 * ca - z0 * sa, z = y0 * sa + z0 * ca, f = 3.4 / (3.4 - z); return { x: MW / 2 + x * f * sc, y: MW / 2 - y * f * sc, d: Math.max(0, Math.min(1, (z + 1) / 2)) }; });
-      mx.clearRect(0, 0, MW, MW);
-      for (const l of LINKS) {
-        const a = pts[l[0]], b = pts[l[1]], dep = (a.d + b.d) / 2;
-        mx.lineWidth = .6 + .6 * dep; mx.strokeStyle = 'rgba(' + col + ',' + (.25 + .6 * dep).toFixed(3) + ')';
-        mx.beginPath(); mx.moveTo(a.x, a.y); mx.lineTo(b.x, b.y); mx.stroke();
-      }
-      pts.forEach((p, i) => {
-        const r = MW * (.024 + .022 * p.d) * (1 + glow[i] * .7);
-        mx.fillStyle = 'rgba(' + col + ',' + (.2 + .2 * p.d + .45 * glow[i]).toFixed(3) + ')';
-        mx.beginPath(); mx.arc(p.x, p.y, r * 2.2, 0, TAU); mx.fill();
-        mx.fillStyle = 'rgba(' + tcol + ',' + (.6 + .4 * Math.max(p.d, glow[i])).toFixed(3) + ')';
-        mx.beginPath(); mx.arc(p.x, p.y, r, 0, TAU); mx.fill();
+  /* ---------- The design blocks ---------- */
+  const LAYOUTS = [
+    [[0, 0, 140, 26], [0, 32, 66, 26], [74, 32, 66, 26], [0, 64, 42, 26], [49, 64, 42, 26], [98, 64, 42, 26]],
+    [[0, 0, 40, 90], [48, 0, 92, 20], [48, 26, 44, 28], [96, 26, 44, 28], [48, 60, 92, 12], [48, 76, 60, 14]],
+    [[0, 0, 66, 42], [74, 0, 66, 42], [0, 48, 66, 42], [74, 48, 30, 42], [110, 48, 30, 20], [110, 72, 30, 18]],
+    [[0, 0, 140, 16], [0, 20, 140, 16], [0, 40, 140, 16], [0, 60, 140, 16], [0, 80, 100, 10], [108, 80, 32, 10]]
+  ];
+  function layout(k) { $$('.blocks').forEach(box => { const bs = $$('i', box); LAYOUTS[k].forEach((r, i) => { const b = bs[i]; if (!b) return; b.style.transform = 'translate(' + r[0] + 'px,' + r[1] + 'px)'; b.style.width = r[2] + 'px'; b.style.height = r[3] + 'px'; }); }); }
+  let lk = 0; layout(0);
+  // The blocks rearrange themselves only while their card is pointed at; at rest they hold the first layout.
+  let blocksTimer = null;
+  const blocksEl = $('.blocks');
+  whileOver(blocksEl && blocksEl.closest('.svc'), on => {
+    clearInterval(blocksTimer); blocksTimer = null;
+    if (on) { const step = () => { lk = (lk + 1) % LAYOUTS.length; layout(lk); }; step(); blocksTimer = setInterval(step, 1800); }
+    else { lk = 0; layout(0); }
+  });
+
+  /* ---------- The shapes on the blackboard of My services: one wireframe for each kind of work, each morphing into the next ---------- */
+  // Tutoring is two quills writing together; Editing is a sentence gathering itself out of a cloud of words; Learning design is a lesson
+  // as a puzzle box of four layers that twist; Consulting is the tetraktys, ten points in a pyramid, with points that light and dim.
+  // A drag turns the shape. Each tab of the board has its own: Teach the quills and the words (a tap, or Enter, changes between them),
+  // Design the lesson stages, Consult the tetraktys.
+  const tc = $('#tetra');
+  let drawTetra = () => {}, sizeTetra = () => {}, showShapes = () => {};
+  if (tc) {
+    const tx = tc.getContext('2d'), nameEl = $('#maker-name'), whatEl = $('#maker-what'), hintEl = $('#maker-hint');
+    const mixv = (p, q, m) => p + (q - p) * m, clamp01 = v => Math.max(0, Math.min(1, v));
+    const ease = v => v < .5 ? 2 * v * v : 1 - Math.pow(-2 * v + 2, 2) / 2;
+    // A pulse that is 0, rises to 1, holds, and falls back to 0, once every `period` milliseconds.
+    const pulse = (t, period, up, hold, down) => { const s = t % period, r = period * .16; return s < up ? 0 : s < up + r ? ease((s - up) / r) : s < up + r + hold ? 1 : s < up + r + hold + r ? 1 - ease((s - up - r - hold) / r) : 0; };
+    let TW = 0;
+
+    /* 1. Tutoring: two quills writing together. The larger leads round the page in curls; the smaller follows half a turn behind
+       and writes over the same line just as the first one's ink fades. */
+    const QUILL = (() => {   // one quill with its nib at the origin, leaning to the right: a spine, a vane on either side that curls a little out of the page, a nib
+      const pts = [], links = [], N = 11, nx = -.819, ny = .573;
+      const spine = t => [.1 + 1.0 * t + .12 * Math.sin(t * Math.PI), .16 + 1.45 * t - .1 * Math.sin(t * Math.PI), .1 * Math.sin(t * Math.PI * 1.5)];
+      for (let i = 0; i <= N; i++) { pts.push({ p: spine(i / N), r: 0 }); if (i) links.push([i - 1, i, 1]); }
+      // The vanes begin a little way up the shaft, are widest below the middle and come to a point at the tip.
+      [1, -1].forEach(side => {
+        const base = pts.length;
+        for (let i = 2; i < N; i++) {
+          const t = i / N, u = (t - 2 / N) / (1 - 2 / N), w = .36 * Math.pow(Math.sin(Math.PI * Math.pow(u, .75)), .8) * (side > 0 ? 1 : .72), s = spine(t);
+          pts.push({ p: [s[0] + nx * w * side - .05 * u, s[1] + ny * w * side - .1 * w, s[2] + .22 * w * side], r: .38 });
+          links.push([i, base + i - 2, .4]);
+          if (i > 2) links.push([base + i - 3, base + i - 2, 1]);
+        }
+        links.push([1, base, 1]); links.push([N, base + N - 3, 1]);
       });
+      pts.push({ p: [0, 0, 0], r: .62 }); links.push([0, pts.length - 1, 1]);   // the nib
+      return { pts, links };
+    })();
+    const PAGE = -.74, ORBIT = .46, CURL = .11, LOOPS = 7, TRAIL = 46, SPAN = Math.PI * .92;
+    const nibAt = th => [ORBIT * Math.cos(th) + CURL * Math.cos(LOOPS * th), ORBIT * Math.sin(th) + CURL * Math.sin(LOOPS * th)];   // a nib goes round the middle of the page, curling as it goes
+    function quill(t) {
+      const pts = [], links = [], turn = t * .00045;   // once round the page in about fourteen seconds
+      [[.86, 0, 1], [.56, Math.PI, .8]].forEach(([s, lag, dot]) => {
+        const th = turn - lag, n = nibAt(th), base = pts.length;
+        // Each quill trails behind its nib like a pen being drawn along, and rocks a little with every curl.
+        const yaw = Math.atan2(Math.cos(th), Math.sin(th)) + .3 * Math.sin(LOOPS * th), rock = .1 * Math.cos(LOOPS * th);
+        const cy = Math.cos(yaw), sy = Math.sin(yaw), cr = Math.cos(rock), sr = Math.sin(rock);
+        QUILL.pts.forEach(q => {
+          const x1 = q.p[0] * cr - q.p[1] * sr, y1 = q.p[0] * sr + q.p[1] * cr, z = q.p[2];
+          pts.push({ p: [n[0] + s * (x1 * cy + z * sy), PAGE + s * y1, n[1] + s * (-x1 * sy + z * cy)], r: q.r * dot });
+        });
+        QUILL.links.forEach(l => links.push([base + l[0], base + l[1], l[2]]));
+        // The ink it has just laid down, fading the further back it goes.
+        for (let k = 0; k <= TRAIL; k++) {
+          const p = nibAt(th - k / TRAIL * SPAN);
+          pts.push({ p: [p[0], PAGE, p[1]], r: 0 });
+          if (k) links.push([pts.length - 2, pts.length - 1, 1.5 * (1 - k / TRAIL)]);
+        }
+      });
+      return { pts, links, labels: [] };
+    }
+
+    /* 2. Editing: the words of a sentence drift in a cloud, then the ones worth keeping gather into the shorter sentence. */
+    const WORDS = PAIRS[0][0].split(' '), KEEP = PAIRS[0][1].split(' ');   // "In order to write well, one must first read closely." becomes "To write well, read closely."
+    const keepAt = WORDS.map(w => KEEP.findIndex(k => k.toLowerCase() === w.toLowerCase()));
+    const cloud = WORDS.map((w, i) => { const y = 1 - 2 * (i + .5) / WORDS.length, r = Math.sqrt(1 - y * y), th = i * 2.399963; return [Math.cos(th) * r * .9, y * .9, Math.sin(th) * r * .9]; });
+    function words(t) {
+      const a = pulse(t, 11000, 3200, 3000), size = TW * .058, swap = clamp01((a - .35) / .3);
+      tx.font = '500 ' + (size * 1.075).toFixed(1) + 'px "EB Garamond", Georgia, serif';   // the size the words are drawn at once they reach the line
+      const widths = KEEP.map(k => tx.measureText(k).width), gap = size * .32, total = widths.reduce((s, w) => s + w, 0) + gap * (KEEP.length - 1);
+      let x = -total / 2;
+      const lineX = widths.map(w => { const c = x + w / 2; x += w + gap; return c; });
+      const pts = WORDS.map((w, i) => {
+        const k = keepAt[i], bob = Math.sin(t * .0009 + i * 1.7) * .04;
+        return { p: [cloud[i][0], cloud[i][1] + bob, cloud[i][2]], r: 0, f: k >= 0 ? [lineX[k], 0] : null, a: k >= 0 ? a : 0 };
+      });
+      const links = WORDS.map((w, i) => [i, (i + 1) % WORDS.length, .28 * (1 - a)]);
+      const labels = [];
+      WORDS.forEach((w, i) => {
+        const k = keepAt[i];
+        if (k < 0) labels.push({ i, text: w, size, serif: true, alpha: 1 - .82 * a });
+        else if (KEEP[k] === w) labels.push({ i, text: w, size, serif: true, alpha: 1 });
+        else { labels.push({ i, text: w, size, serif: true, alpha: 1 - swap }); labels.push({ i, text: KEEP[k], size, serif: true, alpha: swap }); }   // "to" fades into "To"
+      });
+      return { pts, links, labels };
+    }
+
+    /* 3. Learning design: a lesson as a puzzle box. Four layers, one for each stage of my lesson plans and as tall as its minutes,
+       with the stage's name on every side. The layers twist a quarter turn one after another, slide apart like drawers, and close again. */
+    const STAGES = [['Hook', 5], ['Introduction', 10], ['Body', 20], ['Consolidation', 5]];   // a 40-minute lesson
+    const BOX = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]];
+    const EDGES = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+    const FACES = [[4, 5, 6, 7], [1, 2, 6, 5], [0, 1, 2, 3], [0, 3, 7, 4], [3, 2, 6, 7], [0, 1, 5, 4]];
+    const SIDE = 1.04, TALL = 1.5, MINUTES = STAGES.reduce((s, st) => s + st[1], 0);
+    function blocks(t) {
+      const PERIOD = 9000, cyc = Math.floor(t / PERIOD), s = t % PERIOD, hs = SIDE / 2;
+      const open = s < 3400 ? 0 : s < 4500 ? ease((s - 3400) / 1100) : s < 6200 ? 1 : s < 7300 ? 1 - ease((s - 6200) / 1100) : 0;
+      const gap = .03 + .1 * open, size = Math.max(10, TW * .03), pts = [], links = [], labels = [], quads = [];
+      let top = (TALL + gap * (STAGES.length - 1)) / 2;
+      STAGES.forEach((st, n) => {
+        const h = st[1] / MINUTES * TALL, dir = n % 2 ? 1 : -1, cy = top - h / 2, cx = dir * .16 * open; top -= h + gap;
+        const th = dir * Math.PI / 2 * (cyc + ease(clamp01((s - 400 - n * 380) / 1300))), c = Math.cos(th), sn = Math.sin(th), base = pts.length;
+        BOX.forEach(q => { const x = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + x * c + z * sn, cy + q[1] * h / 2, -x * sn + z * c], r: .3 }); });
+        EDGES.forEach(e => links.push([base + e[0], base + e[1], 1]));
+        FACES.forEach(f => quads.push(f.map(k => base + k)));
+        const text = st[0] + ' · ' + st[1] + ' min';
+        for (let k = 0; k < 4; k++) {   // the middle of each side, a point to its right and a point above it: enough to lay the name flat on the side
+          const ph = th + k * Math.PI / 2, nx = Math.sin(ph), nz = Math.cos(ph), o = pts.length;
+          pts.push({ p: [cx + nx * hs, cy, nz * hs], r: 0 }, { p: [cx + (nx + nz) * hs, cy, (nz - nx) * hs], r: 0 }, { p: [cx + nx * hs, cy + h / 2, nz * hs], r: 0 });
+          labels.push({ face: [o, o + 1, o + 2], hx: hs, hy: h / 2, text, size, serif: false, alpha: 1 });
+        }
+      });
+      return { pts, links, labels, quads };
+    }
+
+    /* 4. Consulting: the tetraktys. Four corners of a tetrahedron and the middle of each edge: ten points, in layers of one, three and six. */
+    const R3 = Math.sqrt(8 / 9), V = [[0, 1, 0], [R3, -1 / 3, 0], [-R3 / 2, -1 / 3, R3 * Math.sqrt(3) / 2], [-R3 / 2, -1 / 3, -R3 * Math.sqrt(3) / 2]];
+    const P = V.slice();
+    for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) P.push(V[a].map((v, n) => (v + V[b][n]) / 2));
+    const gap3 = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]), nearest = gap3(P[0], P[4]);
+    const TLINKS = [];
+    for (let a = 0; a < P.length; a++) for (let b = a + 1; b < P.length; b++) if (Math.abs(gap3(P[a], P[b]) - nearest) < 1e-6) TLINKS.push([a, b, 1]);
+    const glow = P.map(() => 0); let lastSpark = 0;
+    function tetraktys(t) {
+      if (!reduced && t - lastSpark > 520) { lastSpark = t; glow[Math.floor(Math.random() * glow.length)] = 1; }   // now and then one point lights
+      for (let i = 0; i < glow.length; i++) glow[i] *= .965;                                                          // and slowly dims
+      return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: 1 + glow[i] * .9, g: glow[i] })), links: TLINKS, labels: [] };
+    }
+
+    const SHAPES = [
+      { key: 'tutoring', title: 'Tutoring', what: 'Quills', frame: quill },
+      { key: 'editing', title: 'Editing', what: 'Words', frame: words },
+      { key: 'design', title: 'Learning design', what: 'Lesson stages', frame: blocks },
+      { key: 'consulting', title: 'Philosophical & AI consulting', what: 'Tetraktys', frame: tetraktys }
+    ];
+    const SETS = { teach: [0, 1], design: [2], consult: [3] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
+    const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
+    function caption(i) { T.named = i; nameEl.textContent = TAB_NAME[T.set]; whatEl.textContent = SHAPES[i].what; hintEl.textContent = SETS[T.set].length > 1 ? 'drag to turn · tap to change' : 'drag to turn'; }
+    // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.
+    function goShape(i) {
+      T.want = i; T.since = performance.now();
+      if (T.mixing || i === T.cur) return;
+      T.nxt = i;
+      if (reduced) { T.cur = i; caption(i); return; }
+      T.mixing = true; T.mix = 0;
+    }
+    function nextShape() { const set = SETS[T.set]; goShape(set[(set.indexOf(T.want) + 1) % set.length]); }
+    showShapes = (tab, i) => { T.set = tab; goShape(i === undefined ? SETS[tab][0] : i); };
+    caption(0);
+
+    // Words are drawn once, large, onto their own small canvases and then placed as pictures: a picture glides between pixels, where type would step.
+    const sprites = new Map();
+    function sprite(text, serif, px, color) {
+      const key = (serif ? 's' : 'n') + px.toFixed(1) + color + text;
+      let sp = sprites.get(key);
+      if (!sp) {
+        const K = DPR * 2, c = document.createElement('canvas'), g = c.getContext('2d'), font = (serif ? '500 ' : '600 ') + px.toFixed(1) + 'px ' + (serif ? '"EB Garamond", Georgia, serif' : '"Source Sans 3", system-ui, sans-serif');
+        g.font = font;
+        const w = Math.ceil(g.measureText(text).width) + 8, h = Math.ceil(px * 1.5);
+        c.width = Math.ceil(w * K); c.height = Math.ceil(h * K);
+        g.setTransform(K, 0, 0, K, 0, 0); g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgb(' + color + ')'; g.fillText(text, w / 2, h / 2);
+        sp = { c, w, h }; sprites.set(key, sp);
+      }
+      return sp;
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => sprites.clear());   // redraw the words once the real typefaces have arrived
+    sizeTetra = () => { TW = tc.getBoundingClientRect().width || 300; tc.width = tc.height = Math.round(TW * DPR); tx.setTransform(DPR, 0, 0, DPR, 0, 0); tx.imageSmoothingQuality = 'high'; sprites.clear(); };
+    new IntersectionObserver(es => { const now = es[0].isIntersecting; if (now && !T.seen) T.since = performance.now(); T.seen = now; }, { threshold: 0 }).observe(tc);   // the wait for the next shape starts when the cabinet comes into view
+    tc.addEventListener('pointerdown', e => { if (e.button) return; T.drag = { x: e.clientX, y: e.clientY, moved: 0 }; tc.classList.add('dragging'); try { tc.setPointerCapture(e.pointerId); } catch (err) {} });
+    tc.addEventListener('pointermove', e => {
+      if (!T.drag) return;
+      const dx = e.clientX - T.drag.x, dy = e.clientY - T.drag.y; T.drag.x = e.clientX; T.drag.y = e.clientY; T.drag.moved += Math.abs(dx) + Math.abs(dy);
+      T.ay += dx * .008; T.ax = Math.max(-1.2, Math.min(1.2, T.ax + dy * .008)); T.vy = dx * .0012;
+    });
+    tc.addEventListener('pointerup', () => { if (!T.drag) return; const tap = T.drag.moved < 6; T.drag = null; tc.classList.remove('dragging'); if (tap) nextShape(); });
+    tc.addEventListener('pointercancel', () => { T.drag = null; tc.classList.remove('dragging'); });
+    tc.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { T.ay -= .2; e.preventDefault(); }
+      else if (e.key === 'ArrowRight') { T.ay += .2; e.preventDefault(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextShape(); }
+    });
+
+    drawTetra = t => {
+      if (!T.seen || !TW) return;
+      const theme = root.getAttribute('data-theme') || 'dark';
+      if (theme !== T.theme || !T.col) { T.theme = theme; T.col = rgb(cssVar('--accent', tc) || '#C9A24D'); sprites.clear(); }
+      if (!T.drag) { T.ay += T.vy; T.vy += ((reduced ? 0 : .0035) - T.vy) * .02; T.ax += (.3 - T.ax) * .012; }
+      if (T.mixing) { T.mix += Math.min(400, t - (T.last || t)) / 1150; if (T.mix >= .5 && T.named !== T.nxt) caption(T.nxt); if (T.mix >= 1) { T.mixing = false; T.cur = T.nxt; if (T.want !== T.cur) goShape(T.want); } }
+      else if (!reduced && !T.drag && SETS[T.set].length > 1 && t - T.since > 13000) nextShape();   // left alone on the Teach tab, it moves between the quills and the words by itself
+      T.last = t;   // a change of shape takes the same time whatever the frame rate of the screen
+      const tt = reduced ? 0 : t;   // with reduced motion the shapes hold still
+      const m = T.mixing ? ease(clamp01(T.mix)) : 0, A = SHAPES[T.cur].frame(tt), B = T.mixing ? SHAPES[T.nxt].frame(tt) : null;
+      const ca = Math.cos(T.ax), sa = Math.sin(T.ax), cb = Math.cos(T.ay), sb = Math.sin(T.ay), sc = TW * .4;
+      const place = q => {
+        const p = q.p, x = p[0] * cb + p[2] * sb, z0 = -p[0] * sb + p[2] * cb, y = p[1] * ca - z0 * sa, z = p[1] * sa + z0 * ca, f = 3.4 / (3.4 - z);
+        const o = { x: TW / 2 + x * f * sc, y: TW / 2 - y * f * sc, d: clamp01((z + 1) / 2) };
+        if (q.a && q.f) { o.x = mixv(o.x, TW / 2 + q.f[0], q.a); o.y = mixv(o.y, TW / 2 + q.f[1], q.a); o.d = mixv(o.d, .85, q.a); }   // words that have left the cloud for the line
+        return o;
+      };
+      const PA = A.pts.map(place), PB = B ? B.pts.map(place) : null;
+      const blend = (p, q) => ({ x: mixv(p.x, q.x, m), y: mixv(p.y, q.y, m), d: mixv(p.d, q.d, m) });
+      const posA = i => PB ? blend(PA[i], PB[i % PB.length]) : PA[i], posB = i => blend(PA[i % PA.length], PB[i]);
+      const col = T.col.r + ',' + T.col.g + ',' + T.col.b, tcol = pal.text.r + ',' + pal.text.g + ',' + pal.text.b;
+      tx.clearRect(0, 0, TW, TW);
+      // A soft light behind the shape, breathing slowly, as behind the solid on the first screen.
+      const br = reduced ? .5 : .5 + .5 * Math.sin(t * .0006), grad = tx.createRadialGradient(TW / 2, TW / 2, sc * .2, TW / 2, TW / 2, sc * 1.25);
+      grad.addColorStop(0, 'rgba(' + col + ',' + ((pal.light ? .08 : .12) * br + .035).toFixed(3) + ')'); grad.addColorStop(1, 'rgba(' + col + ',0)');
+      tx.fillStyle = grad; tx.fillRect(0, 0, TW, TW);
+      const paint = (S, pos, fade) => {
+        if (fade <= .01) return;
+        if (S.quads) {   // the sides of the box, faintly glazed
+          tx.fillStyle = 'rgba(' + col + ',' + (.05 * fade).toFixed(3) + ')';
+          for (const q of S.quads) { tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }
+        }
+        for (const l of S.links) {
+          const a = pos(l[0]), b = pos(l[1]), dep = (a.d + b.d) / 2, al = (.2 + .6 * dep) * l[2] * fade;
+          if (al < .01) continue;
+          tx.lineWidth = .9 + .9 * dep;
+          tx.strokeStyle = 'rgba(' + col + ',' + al.toFixed(3) + ')';
+          tx.beginPath(); tx.moveTo(a.x, a.y); tx.lineTo(b.x, b.y); tx.stroke();
+        }
+        S.pts.forEach((q, i) => {
+          if (!q.r) return;
+          const p = pos(i), r = TW * (.011 + .013 * p.d) * q.r, g = q.g || 0;
+          tx.fillStyle = 'rgba(' + col + ',' + ((.16 + .2 * p.d + .4 * g) * fade).toFixed(3) + ')';
+          tx.beginPath(); tx.arc(p.x, p.y, r * (2.4 + 1.2 * g), 0, TAU); tx.fill();
+          tx.fillStyle = 'rgba(' + tcol + ',' + ((.55 + .45 * Math.max(p.d, g)) * fade).toFixed(3) + ')';
+          tx.beginPath(); tx.arc(p.x, p.y, r, 0, TAU); tx.fill();
+        });
+        for (const L of S.labels) {
+          const sp = sprite(L.text, L.serif, L.serif ? L.size * 1.12 : L.size, tcol);
+          if (L.face) {   // a name lying flat on the side of a block, shown only while that side faces us
+            const O = pos(L.face[0]), X = pos(L.face[1]), Y = pos(L.face[2]), wx = L.hx * sc, wy = L.hy * sc;
+            const facing = -((X.x - O.x) * (Y.y - O.y) - (X.y - O.y) * (Y.x - O.x)) / (wx * wy), al = L.alpha * clamp01((facing - .15) / .4) * fade;
+            if (al < .02) continue;
+            const k = Math.min(1, 2 * wx * .86 / sp.w, 2 * wy * .72 / sp.h);
+            tx.setTransform(DPR * (X.x - O.x) / wx, DPR * (X.y - O.y) / wx, DPR * (O.x - Y.x) / wy, DPR * (O.y - Y.y) / wy, DPR * O.x, DPR * O.y);
+            tx.globalAlpha = al; tx.drawImage(sp.c, -sp.w * k / 2, -sp.h * k / 2, sp.w * k, sp.h * k);
+          } else {   // a word in the cloud, a little larger as it comes nearer
+            const p = pos(L.i), al = L.alpha * (.5 + .5 * p.d) * fade;
+            if (al < .02) continue;
+            const k = (.82 + .3 * p.d) / 1.12;
+            tx.setTransform(DPR * k, 0, 0, DPR * k, DPR * p.x, DPR * p.y);
+            tx.globalAlpha = al; tx.drawImage(sp.c, -sp.w / 2, -sp.h / 2, sp.w, sp.h);
+          }
+        }
+        tx.setTransform(DPR, 0, 0, DPR, 0, 0); tx.globalAlpha = 1;
+      };
+      paint(A, posA, 1 - m);
+      if (B) paint(B, posB, m);
     };
+    if ('ResizeObserver' in window) new ResizeObserver(() => sizeTetra()).observe(tc);
   }
 
   /* ---------- Main loop ---------- */
   function loop(t) {
-    if (pageVisible) { arcTick(t); miniTick(t); drawMini(t); }
+    if (pageVisible) { drawField(t); if (heroVisible) drawSolid(t); arcTick(t); drawTetra(t); }
     requestAnimationFrame(loop);
   }
+  sizeField(); sizeSolid(); sizeTetra();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { sizeField(); sizeSolid(); sizeTetra(); if (reduced) { drawField(0); drawSolid(performance.now()); } }, 120); });
   requestAnimationFrame(loop);
+  if ('ResizeObserver' in window) new ResizeObserver(() => sizeSolid()).observe(sc);
   openFromHash();
 })();
