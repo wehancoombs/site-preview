@@ -359,7 +359,7 @@
   const BOOKING_URL = 'https://calendar.app.google/LnQHr42n4ykTqa4ZA', FORM_URL = 'https://formspree.io/f/xnppyzon';
   const REQUESTS = {
     tutoring: { ch: 'make', title: 'Request tutoring', subject: 'Tutoring request', intro: 'Tell me the subject, the level and when suits you. I reply with a plan, a rate and a start date.', body: 'Hi Wehan,\n\nI’d like to ask about tutoring.\n\nSubject and grade or level: \nWhen and how often: \nIn person or online: \n\nThanks,\n' },
-    editing: { ch: 'make', title: 'Request editing', subject: 'Editing request', intro: 'Tell me what the document is and when you need it back. I reply with a rate and a date.', body: 'Hi Wehan,\n\nI’d like to ask about editing.\n\nWhat the document is and roughly how long: \nWhen I need it back: \n\nThanks,\n' },
+    editing: { ch: 'make', title: 'Request writing support', subject: 'Writing support request', intro: 'Tell me what the document is and when you need it back. I reply with a rate and a date.', body: 'Hi Wehan,\n\nI’d like to ask about writing support.\n\nWhat the document is and roughly how long: \nWhen I need it back: \n\nThanks,\n' },
     design: { ch: 'make', title: 'Request learning design', subject: 'Learning design request', intro: 'Tell me what you need built and who it is for. I reply with a plan, a rate and a timeline.', body: 'Hi Wehan,\n\nI’d like to ask about learning design.\n\nWhat I need built: \nWho it is for: \nWhen I need it: \n\nThanks,\n' },
     consulting: { ch: 'make', title: 'Request consulting', subject: 'Consulting request', intro: 'Tell me the question and who it is for. I reply with a proposal and a rate.', body: 'Hi Wehan,\n\nI’d like to talk about philosophical and AI consulting.\n\nFor me personally, or for a school, team or organisation: \nThe question or situation: \nA talk, a workshop, a written brief, or a conversation: \n\nThanks,\n' },
     any: { ch: 'write', title: 'Write to me', subject: 'Hello', intro: 'For anything else: a post, a reference, a question, a hello.', body: 'Hi Wehan,\n\n\n\nThanks,\n' }
@@ -651,14 +651,20 @@
     writing: { line: true, lines: () => part('editing', '.svc-summary .deliv li'), quote: () => VOICES.make.items[0], request: 'editing', more: 'editing' },
     classes: { line: true, inline: true, quote: () => VOICES.teach.items[0],
       extra: () => '<p class="eyebrow">What I taught in 2026 · tap a spine</p>' + SHELF_HTML + '<div class="shelf-detail" aria-live="polite"><p class="caption">Each spine opens a lesson.</p></div>' },
-    lectures: { line: true, quote: () => VOICES.think.items[6], more: 'courses',
-      extra: () => '<div class="bb-two"><div><p class="eyebrow">Watch me teach</p>' + LECT_HTML + '</div><div><p class="eyebrow">Study guides I wrote</p>' + GUIDES_HTML + '</div></div>' },
+    // Lectures: the two recordings, large, one in front of the other; the chevron beside them brings the other forward.
+    lectures: { line: true, inline: true, wide: true, quote: () => VOICES.think.items[6], more: 'courses',
+      extra: () => '<p class="eyebrow">Watch me teach · <span class="deck-n">1 of 2</span></p><div class="deck">' + LECT_HTML +
+        '<button class="deck-next" type="button" aria-label="Show the other recording"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>' },
     lesson: { line: true, inline: true, arc: true, extra: () => '<div class="bb-arc-slot"></div>', quote: () => VOICES.teach.items[1], request: 'design', more: 'approach' },
-    module: { lines: () => part('design', '.list li').filter((l, i) => i !== 2), long: true, quote: () => VOICES.make.items[4], request: 'design', more: 'design' },
-    curriculum: { line: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
+    // A module: what a module comes with, the modules he has designed (the paragraph that used to sit under A curriculum), and the study guides.
+    module: { line: true, inline: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.make.items[4], request: 'design', more: 'design',
+      extra: () => '<p class="eyebrow">Study guides I wrote · tap one to read it</p>' + GUIDES_HTML },
+    // A curriculum: two sentences lifted whole from the pop-up "Curriculum and course development". What this service is, is still his to settle.
+    curriculum: { line: true, text: () => 'In 2019 I was given the opportunity to create my own introductory philosophy curriculum from scratch, and so created FIL110: Introduction to Metaphysics and Epistemology, a course still in use at the University of Pretoria today. The course has been hugely successful and popular, and is in my estimation an excellent example of what a decolonised philosophy curriculum may look like in practice.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
     school: { line: true, lines: () => part('consulting', '.list li'), long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
-    university: { line: true, text: () => part('star-ai', 'p')[1], quote: () => VOICES.think.items[3], request: 'consulting', more: 'ai' }
+    // DRAFT-WEHAN: "My research focuses on" is his phrase; the rest is the question from the pop-up "Teaching in the age of AI". No fellowship, no project title.
+    university: { line: true, text: () => 'My research focuses on teaching in the age of AI: if a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?', quote: () => VOICES.think.items[3], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
   function openDetail(id) {
@@ -670,7 +676,7 @@
     detailFocus = document.activeElement;
     bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button>' +
       '<div class="bb-head"><span class="bb-icon" aria-hidden="true"><svg viewBox="0 0 48 48">' + ART[DETAIL_ART[id]] + '</svg></span><div><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><p class="bb-rate">' + $('.item-rate', it).innerHTML + '</p></div></div>' +
-      '<div class="sheet-body bb-text"><div class="bb-short"><div>' +
+      '<div class="sheet-body bb-text"><div class="bb-short' + (d.wide ? ' wide' : '') + '"><div>' +
         (d.line ? '<p class="bb-line">' + $('.item-line', it).innerHTML + '</p>' : '') +
         (d.lines ? '<ul class="bb-lines' + (d.long ? ' long' : '') + '">' + d.lines().map(l => '<li>' + l + '</li>').join('') + '</ul>' : '') +
         (d.text ? '<p class="bb-para">' + d.text() + '</p>' : '') +
@@ -681,6 +687,7 @@
     const title = $('.bb-title', bbDetail);
     title.textContent = $('h3', it).textContent;
     if (d.arc) $('.bb-arc-slot', bbDetail).appendChild(arcFig);   // the real drawing is moved in, so that it keeps running
+    const first = $('.deck .lecture', bbDetail); if (first) first.classList.add('front');
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
     svcStage.classList.add('detail-open');
     title.focus({ preventScroll: true });
@@ -694,7 +701,17 @@
     detailFocus = null;
   }
   bbChev.addEventListener('click', closeDetail);
-  bbDetail.addEventListener('click', e => { if (e.target.closest('[data-detail-close]')) closeDetail(); });
+  bbDetail.addEventListener('click', e => {
+    if (e.target.closest('[data-detail-close]')) { closeDetail(); return; }
+    if (!e.target.closest('.deck-next')) return;
+    // The other recording comes to the front. One that was playing stops, so that nothing plays out of sight.
+    const ls = $$('.deck .lecture', bbDetail), to = (ls.findIndex(l => l.classList.contains('front')) + 1) % ls.length;
+    ls.forEach((l, i) => {
+      l.classList.toggle('front', i === to);
+      if (i !== to && l.classList.contains('playing')) { const f = $('iframe', l); if (f) f.remove(); l.classList.remove('playing'); }
+    });
+    $('.deck-n', bbDetail).textContent = (to + 1) + ' of ' + ls.length;
+  });
 
   /* ---------- The sketch fades in the first time the services cabinet comes into view, on a first visit only ---------- */
   const meEl = $('.me');
@@ -867,7 +884,7 @@
     { id: 'meta', x: 450, y: 405, r: 5.5, label: 'Metacrisis',
       body: '<em>Is Philosophy A(gnostic)? Post-disciplinary Interventions in the Time of Metacrisis</em>, PSSA Annual Conference, University of Cape Town, 2026, with Mitchell Black.', more: 'papers' },
     { id: 'ai', x: 340, y: 55, r: 6.5, label: 'AI & the humanities',
-      body: 'What is human teaching for, once a machine can write the essay? My current project, <em>Socratic Pedagogy beyond the AI Horizon</em>, reads Plato’s <em>Phaedrus</em> as a guide to what cannot be automated in learning, and to how teaching should be built around it. Proposed as a 2027 fellowship at the University of Pretoria.', more: 'ai' }
+      body: 'What is human teaching for, once a machine can write the essay? My current project, <em>Socratic Pedagogy beyond the AI Horizon</em>, reads Plato’s <em>Phaedrus</em> as a guide to what cannot be automated in learning, and to how teaching should be built around it.', more: 'ai' }
   ];
   const EDGES = [['plato', 'aristotle'], ['plato', 'neo'], ['plato', 'eso'], ['plato', 'life'], ['plato', 'rorty'], ['neo', 'theurgy'], ['neo', 'egypt'], ['theurgy', 'egypt'], ['eso', 'african'], ['eso', 'neo'], ['eso', 'meta'], ['life', 'nature'], ['life', 'meta'], ['nature', 'meta'], ['african', 'egypt'], ['plato', 'ai'], ['ai', 'life']];
   NODES.forEach(n => {
@@ -880,6 +897,12 @@
   // On a phone the same twelve stars are laid out again in a tall frame, so that every star and every name fits the screen with no sideways scrolling.
   const TALL = { ai: [112, 42], theurgy: [290, 46], aristotle: [62, 132], neo: [238, 130], rorty: [44, 236], plato: [172, 236], egypt: [308, 222], life: [78, 340], eso: [254, 332], nature: [74, 452], meta: [178, 420], african: [264, 492] };
   const byId = {}; NODES.forEach(n => { byId[n.id] = n; });
+  // A scatter of small unnamed stars behind the twelve, so that the sky has some depth on a wide screen. The same scatter every time.
+  const dust = mk('g', { class: 'dust', 'aria-hidden': 'true' }); sky.appendChild(dust);
+  for (let i = 0, s = 11; i < 58; i++) {
+    const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
+    dust.appendChild(mk('circle', { cx: (16 + rnd() * 1008).toFixed(1), cy: (10 + rnd() * 430).toFixed(1), r: (.7 + rnd() * 1.4).toFixed(2), opacity: (.16 + rnd() * .4).toFixed(2) }));
+  }
   const edgeEls = EDGES.map(([a, b]) => { const l = mk('line', {}); l.dataset.a = a; l.dataset.b = b; sky.appendChild(l); return l; });
   const nodeEls = {};
   NODES.forEach(n => {
@@ -904,11 +927,11 @@
   });
   const narrowSky = matchMedia('(max-width: 640px)');
   function placeSky() {
-    const tall = narrowSky.matches, k = tall ? .72 : 1, at = n => tall ? TALL[n.id] : [n.x, n.y];
+    const tall = narrowSky.matches, k = tall ? .72 : 1.3, at = n => tall ? TALL[n.id] : [n.x, n.y];   // on a wide screen the stars are drawn larger
     sky.setAttribute('viewBox', tall ? '0 0 360 524' : '0 0 1040 450'); sky.classList.toggle('tall', tall);
     NODES.forEach(n => {
       const p = at(n), r = n.r * k;
-      put(n.hit, { cx: p[0], cy: p[1], r: tall ? 24 : 28 }); put(n.glow, { cx: p[0], cy: p[1], r: r * 2.4 }); put(n.dot, { cx: p[0], cy: p[1], r: r }); put(n.tx, { x: p[0], y: p[1] + r + (tall ? 17 : 24) });
+      put(n.hit, { cx: p[0], cy: p[1], r: tall ? 24 : 28 }); put(n.glow, { cx: p[0], cy: p[1], r: r * 2.4 }); put(n.dot, { cx: p[0], cy: p[1], r: r }); put(n.tx, { x: p[0], y: p[1] + r + (tall ? 17 : 27) });
     });
     edgeEls.forEach(l => { const a = at(byId[l.dataset.a]), b = at(byId[l.dataset.b]); put(l, { x1: a[0], y1: a[1], x2: b[0], y2: b[1] }); });
   }
@@ -1123,34 +1146,30 @@
       return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: (1 + glow[i] * .9) * (.22 + .78 * w(0)), g: glow[i] })), links: TLINKS, labels };
     }
 
-    /* A person: a column of linked centres, with pairs to either side. It gathers itself into a single sphere, rests, and opens out again. */
-    const BODY = [[0, -.85, 0], [0, -.42, 0], [0, 0, 0], [0, .42, 0], [0, .85, 0], [-.46, -.62, .16], [.46, -.62, .16], [-.5, -.02, -.16], [.5, -.02, -.16], [-.42, .6, .16], [.42, .6, .16]];
-    const BLINKS = [[0, 1], [1, 2], [2, 3], [3, 4], [5, 6], [7, 8], [9, 10], [0, 5], [0, 6], [5, 1], [6, 1], [5, 7], [6, 8], [1, 7], [1, 8], [7, 3], [8, 3], [7, 9], [8, 10], [3, 9], [3, 10], [9, 4], [10, 4]].map(l => [l[0], l[1], 1]);
+    /* A person: a soft glowing sphere, breathing slowly. Its one point is its centre, which is where the other shapes gather when they change into it. */
     function person(t) {
-      const c = pulse(t + 3000, 10000, 4200, 1300), k = 1 - .97 * c, br = .5 + .5 * Math.sin(t * .002);
-      return { pts: BODY.map((p, i) => ({ p: [p[0] * k, p[1] * k, p[2] * k], r: i === 2 ? 1.15 + 2.6 * c + .3 * c * br : (i < 5 ? 1 : .8) * (1 - c), g: i === 2 ? c * .8 : .25 * Math.max(0, Math.sin(t * .0016 - i * .7)) })),
-               links: BLINKS.map(l => [l[0], l[1], 1 - c]), labels: [] };
+      const br = .5 + .5 * Math.sin(t * .0011);
+      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .54 + .05 * br, glow: .78 + .22 * br } };
     }
 
-    /* A university: a star tetrahedron, two tetrahedra through one another, its eight points lighting and dimming in turn. */
+    /* A university: a star tetrahedron, two tetrahedra through one another, its points lighting and dimming in turn. */
     const STAR = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]].map(v => v.map(x => x * .58)), STAR8 = STAR.concat(STAR.map(v => v.map(x => -x)));
     const SP = STAR8.map(p => ({ p, r: 1 })), SLINKS = [], mids = [];
-    for (let h = 0; h < 2; h++) for (let a = 0; a < 4; a++) for (let c = a + 1; c < 4; c++) {   // seven small nodes along every edge
+    for (let h = 0; h < 2; h++) for (let a = 0; a < 4; a++) for (let c = a + 1; c < 4; c++) {   // three small nodes along every edge
       let prev = h * 4 + a; const A = STAR8[h * 4 + a], B = STAR8[h * 4 + c];
-      for (let k = 1; k < 8; k++) { SP.push({ p: A.map((v, n) => v + (B[n] - v) * k / 8), r: k === 4 ? .7 : .42 }); SLINKS.push([prev, SP.length - 1, 1]); prev = SP.length - 1; if (k === 4) mids.push(prev); }
+      for (let k = 1; k < 4; k++) { SP.push({ p: A.map((v, n) => v + (B[n] - v) * k / 4), r: k === 2 ? .7 : .42 }); SLINKS.push([prev, SP.length - 1, 1]); prev = SP.length - 1; if (k === 2) mids.push(prev); }
       SLINKS.push([prev, h * 4 + c, 1]);
     }
-    // Where the two tetrahedra cross they mark out an octahedron: its edges are drawn too, each with three nodes of its own.
+    // Where the two tetrahedra cross they mark out an octahedron: its edges are drawn too, each with one node of its own.
     const sd = (i, k) => Math.hypot(SP[i].p[0] - SP[k].p[0], SP[i].p[1] - SP[k].p[1], SP[i].p[2] - SP[k].p[2]);
     const core = mids.filter((m, n) => !mids.slice(0, n).some(o => sd(m, o) < 1e-6)), near = Math.min(...core.slice(1).map(m => sd(core[0], m)));
     for (let a = 0; a < core.length; a++) for (let c = a + 1; c < core.length; c++) if (Math.abs(sd(core[a], core[c]) - near) < 1e-6) {
-      let prev = core[a]; const A = SP[core[a]].p, B = SP[core[c]].p;
-      for (let k = 1; k < 4; k++) { SP.push({ p: A.map((v, n) => v + (B[n] - v) * k / 4), r: .34 }); SLINKS.push([prev, SP.length - 1, .6]); prev = SP.length - 1; }
-      SLINKS.push([prev, core[c], .6]);
+      const A = SP[core[a]].p, B = SP[core[c]].p;
+      SP.push({ p: A.map((v, n) => (v + B[n]) / 2), r: .34 }); SLINKS.push([core[a], SP.length - 1, .6], [SP.length - 1, core[c], .6]);
     }
     const sglow = SP.map(() => 0); let sSpark = 0;
     function merkaba(t) {
-      if (!reduced && t - sSpark > 70) { sSpark = t; sglow[Math.floor(Math.random() * SP.length)] = 1; }
+      if (!reduced && t - sSpark > 150) { sSpark = t; sglow[Math.floor(Math.random() * SP.length)] = 1; }
       for (let i = 0; i < sglow.length; i++) sglow[i] *= .95;
       return { pts: SP.map((q, i) => ({ p: q.p, r: q.r * (1 + sglow[i] * 1.3), g: sglow[i] })), links: SLINKS, labels: [] };
     }
@@ -1182,31 +1201,41 @@
       return { pts, links, labels: [] };
     }
 
-    /* 7. A module: a shelf of lesson boxes side by side, each of its own height, turning one after another. */
+    /* 7. A module: a run of lessons. Each is a small copy of the lesson box, with its four layers and no words, and each is of its own size.
+       Their layers twist a quarter turn, one lesson after another. */
+    const RUN = [.8, 1.04, .9, 1.18, .72, .96];   // six lessons, three by two, so that they read as a set from every side
     function moduleShelf(t) {
-      const pts = [], links = [], quads = [], hs = .15;
-      for (let n = 0; n < 5; n++) {
-        const c = t / 5200 - n * .16, th = Math.PI / 2 * (Math.floor(c) + ease(clamp01((c - Math.floor(c)) * 3))), cs = Math.cos(th), sn = Math.sin(th);
-        const h = .3 + .09 * ((n * 3) % 5), cx = (n - 2) * .42, base = pts.length;
-        BOX.forEach(q => { const x = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + x * cs + z * sn, -.45 + (q[1] + 1) * h, -x * sn + z * cs], r: .3 }); });
-        EDGES.forEach(e => links.push([base + e[0], base + e[1], 1]));
-        FACES.forEach(f => quads.push(f.map(k => base + k)));
-      }
-      pts.push({ p: [-1.08, -.45, 0], r: 0 }, { p: [1.08, -.45, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .5]);   // the shelf they stand on
+      const pts = [], links = [], quads = [], PERIOD = 9000, FLOOR = -.46;
+      RUN.forEach((k, b) => {
+        const hs = .15 * k, tall = .74 * k, gap = .016 * k, cx = (b % 3 - 1) * .5, cz = (b < 3 ? -.27 : .27), tb = t + (RUN.length - b) * 650, cyc = Math.floor(tb / PERIOD), s = tb % PERIOD;
+        let top = FLOOR + tall + gap * (STAGES.length - 1);
+        STAGES.forEach((st, n) => {
+          const h = st[1] / MINUTES * tall, dir = n % 2 ? 1 : -1, cy = top - h / 2; top -= h + gap;
+          const th = dir * Math.PI / 2 * (cyc + ease(clamp01((s - 400 - n * 380) / 1300))), cs = Math.cos(th), sn = Math.sin(th), base = pts.length;
+          BOX.forEach(q => { const u = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + u * cs + z * sn, cy + q[1] * h / 2, cz - u * sn + z * cs], r: .15 }); });
+          EDGES.forEach(e => links.push([base + e[0], base + e[1], .9]));
+          FACES.forEach(f => quads.push(f.map(i => base + i)));
+        });
+      });
+      const o = pts.length; [[-.78, -.55], [.78, -.55], [.78, .55], [-.78, .55]].forEach(c => pts.push({ p: [c[0], FLOOR, c[1]], r: 0 }));   // the board they stand on
+      for (let i = 0; i < 4; i++) links.push([o + i, o + (i + 1) % 4, .45]);
       return { pts, links, labels: [], quads };
     }
 
-    /* 8. A curriculum: a spiral stair. The same ground comes round again, one level higher each time; a light climbs it. */
+    /* 8. A curriculum: a spiral stair. Each step is a plank, a lesson block laid flat, and the planks differ in length as the lessons of a module differ in size.
+       The same ground comes round again, one level higher each time; a light climbs it. */
     function curriculum(t) {
-      const N = 30, pts = [], links = [], at = (t * .0035) % (N + 6) - 3;
+      const N = 17, pts = [], links = [], quads = [], at = (t * .0022) % (N + 5) - 2.5;
       for (let i = 0; i < N; i++) {
-        const th = i * .52, y = -.85 + i * 1.7 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2.5);
-        pts.push({ p: [.2 * Math.sin(th), y, .2 * Math.cos(th)], r: 0 }, { p: [.7 * Math.sin(th), y, .7 * Math.cos(th)], r: .5 + .7 * g, g });
-        links.push([2 * i, 2 * i + 1, .45 + .5 * g]);
-        if (i) links.push([2 * i - 1, 2 * i + 1, .7]);
+        const th = i * .5, y = -.86 + i * 1.72 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2.2), sn = Math.sin(th), cs = Math.cos(th);
+        const r1 = .46 + .26 * RUN[i % RUN.length], base = pts.length;
+        BOX.forEach(q => { const r = q[0] < 0 ? .1 : r1, v = q[2] * .115; pts.push({ p: [r * sn + v * cs, y + q[1] * .022, r * cs - v * sn], r: 0 }); });
+        EDGES.forEach(e => links.push([base + e[0], base + e[1], .55 + .45 * g]));
+        FACES.forEach(f => { const q = f.map(k => base + k); q.a = 1 + 5 * g; quads.push(q); });
+        pts.push({ p: [r1 * sn, y, r1 * cs], r: .26 + .45 * g, g: .8 * g });   // the end of the plank, where the light on the stair shows
       }
-      pts.push({ p: [0, -.9, 0], r: 0 }, { p: [0, .9, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .35]);
-      return { pts, links, labels: [] };
+      pts.push({ p: [0, -.92, 0], r: 0 }, { p: [0, .92, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .4]);   // the post the stair turns about
+      return { pts, links, labels: [], quads };
     }
 
     const SHAPES = [
@@ -1299,9 +1328,14 @@
       tx.fillStyle = grad; tx.fillRect(0, 0, TW, TW);
       const paint = (S, pos, fade) => {
         if (fade <= .01) return;
-        if (S.quads) {   // the sides of the box, faintly glazed
-          tx.fillStyle = 'rgba(' + col + ',' + (.05 * fade).toFixed(3) + ')';
-          for (const q of S.quads) { tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }
+        if (S.orb) {   // a soft sphere of light: brightest at its heart, fading to nothing at its edge
+          const c = pos(0), R = sc * S.orb.r * 1.5, a = S.orb.glow * fade, g = tx.createRadialGradient(c.x - R * .07, c.y - R * .09, 0, c.x, c.y, R);
+          g.addColorStop(0, 'rgba(' + (pal.light ? col : tcol) + ',' + (.85 * a).toFixed(3) + ')'); g.addColorStop(.14, 'rgba(' + col + ',' + (.8 * a).toFixed(3) + ')');
+          g.addColorStop(.42, 'rgba(' + col + ',' + (.36 * a).toFixed(3) + ')'); g.addColorStop(.7, 'rgba(' + col + ',' + (.11 * a).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+          tx.fillStyle = g; tx.beginPath(); tx.arc(c.x, c.y, R, 0, TAU); tx.fill();
+        }
+        if (S.quads) {   // the sides of the box, faintly glazed; a side can be lit more than the rest
+          for (const q of S.quads) { tx.fillStyle = 'rgba(' + col + ',' + (.05 * (q.a || 1) * fade).toFixed(3) + ')'; tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }
         }
         for (const l of S.links) {
           const a = pos(l[0]), b = pos(l[1]), dep = (a.d + b.d) / 2, al = (.2 + .6 * dep) * l[2] * fade;
