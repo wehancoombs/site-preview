@@ -901,7 +901,7 @@
       body: 'An introduction to philosophy that follows it around the globe, not only through the West. I created <em>Introduction to Metaphysics and Epistemology</em> in 2019, and it is still in use at the University of Pretoria in 2026.', more: 'guide-c2' }
   ];
   const EDGES = [['plato', 'aristotle'], ['plato', 'neo'], ['plato', 'eso'], ['plato', 'life'], ['neo', 'theurgy'], ['neo', 'egypt'], ['theurgy', 'egypt'], ['eso', 'african'], ['eso', 'neo'], ['eso', 'meta'], ['life', 'nature'], ['life', 'meta'], ['nature', 'meta'], ['african', 'egypt'], ['plato', 'ai'], ['ai', 'life'],
-    ['rorty', 'life'], ['rorty', 'meta'], ['soul', 'plato'], ['soul', 'aristotle'], ['soul', 'neo'], ['hidden', 'eso'], ['hidden', 'plato'], ['decol', 'african'], ['decol', 'egypt'], ['decol', 'life']];
+    ['plato', 'rorty'], ['rorty', 'life'], ['rorty', 'meta'], ['soul', 'plato'], ['soul', 'aristotle'], ['soul', 'neo'], ['hidden', 'eso'], ['hidden', 'plato'], ['decol', 'african'], ['decol', 'egypt'], ['decol', 'life']];
   NODES.forEach(n => {
     const links = (n.links || []).map(l => '<li><a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + '</a></li>').join('');
     library['star-' + n.id] = { title: n.label, ch: 'think', html: '<p class="when">A star in my research</p><p>' + n.body + '</p>' + (links ? '<ul class="list">' + links + '</ul>' : '') + '<p class="more">' + (n.more ? '<button type="button" data-sheet="' + n.more + '">Go further →</button> ' : '') + '<button type="button" data-sheet="publications">Research and publications →</button></p>' };
