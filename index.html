@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=53">
+<link rel="stylesheet" href="assets/style.css?v=54">
 </head>
 <body data-chapter="threshold">
 
@@ -261,7 +261,7 @@
               <li class="item" data-shape="7">
                 <div class="item-head"><h3>A curriculum</h3><button class="textlink" type="button" data-detail="curriculum" aria-label="Details: A curriculum">Details</button></div>
                 <!-- DRAFT-WEHAN -->
-                <p class="item-line">A year’s plan for a subject or a phase.</p>
+                <p class="item-line">Modules stacked so that each builds on the last.</p>
                 <p class="item-rate">Quoted per project, after a free intro call</p>
               </li>
               </ul>
@@ -306,7 +306,17 @@
     <div class="wrap about-grid">
       <div class="ab-side">
         <p class="eyebrow">Pretoria East · South Africa</p>
-        <h2 class="ab-title">About me</h2>
+        <div class="ab-id">
+          <button class="ab-seal" type="button" data-sheet="why" aria-label="Docendo discimus: why I teach">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <defs><path id="sp-ab" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+              <circle class="seal-ring" cx="60" cy="60" r="56"/>
+              <text class="seal-text"><textPath href="#sp-ab">Docendo discimus · Docendo discimus · </textPath></text>
+              <text class="seal-letter" x="60" y="75">W</text>
+            </svg>
+          </button>
+          <h2 class="ab-title">About<br>me</h2>
+        </div>
         <!-- DRAFT-WEHAN -->
         <p class="ab-open">Also open to teaching and lecturing posts.</p>
       </div>
@@ -340,18 +350,19 @@
       </div>
 
       <div class="ab-more write-side">
-        <p class="index">
-          <button type="button" data-sheet="about">About me</button>
-          <button type="button" data-sheet="qualifications">Qualifications</button>
-          <button type="button" data-sheet="why">Why I teach</button>
-          <button type="button" data-sheet="referees">Referees</button>
+        <p class="ab-btns">
+          <button class="btn" type="button" data-sheet="about">About me</button>
+          <button class="btn" type="button" data-sheet="qualifications">Qualifications</button>
+          <button class="btn" type="button" data-sheet="why">Why I teach</button>
+          <button class="btn" type="button" data-sheet="referees">Referees</button>
         </p>
-        <p class="write-links">
+        <p class="index ab-links">
           <a href="https://www.linkedin.com/in/wehan-coombs">LinkedIn</a>
           <a href="https://orcid.org/0000-0001-9151-7344">ORCID</a>
           <a href="https://www.researchgate.net/profile/Wehan-Coombs">ResearchGate</a>
         </p>
-        <p class="ab-foot"><button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button> <span>© 2026 Wehan M. Coombs</span></p>
+        <p class="ab-resume"><button type="button" data-sheet="resume">The full resume</button></p>
+        <p class="ab-foot"><span>© 2026 Wehan M. Coombs</span></p>
       </div>
     </div>
   </div>
@@ -761,7 +772,7 @@
     <p class="more"><button type="button" data-sheet="film">Film study →</button> <button type="button" data-sheet="philosophy">How I teach at university →</button></p>
   </article>
 
-  <article id="s-ai" data-art="spark" data-ch="teach" data-title="Teaching in the age of AI">
+  <article id="s-ai" data-tone="c-consult" data-art="spark" data-ch="teach" data-title="Teaching in the age of AI">
     <p>Generative AI can now write the kind of essay most classrooms use to teach and to assess. The usual response has been reactive: bans, detection software, policing. That leaves the real question open. If a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?</p>
     <p>My answer comes from Plato. In the <em>Phaedrus</em> he warned that writing cannot answer for itself: ask a text a question and it only repeats what it says. Philosophy, for him, was dialogue, question and answer between people, which changes the people who take part. That is the part no model can do for a learner, and it is the part I teach.</p>
     <h4>In my classrooms</h4>
@@ -1077,7 +1088,7 @@
     <p class="note">Mornings 09:00 to 12:00 and afternoons 14:00 to 16:00, South African time. If nothing suits, write to me instead.</p>
   </article>
 
-  <article id="s-tutoring" data-art="quill" data-ch="make" data-title="Tutoring and TEFL">
+  <article id="s-tutoring" data-tone="c-teach" data-art="quill" data-ch="make" data-title="Tutoring and TEFL">
     <p class="rate">From R350 an hour · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1108,7 +1119,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-tutoring">Request tutoring</button> <button type="button" data-sheet="working">How it works →</button></p>
   </article>
 
-  <article id="s-classes"data-art="people" data-ch="make" data-title="Classes">
+  <article id="s-classes" data-tone="c-teach" data-art="people" data-ch="make" data-title="Classes">
     <p class="rate">Quoted per project, after a free intro call · Taking new clients for 2027</p>
     <!-- DRAFT-WEHAN -->
     <p>Revision classes and workshops on set works, for a group.</p>
@@ -1124,7 +1135,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="book">Book a free intro call</button></p>
   </article>
 
-  <article id="s-editing" data-art="edit" data-ch="make" data-title="Writing support">
+  <article id="s-editing" data-tone="c-teach" data-art="edit" data-ch="make" data-title="Writing support">
     <p class="rate">From R0.30 a word, or R450 an hour · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1181,7 +1192,7 @@
     <p class="more"><button class="btn solid" type="button" data-sheet="request-design">Request a design</button> <button type="button" data-sheet="guides">See the study guides →</button> <button type="button" data-sheet="lectures">Watch a lecture →</button></p>
   </article>
 
-  <article id="s-consulting" data-art="dots" data-ch="make" data-title="Philosophical and AI consulting">
+  <article id="s-consulting" data-tone="c-consult" data-art="dots" data-ch="make" data-title="Philosophical and AI consulting">
     <p class="rate">Quoted per project, after a free intro call · Taking new clients for 2027</p>
     <div class="svc-summary">
       <div class="svc-summary-text">
@@ -1258,7 +1269,7 @@
 
 </div>
 
-<script src="assets/main.js?v=53"></script>
+<script src="assets/main.js?v=54"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

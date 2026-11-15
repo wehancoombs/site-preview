@@ -367,7 +367,7 @@
   const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   Object.keys(REQUESTS).forEach(k => {
     const r = REQUESTS[k];
-    library['request-' + k] = { title: r.title, ch: r.ch, html:
+    library['request-' + k] = { title: r.title, ch: r.ch, tone: { tutoring: 'c-teach', editing: 'c-teach', consulting: 'c-consult' }[k], html:
       '<p class="when">' + r.intro + '</p>' +
       '<div class="req" data-kind="' + k + '">' +
         '<label class="req-label" for="req-from">Your email <small>so that I can reply</small></label>' +
@@ -609,7 +609,9 @@
     const c = e.target.closest('[data-copy]');
     if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
     const s = e.target.closest('[data-sheet]');
-    if (s) { e.preventDefault(); const id = s.dataset.sheet, place = library[id] && CH_PLACE[library[id].ch]; if (place && map.classList.contains('on') && body.dataset.chapter !== place.slice(1)) showTarget(place, true); openSheet(id); return; }
+    if (s) { e.preventDefault(); const id = s.dataset.sheet, place = library[id] && CH_PLACE[library[id].ch]; if (place && map.classList.contains('on') && body.dataset.chapter !== place.slice(1)) showTarget(place, true); openSheet(id);
+      if (s.closest('#board') && library[id] && !library[id].tone) sheet.dataset.tone = 'c-' + svcBoard.dataset.open;   // a pop-up opened from the board keeps the colour of its tab
+      return; }
     const dt = e.target.closest('[data-detail]');
     if (dt) { e.preventDefault(); openDetail(dt.dataset.detail); return; }
     const g = e.target.closest('[data-goto]');
@@ -659,12 +661,15 @@
     // A module: what a module comes with, the modules he has designed (the paragraph that used to sit under A curriculum), and the study guides.
     module: { line: true, inline: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.make.items[4], request: 'design', more: 'design',
       extra: () => '<p class="eyebrow">Study guides I wrote · tap one to read it</p>' + GUIDES_HTML },
-    // A curriculum: two sentences lifted whole from the pop-up "Curriculum and course development". What this service is, is still his to settle.
-    curriculum: { line: true, text: () => 'In 2019 I was given the opportunity to create my own introductory philosophy curriculum from scratch, and so created FIL110: Introduction to Metaphysics and Epistemology, a course still in use at the University of Pretoria today. The course has been hugely successful and popular, and is in my estimation an excellent example of what a decolonised philosophy curriculum may look like in practice.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
+    // DRAFT-WEHAN: A curriculum. His own account of it (2026-11-15): modules stacked so that they make sense together, which he did for first- and second-year modules. He has no document that proves it.
+    curriculum: { line: true, text: () => 'A curriculum is modules stacked in an order that makes sense, at school or at university. At the University of Pretoria I made sure that the first- and second-year modules I designed fitted what came before and after them.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
     school: { line: true, lines: () => part('consulting', '.list li'), long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
     // DRAFT-WEHAN: "My research focuses on" is his phrase; the rest is the question from the pop-up "Teaching in the age of AI". No fellowship, no project title.
-    university: { line: true, text: () => 'My research focuses on teaching in the age of AI: if a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?', quote: () => VOICES.think.items[3], request: 'consulting', more: 'ai' }
+    // The two lines under it (DRAFT-WEHAN too) are facts from the pop-up "Curriculum and course development", and the quotation is from the pop-up "Teaching in the age of AI".
+    university: { line: true, linesLast: true, long: true, text: () => 'My research focuses on teaching in the age of AI: if a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?',
+      lines: () => ['My 2026 honours module was assessed through video essays, podcasts and written work', 'Its last assessment was a sit-down essay on an unseen question: the role of philosophy in a world of AI'],
+      quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
   function openDetail(id) {
@@ -673,13 +678,15 @@
     stash.appendChild(arcFig);   // the arc goes back to its shelf before the card is redrawn
     const it = from.closest('.item'), q = d.quote();
     const btn = (cls, sheet, label) => '<button' + (cls ? ' class="' + cls + '"' : '') + ' type="button" data-sheet="' + sheet + '">' + label + '</button> ';
+    const ul = d.lines ? '<ul class="bb-lines' + (d.long ? ' long' : '') + '">' + d.lines().map(l => '<li>' + l + '</li>').join('') + '</ul>' : '';
     detailFocus = document.activeElement;
     bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button>' +
       '<div class="bb-head"><span class="bb-icon" aria-hidden="true"><svg viewBox="0 0 48 48">' + ART[DETAIL_ART[id]] + '</svg></span><div><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><p class="bb-rate">' + $('.item-rate', it).innerHTML + '</p></div></div>' +
       '<div class="sheet-body bb-text"><div class="bb-short' + (d.wide ? ' wide' : '') + '"><div>' +
         (d.line ? '<p class="bb-line">' + $('.item-line', it).innerHTML + '</p>' : '') +
-        (d.lines ? '<ul class="bb-lines' + (d.long ? ' long' : '') + '">' + d.lines().map(l => '<li>' + l + '</li>').join('') + '</ul>' : '') +
+        (d.lines && !d.linesLast ? ul : '') +
         (d.text ? '<p class="bb-para">' + d.text() + '</p>' : '') +
+        (d.lines && d.linesLast ? ul : '') +
         (d.extra && d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
       '</div><blockquote class="bb-proof"><p>' + q[0] + '</p><small>' + q[1] + '</small></blockquote></div>' +
       (d.extra && !d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
@@ -897,12 +904,6 @@
   // On a phone the same twelve stars are laid out again in a tall frame, so that every star and every name fits the screen with no sideways scrolling.
   const TALL = { ai: [112, 42], theurgy: [290, 46], aristotle: [62, 132], neo: [238, 130], rorty: [44, 236], plato: [172, 236], egypt: [308, 222], life: [78, 340], eso: [254, 332], nature: [74, 452], meta: [178, 420], african: [264, 492] };
   const byId = {}; NODES.forEach(n => { byId[n.id] = n; });
-  // A scatter of small unnamed stars behind the twelve, so that the sky has some depth on a wide screen. The same scatter every time.
-  const dust = mk('g', { class: 'dust', 'aria-hidden': 'true' }); sky.appendChild(dust);
-  for (let i = 0, s = 11; i < 58; i++) {
-    const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
-    dust.appendChild(mk('circle', { cx: (16 + rnd() * 1008).toFixed(1), cy: (10 + rnd() * 430).toFixed(1), r: (.7 + rnd() * 1.4).toFixed(2), opacity: (.16 + rnd() * .4).toFixed(2) }));
-  }
   const edgeEls = EDGES.map(([a, b]) => { const l = mk('line', {}); l.dataset.a = a; l.dataset.b = b; sky.appendChild(l); return l; });
   const nodeEls = {};
   NODES.forEach(n => {
@@ -927,11 +928,11 @@
   });
   const narrowSky = matchMedia('(max-width: 640px)');
   function placeSky() {
-    const tall = narrowSky.matches, k = tall ? .72 : 1.3, at = n => tall ? TALL[n.id] : [n.x, n.y];   // on a wide screen the stars are drawn larger
+    const tall = narrowSky.matches, k = tall ? .72 : 1, at = n => tall ? TALL[n.id] : [n.x, n.y];
     sky.setAttribute('viewBox', tall ? '0 0 360 524' : '0 0 1040 450'); sky.classList.toggle('tall', tall);
     NODES.forEach(n => {
       const p = at(n), r = n.r * k;
-      put(n.hit, { cx: p[0], cy: p[1], r: tall ? 24 : 28 }); put(n.glow, { cx: p[0], cy: p[1], r: r * 2.4 }); put(n.dot, { cx: p[0], cy: p[1], r: r }); put(n.tx, { x: p[0], y: p[1] + r + (tall ? 17 : 27) });
+      put(n.hit, { cx: p[0], cy: p[1], r: tall ? 24 : 28 }); put(n.glow, { cx: p[0], cy: p[1], r: r * 2.4 }); put(n.dot, { cx: p[0], cy: p[1], r: r }); put(n.tx, { x: p[0], y: p[1] + r + (tall ? 17 : 24) });
     });
     edgeEls.forEach(l => { const a = at(byId[l.dataset.a]), b = at(byId[l.dataset.b]); put(l, { x1: a[0], y1: a[1], x2: b[0], y2: b[1] }); });
   }
@@ -1146,10 +1147,10 @@
       return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: (1 + glow[i] * .9) * (.22 + .78 * w(0)), g: glow[i] })), links: TLINKS, labels };
     }
 
-    /* A person: a soft glowing sphere, breathing slowly. Its one point is its centre, which is where the other shapes gather when they change into it. */
+    /* A person: a small planet with an aura. The core is solid and shaded; the aura swells and fades, and a ring of light leaves it now and then.
+       Its one point is its centre, which is where the other shapes gather when they change into it. */
     function person(t) {
-      const br = .5 + .5 * Math.sin(t * .0011);
-      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .54 + .05 * br, glow: .78 + .22 * br } };
+      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .33, pulse: .5 + .5 * Math.sin(t * .0021), wave: (t % 3400) / 3400 } };
     }
 
     /* A university: a star tetrahedron, two tetrahedra through one another, its points lighting and dimming in turn. */
@@ -1203,38 +1204,42 @@
 
     /* 7. A module: a run of lessons. Each is a small copy of the lesson box, with its four layers and no words, and each is of its own size.
        Their layers twist a quarter turn, one lesson after another. */
-    const RUN = [.8, 1.04, .9, 1.18, .72, .96];   // six lessons, three by two, so that they read as a set from every side
+    const RUN = [.8, 1.04, .9, 1.18, .72, .96], RUN_GAP = .085, RUN_W = RUN.reduce((s, k) => s + .27 * k, 0) + RUN_GAP * (RUN.length - 1);   // six lessons in a row
     function moduleShelf(t) {
-      const pts = [], links = [], quads = [], PERIOD = 9000, FLOOR = -.46;
+      const pts = [], links = [], quads = [], PERIOD = 9000, FLOOR = -.4;
+      let x = -RUN_W / 2;
       RUN.forEach((k, b) => {
-        const hs = .15 * k, tall = .74 * k, gap = .016 * k, cx = (b % 3 - 1) * .5, cz = (b < 3 ? -.27 : .27), tb = t + (RUN.length - b) * 650, cyc = Math.floor(tb / PERIOD), s = tb % PERIOD;
-        let top = FLOOR + tall + gap * (STAGES.length - 1);
+        const hs = .135 * k, tall = .66 * k, gap = .014 * k, cx = x + hs, tb = t + (RUN.length - b) * 650, cyc = Math.floor(tb / PERIOD), s = tb % PERIOD;
+        let top = FLOOR + tall + gap * (STAGES.length - 1); x += 2 * hs + RUN_GAP;
         STAGES.forEach((st, n) => {
           const h = st[1] / MINUTES * tall, dir = n % 2 ? 1 : -1, cy = top - h / 2; top -= h + gap;
           const th = dir * Math.PI / 2 * (cyc + ease(clamp01((s - 400 - n * 380) / 1300))), cs = Math.cos(th), sn = Math.sin(th), base = pts.length;
-          BOX.forEach(q => { const u = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + u * cs + z * sn, cy + q[1] * h / 2, cz - u * sn + z * cs], r: .15 }); });
+          BOX.forEach(q => { const u = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + u * cs + z * sn, cy + q[1] * h / 2, -u * sn + z * cs], r: .15 }); });
           EDGES.forEach(e => links.push([base + e[0], base + e[1], .9]));
           FACES.forEach(f => quads.push(f.map(i => base + i)));
         });
       });
-      const o = pts.length; [[-.78, -.55], [.78, -.55], [.78, .55], [-.78, .55]].forEach(c => pts.push({ p: [c[0], FLOOR, c[1]], r: 0 }));   // the board they stand on
-      for (let i = 0; i < 4; i++) links.push([o + i, o + (i + 1) % 4, .45]);
+      pts.push({ p: [-RUN_W / 2 - .08, FLOOR, 0], r: 0 }, { p: [RUN_W / 2 + .08, FLOOR, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .5]);   // the line they stand on
       return { pts, links, labels: [], quads };
     }
 
-    /* 8. A curriculum: a spiral stair. Each step is a plank, a lesson block laid flat, and the planks differ in length as the lessons of a module differ in size.
-       The same ground comes round again, one level higher each time; a light climbs it. */
+    /* 8. A curriculum: a spiral stair, and every step of it is a module: a row of lesson boxes, laid from the post outwards, like the row above.
+       The same ground comes round again, one level higher each time; a light climbs it, a module at a time. */
+    const STEP = [.9, 1.16, .78, 1.06, .86];   // five lessons to a step
     function curriculum(t) {
-      const N = 17, pts = [], links = [], quads = [], at = (t * .0022) % (N + 5) - 2.5;
+      const N = 12, pts = [], links = [], quads = [], at = (t * .0016) % (N + 5) - 2.5;
       for (let i = 0; i < N; i++) {
-        const th = i * .5, y = -.86 + i * 1.72 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2.2), sn = Math.sin(th), cs = Math.cos(th);
-        const r1 = .46 + .26 * RUN[i % RUN.length], base = pts.length;
-        BOX.forEach(q => { const r = q[0] < 0 ? .1 : r1, v = q[2] * .115; pts.push({ p: [r * sn + v * cs, y + q[1] * .022, r * cs - v * sn], r: 0 }); });
-        EDGES.forEach(e => links.push([base + e[0], base + e[1], .55 + .45 * g]));
-        FACES.forEach(f => { const q = f.map(k => base + k); q.a = 1 + 5 * g; quads.push(q); });
-        pts.push({ p: [r1 * sn, y, r1 * cs], r: .26 + .45 * g, g: .8 * g });   // the end of the plank, where the light on the stair shows
+        const th = i * .56, y = -.88 + i * 1.6 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2), sn = Math.sin(th), cs = Math.cos(th);
+        let r = .13;
+        for (let b = 0; b < STEP.length; b++) {
+          const k = STEP[(b + i) % STEP.length], s = .052 * k, h = .062 * k, rc = r + s, base = pts.length; r += 2 * s + .022;
+          BOX.forEach(q => { const u = rc + q[0] * s, v = q[2] * s; pts.push({ p: [u * sn + v * cs, y + (q[1] + 1) * h, u * cs - v * sn], r: 0 }); });
+          EDGES.forEach(e => links.push([base + e[0], base + e[1], .5 + .5 * g]));
+          FACES.forEach(f => { const q = f.map(n => base + n); q.a = 1 + 5 * g; quads.push(q); });
+        }
+        pts.push({ p: [r * sn, y, r * cs], r: .2 + .4 * g, g: .8 * g });   // the end of the step, where the light on the stair shows
       }
-      pts.push({ p: [0, -.92, 0], r: 0 }, { p: [0, .92, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .4]);   // the post the stair turns about
+      pts.push({ p: [0, -.94, 0], r: 0 }, { p: [0, .94, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .4]);   // the post the stair turns about
       return { pts, links, labels: [], quads };
     }
 
@@ -1328,11 +1333,18 @@
       tx.fillStyle = grad; tx.fillRect(0, 0, TW, TW);
       const paint = (S, pos, fade) => {
         if (fade <= .01) return;
-        if (S.orb) {   // a soft sphere of light: brightest at its heart, fading to nothing at its edge
-          const c = pos(0), R = sc * S.orb.r * 1.5, a = S.orb.glow * fade, g = tx.createRadialGradient(c.x - R * .07, c.y - R * .09, 0, c.x, c.y, R);
-          g.addColorStop(0, 'rgba(' + (pal.light ? col : tcol) + ',' + (.85 * a).toFixed(3) + ')'); g.addColorStop(.14, 'rgba(' + col + ',' + (.8 * a).toFixed(3) + ')');
-          g.addColorStop(.42, 'rgba(' + col + ',' + (.36 * a).toFixed(3) + ')'); g.addColorStop(.7, 'rgba(' + col + ',' + (.11 * a).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+        if (S.orb) {   // a planet and its aura
+          const c = pos(0), o = S.orb, R = sc * o.r * (.35 + .65 * fade), A = R * (2.05 + .4 * o.pulse), L = pal.light, k = L ? 1.35 : 1;
+          const mixc = (to, m) => [T.col.r, T.col.g, T.col.b].map(v => Math.round(v + (to - v) * m)).join(','), rg = (x, y, r0, r1) => tx.createRadialGradient(x, y, r0, c.x, c.y, r1);
+          let g = rg(c.x, c.y, R * .92, A);   // the aura: densest against the planet, gone at its edge; it swells and fades
+          g.addColorStop(0, 'rgba(' + col + ',' + Math.min(1, (.5 - .16 * o.pulse) * k * fade).toFixed(3) + ')'); g.addColorStop(.4, 'rgba(' + col + ',' + (.17 * k * fade).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+          tx.fillStyle = g; tx.beginPath(); tx.arc(c.x, c.y, A, 0, TAU); tx.fill();
+          const W = R * (1.05 + 1.5 * o.wave);   // a ring of light leaving it
+          tx.lineWidth = 1.6; tx.strokeStyle = 'rgba(' + col + ',' + (.55 * k * (1 - o.wave) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, W, 0, TAU); tx.stroke();
+          g = rg(c.x - R * .38, c.y - R * .42, R * .04, R);   // the core: lit from the upper left, in shadow at the lower right
+          g.addColorStop(0, 'rgba(' + mixc(255, L ? .5 : .82) + ',' + fade.toFixed(3) + ')'); g.addColorStop(.45, 'rgba(' + col + ',' + fade.toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + mixc(0, L ? .45 : .62) + ',' + fade.toFixed(3) + ')');
           tx.fillStyle = g; tx.beginPath(); tx.arc(c.x, c.y, R, 0, TAU); tx.fill();
+          tx.lineWidth = 1.2; tx.strokeStyle = 'rgba(' + mixc(255, L ? .2 : .5) + ',' + (.7 * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, R, 0, TAU); tx.stroke();
         }
         if (S.quads) {   // the sides of the box, faintly glazed; a side can be lit more than the rest
           for (const q of S.quads) { tx.fillStyle = 'rgba(' + col + ',' + (.05 * (q.a || 1) * fade).toFixed(3) + ')'; tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }

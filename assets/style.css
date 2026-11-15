@@ -1114,6 +1114,13 @@ body[data-chapter="services"]:has(#board[data-open="teach"]) { --accent: var(--c
 body[data-chapter="services"]:has(#board[data-open="design"]) { --accent: var(--c-design); }
 body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(--c-consult); }
 
+/* The older three colours (schools terracotta, universities blue, services teal) give way to the same three everywhere:
+   schools and teaching green, universities and research purple, making and design orange. The pop-ups, the Map and the CVs menu follow. */
+:root, :root[data-theme="light"] { --teach: var(--c-teach); --think: var(--c-consult); --make: var(--c-design); }
+.sheet[data-tone="c-teach"] { --accent: var(--c-teach); }
+.sheet[data-tone="c-design"] { --accent: var(--c-design); }
+.sheet[data-tone="c-consult"] { --accent: var(--c-consult); }
+
 /* ---------- The CVs: one dropdown in the top bar, at every width ---------- */
 .cvs-btn { display: inline-flex; }
 .cvs-menu { display: none; position: absolute; right: 0; top: calc(100% + 8px); flex-direction: column; gap: 4px; padding: 8px; min-width: 210px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 40px -24px #000; }
@@ -1247,13 +1254,28 @@ html.first-visit .me.in { opacity: 1; }
 .bb-extra .arc-text { font-size: clamp(16px, 2.2vh, 19px); min-height: 2.8em; margin-top: 4px; }
 .bb-extra .arc .eyebrow { margin: 0 0 4px; }
 .ab-side .eyebrow { margin: 0 0 clamp(10px, 1.8vh, 16px); }
-.about-pane .ab-title { margin: 0; font: 500 clamp(40px, min(4.4vw, 7.4vh), 62px)/.95 var(--serif); letter-spacing: -.02em; color: var(--text); }
+/* The title has a turning seal beside it: the motto runs round the ring, and pressing it opens "Why I teach" */
+.ab-id { display: flex; align-items: center; gap: clamp(12px, 1.4vw, 18px); }
+.ab-seal { all: unset; flex: none; display: block; cursor: pointer; border-radius: 50%; }
+.ab-seal svg { display: block; width: clamp(74px, 7.4vw, 100px); height: auto; aspect-ratio: 1; overflow: visible; }
+.ab-seal .seal-text { animation-duration: 36s; }
+.ab-seal:hover .seal-ring, .ab-seal:focus-visible .seal-ring { fill: color-mix(in srgb, var(--accent) 24%, transparent); stroke-width: 2; }
+.ab-seal:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.about-pane .ab-title { margin: 0; font: 500 clamp(38px, min(4vw, 7vh), 56px)/.95 var(--serif); letter-spacing: -.02em; color: var(--text); }
 .ab-open { margin: clamp(12px, 2.2vh, 20px) 0 0; font: italic 500 clamp(17px, 2.4vh, 20px)/1.3 var(--serif); color: var(--text-2); }
-/* The four places to read more, one to a line with room between them, and the three outside links under a rule of their own */
-.ab-more .index { flex-direction: column; align-items: flex-start; gap: clamp(12px, 2.4vh, 22px); margin: 0; padding-top: clamp(16px, 3vh, 28px); border-top: 1px solid var(--line); }
-.ab-more .index button { font-size: 13px; letter-spacing: .2em; }
-.ab-more .write-links { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: clamp(16px, 3vh, 28px) 0 0; padding-top: clamp(16px, 3vh, 28px); border-top: 1px solid var(--line); font-size: 16px; line-height: 1.4; }
-.ab-foot { margin: clamp(16px, 3vh, 28px) 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; font-size: 13px; color: var(--text-3); }
+/* Four buttons, then the three outside links as a dotted list, then the full resume, underlined */
+.ab-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 0; padding-top: clamp(14px, 2.6vh, 24px); border-top: 1px solid var(--line); }
+.ab-btns .btn { padding: 10px 8px; font-size: 13.5px; text-align: center; white-space: nowrap; }
+.ab-more .ab-links { margin: clamp(14px, 2.6vh, 24px) 0 0; gap: 8px 20px; }
+.ab-links a { font: 600 12px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--text-2); padding: 4px 0; transition: color .3s; }
+.ab-links a::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin: 0 9px 2px 0; vertical-align: middle; }
+.ab-links a:hover, .ab-links a:focus-visible { color: var(--accent); }
+.ab-resume { margin: clamp(14px, 2.6vh, 24px) 0 0; }
+.ab-resume button { all: unset; cursor: pointer; font: 500 clamp(21px, 2.9vh, 26px)/1.2 var(--serif); color: var(--text); padding-bottom: 3px; border-bottom: 2px solid var(--accent); transition: color .3s; }
+.ab-resume button::after { content: " →"; color: var(--accent); }
+.ab-resume button:hover, .ab-resume button:focus-visible { color: var(--accent); }
+.ab-resume button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 3px; }
+.ab-foot { margin: clamp(14px, 2.6vh, 24px) 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; font-size: 13px; color: var(--text-3); }
 .ab-foot .motto { font-size: 16px; }
 .ab-panels { position: relative; flex: 1; min-height: 0; }
 .ab-panel { position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: clamp(14px, 2.6vh, 26px) clamp(16px, 1.8vw, 26px); display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(14px, 2.4vh, 24px) clamp(20px, 2.6vw, 38px); align-content: start; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), visibility 0s .35s; }
@@ -1272,14 +1294,6 @@ html.first-visit .me.in { opacity: 1; }
 .ab-board .sky { aspect-ratio: auto; height: clamp(190px, calc(100vh - 440px), 370px); overflow: visible; margin: 0; padding: 0; }
 @supports (height: 100svh) { .ab-board .sky { height: clamp(190px, calc(100svh - 440px), 370px); } }
 .ab-board #sky { width: 100%; height: 100%; max-width: 100%; }
-/* The constellation on a wide screen: heavier lines, larger stars and names, and a scatter of small stars behind them */
-#sky .dust circle { fill: var(--text-2); }
-#sky.tall .dust { display: none; }
-#sky:not(.tall) line { stroke-opacity: .45; stroke-width: 1.7; }
-#sky:not(.tall) line.lit { stroke-opacity: 1; stroke-width: 2.6; }
-#sky:not(.tall) .glow { opacity: .22; }
-#sky:not(.tall) text { font-size: 24px; fill: var(--text); }
-#sky:not(.tall) .node.big text { font-size: 33px; }
 #sky.tall text { font-size: 14px; }
 #sky.tall .node.big text { font-size: 17px; }
 @media (min-width: 901px) {
@@ -1376,9 +1390,7 @@ html.first-visit .me.in { opacity: 1; }
   .bb-extra .deck .lecture .play span { border-width: 9px 0 9px 15px; }
   .bb-extra .deck .lecture .l-cap strong { font-size: 17px; }
   .about-grid { display: flex; flex-direction: column; gap: 14px; }
-  .ab-more .index { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; padding-top: 16px; }
-  .ab-more .write-links { margin-top: 16px; padding-top: 16px; }
-  .ab-foot { margin-top: 16px; }
+  .ab-seal svg { width: 64px; }
   .about-pane .ab-title { font-size: 36px; }
   .ab-open { margin-top: 8px; font-size: 16.5px; }
   .ab-side .eyebrow { margin-bottom: 8px; }
