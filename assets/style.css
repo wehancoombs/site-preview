@@ -1205,10 +1205,21 @@ html.first-visit .me { opacity: 0; transition: opacity 1.8s var(--ease) .2s, bac
 html.first-visit .me.in { opacity: 1; }
 
 /* ---------- 3. About me ---------- */
-.about-grid { display: grid; grid-template-columns: clamp(250px, 25vw, 330px) minmax(0, 1fr); grid-template-rows: auto 1fr; grid-template-areas: "side board" "more board"; column-gap: clamp(24px, 3vw, 44px); row-gap: clamp(12px, 2.2vh, 22px); }
+.about-grid { display: grid; grid-template-columns: clamp(250px, 25vw, 330px) minmax(0, 1fr); grid-template-rows: auto 1fr; grid-template-areas: "side main" "more main"; column-gap: clamp(24px, 3vw, 44px); row-gap: clamp(12px, 2.2vh, 22px); }
 .ab-side { grid-area: side; min-width: 0; }
 .ab-more { grid-area: more; min-width: 0; align-self: start; }
-.ab-board { grid-area: board; }
+.ab-main { grid-area: main; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2.4vh, 24px); }
+.ab-figs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px clamp(18px, 2.6vw, 40px); }
+.ab-figs .stats b { font-size: clamp(32px, 5vh, 46px); }
+.ab-sky .eyebrow { margin: 0 0 6px; }
+.ab-main .sky { aspect-ratio: auto; height: clamp(220px, calc(100vh - 390px), 500px); overflow: visible; margin: 0; padding: 0; }
+@supports (height: 100svh) { .ab-main .sky { height: clamp(220px, calc(100svh - 390px), 500px); } }
+.ab-main #sky { width: 100%; height: 100%; max-width: 100%; }
+.ab-main .index { margin: 0; }
+.stash { position: absolute; width: 0; height: 0; overflow: hidden; visibility: hidden; }
+.bb-extra .arc svg { height: auto; max-height: min(190px, 25vh); }
+.bb-extra .arc-text { font-size: clamp(16px, 2.2vh, 19px); min-height: 2.8em; margin-top: 4px; }
+.bb-extra .arc .eyebrow { margin: 0 0 4px; }
 .ab-side .eyebrow { margin: 0 0 clamp(10px, 1.8vh, 16px); }
 .ab-id { display: flex; align-items: center; gap: 14px; }
 .ab-face { display: block; flex: none; width: clamp(64px, 6.6vw, 88px); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 1px solid var(--line-2); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent); }
@@ -1313,7 +1324,8 @@ html.first-visit .me.in { opacity: 1; }
   .ab-open { margin-top: 8px; font-size: 16.5px; }
   .ab-side .eyebrow { margin-bottom: 8px; }
   .ab-panel { padding: 14px; gap: 18px; }
-  .ab-board .sky { height: auto; aspect-ratio: 1040 / 450; }
+  .ab-main .sky { height: auto; aspect-ratio: 1040 / 450; }
+  .ab-figs { grid-template-columns: minmax(0, 1fr); }
   .ab-board .arc svg { max-height: 30vh; }
 }
 @media (max-width: 760px) {
@@ -1331,7 +1343,7 @@ html.first-visit .me.in { opacity: 1; }
   .cab.home.pane { padding-bottom: calc(var(--bar-h) + 8px); }
   .cab-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .cab-door b { font-size: 20px; }
-  .ab-board .sky { aspect-ratio: 360 / 524; }
+  .ab-main .sky { aspect-ratio: 360 / 524; }
   .ab-more .seals { gap: 12px 10px; }
 }
 @media (prefers-reduced-motion: reduce) {

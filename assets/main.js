@@ -269,7 +269,7 @@
   // the old Think cabinet and the old side rooms to About me, and #write to the contact panel.
   const ALIAS = {
     '#top': ['#threshold'], '#board': ['#services'], '#teach': ['#services', 'board', 'teach'], '#make': ['#services'], '#make-detail': ['#services'],
-    '#think': ['#about', 'about-board', 'consult'], '#think-detail': ['#about', 'about-board', 'teach'], '#teach-detail': ['#about', 'about-board', 'teach']
+    '#think': ['#about'], '#think-detail': ['#about'], '#teach-detail': ['#about']
   };
   function showTarget(sel, instant) {
     if (sel === '#write') { openPanel(); return true; }
@@ -640,7 +640,7 @@
   $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => showShapes(svcBoard.dataset.open, +li.dataset.shape)));
 
   /* ---------- Details: the list folds away into a chevron and the details are laid over the object, in place of a pop-up ---------- */
-  const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev');
+  const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev'), stash = $('#stash'), arcFig = $('.arc');
   let detailFocus = null;
   // What each item shows when Details is pressed. Nothing here is new wording: the name, line and rate are read from the item itself,
   // and the rest is lifted from the pop-ups, the arc of a lesson and the quotations already on the page.
@@ -652,7 +652,7 @@
       extra: () => '<p class="eyebrow">What I taught in 2026 · tap a spine</p>' + SHELF_HTML + '<div class="shelf-detail" aria-live="polite"><p class="caption">Each spine opens a lesson.</p></div>' },
     lectures: { line: true, quote: () => VOICES.think.items[6], more: 'courses',
       extra: () => '<div class="bb-two"><div><p class="eyebrow">Watch me teach</p>' + LECT_HTML + '</div><div><p class="eyebrow">Study guides I wrote</p>' + GUIDES_HTML + '</div></div>' },
-    lesson: { line: true, lines: () => $$('.arc .node').map(n => n.dataset.text), quote: () => VOICES.teach.items[1], request: 'design', more: 'approach' },
+    lesson: { line: true, inline: true, arc: true, extra: () => '<div class="bb-arc-slot"></div>', quote: () => VOICES.teach.items[1], request: 'design', more: 'approach' },
     module: { lines: () => part('design', '.list li').filter((l, i) => i !== 2), long: true, quote: () => VOICES.make.items[4], request: 'design', more: 'design' },
     curriculum: { line: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
@@ -663,6 +663,7 @@
   function openDetail(id) {
     const d = DETAILS[id], from = $('[data-detail="' + id + '"]');
     if (!d || !from) return;
+    stash.appendChild(arcFig);   // the arc goes back to its shelf before the card is redrawn
     const it = from.closest('.item'), q = d.quote();
     const btn = (cls, sheet, label) => '<button' + (cls ? ' class="' + cls + '"' : '') + ' type="button" data-sheet="' + sheet + '">' + label + '</button> ';
     detailFocus = document.activeElement;
@@ -678,6 +679,7 @@
       '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call') + (d.more ? btn('', d.more, 'More →') : '') + '</p></div>';
     const title = $('.bb-title', bbDetail);
     title.textContent = $('h3', it).textContent;
+    if (d.arc) $('.bb-arc-slot', bbDetail).appendChild(arcFig);   // the real drawing is moved in, so that it keeps running
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
     svcStage.classList.add('detail-open');
     title.focus({ preventScroll: true });
@@ -685,6 +687,7 @@
   }
   function closeDetail() {
     if (!svcStage.classList.contains('detail-open')) return;
+    stash.appendChild(arcFig);
     svcStage.classList.remove('detail-open'); bbDetail.hidden = true; bbDetail.innerHTML = '';
     if (detailFocus && detailFocus.focus && detailFocus.offsetParent) detailFocus.focus({ preventScroll: true });
     detailFocus = null;

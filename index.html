@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=50">
+<link rel="stylesheet" href="assets/style.css?v=51">
 </head>
 <body data-chapter="threshold">
 
@@ -297,7 +297,7 @@
   </div>
 </section>
 
-<!-- ===================== 3. About me: a board of proof ===================== -->
+<!-- ===================== 3. About me ===================== -->
 <section id="about" class="chapter compact cabinet">
   <div class="cab pane about-pane">
     <div class="wrap about-grid">
@@ -311,29 +311,8 @@
         <p class="ab-open">Also open to teaching and lecturing posts.</p>
       </div>
 
-      <div class="bb ab-board" id="about-board" data-open="teach">
-          <div class="tabs" role="group" aria-label="About me">
-            <button type="button" data-tab="teach" aria-pressed="true">Teach</button>
-            <button type="button" data-tab="design" aria-pressed="false">Design</button>
-            <button type="button" data-tab="consult" aria-pressed="false">Consult</button>
-          </div>
-        <div class="ab-panels room">
-          <div class="ab-panel pt" data-col="teach">
-            <div class="p-lect">
-        <p class="eyebrow">Watch me teach</p>
-        <div class="lectures">
-          <div class="lecture" data-src="https://drive.google.com/file/d/1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ/preview">
-            <button class="play" type="button" aria-label="Play: first-year metaphysics lecture, live online, 4 May 2021"><span></span></button>
-            <p class="l-cap"><strong>First-year metaphysics, live</strong>FIL110 · 2021 · a class of 485</p>
-          </div>
-          <div class="lecture" data-src="https://drive.google.com/file/d/1JqwCuWJwbXZ4gx45t1xbDxAtxvrOAqL3/preview">
-            <button class="play" type="button" aria-label="Play: honours seminar on esotericism, live online, 21 February 2024"><span></span></button>
-            <p class="l-cap"><strong>Honours seminar, live</strong>FIL710 · 2024 · esotericism</p>
-          </div>
-        </div>
-        <p class="hint">Recorded as they happened · <button class="textlink" type="button" data-sheet="lectures">about these</button></p>
-            </div>
-            <div class="p-figs">
+      <div class="ab-main">
+        <div class="ab-figs room">
         <ul class="stats">
           <li><button type="button" data-sheet="posts"><b data-count="15">15</b><span>years lecturing</span></button></li>
           <li><button type="button" data-sheet="courses"><b data-count="5">5</b><span>self-designed modules</span></button></li>
@@ -344,88 +323,20 @@
           <li><button type="button" data-sheet="abbotts"><b data-count="98">98</b><span>/100 observed lesson</span></button></li>
           <li><button type="button" data-sheet="approach"><b data-count="10">10</b><span>weeks in charge of classes</span></button></li>
         </ul>
-            </div>
-            <div class="p-shelf">
-        <p class="eyebrow">What I taught in 2026 · tap a spine</p>
-        <div class="shelf" role="group" aria-label="What I taught in 2026">
-          <button class="book b-mac" type="button" data-item="macbeth"><span>Macbeth</span></button>
-          <button class="book b-temp" type="button" data-item="tempest"><span>The Tempest</span></button>
-          <button class="book b-poems" type="button" data-item="poems" aria-expanded="false"><span>Poems</span></button>
-          <button class="book b-gram" type="button" data-item="grammar"><span>Grammar</span></button>
-          <button class="case b-film" type="button" data-item="film"><span>Film study</span></button>
-          <button class="book b-phil" type="button" data-item="enrichment"><span>Philosophy</span></button>
         </div>
-        <div class="shelf-detail" id="shelf-detail" aria-live="polite"><p class="caption">Each spine opens a lesson.</p></div>
-            </div>
-            <div class="p-quote">
-              <div class="voices" data-set="teach" aria-label="What people say about my teaching"></div>
-            </div>
-          </div>
-
-          <div class="ab-panel pd" data-col="design">
-            <div class="p-guides">
-        <button class="guides-label" type="button" data-sheet="guides"><span class="eyebrow">Study guides I wrote</span><span class="g-list">Five, 2018 to 2026</span></button>
-        <div class="guide-shelf" role="group" aria-label="Study guides I wrote">
-          <button class="gbook" type="button" data-sheet="guide-c5" title="FIL710 · 810 · 2026"><span>Philosophy as a Rite of Rebirth</span></button>
-          <button class="gbook" type="button" data-sheet="guide-c3" title="FIL710 · 2024"><span>The (Secret) History of Thought</span></button>
-          <button class="gbook" type="button" data-sheet="guide-c4" title="FIL220 · 2024"><span>The Good Life</span></button>
-          <button class="gbook" type="button" data-sheet="guide-c2" title="FIL110 · 2021"><span>Metaphysics and Epistemology</span></button>
-          <button class="gbook" type="button" data-sheet="guide-c1" title="FIL251 · 2018"><span>Moral and Political Philosophy</span></button>
-        </div>
-        <p class="hint">Tap a guide to read it here · <button class="textlink" type="button" data-sheet="guides">all five, and the readers</button></p>
-            </div>
-            <div class="p-arc">
-        <figure class="arc">
-          <figcaption class="eyebrow">The arc of a lesson</figcaption>
-          <svg viewBox="0 0 520 300" aria-label="A lesson rises from what learners know, through a challenge, to ideas they own">
-            <path id="arcpath" d="M40 250 C 150 250 170 150 260 150 S 380 50 480 50"/>
-            <circle class="runner" r="4.5" cx="40" cy="250"/>
-            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="40" data-y="250" data-text="Start from what they already know.">
-              <circle class="hit" cx="40" cy="250" r="24"/><circle class="pt" cx="40" cy="250" r="7"/><text x="40" y="286">Known</text>
-            </g>
-            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="260" data-y="150" data-text="Set a challenge they reason through together, in discussion.">
-              <circle class="hit" cx="260" cy="150" r="24"/><circle class="pt" cx="260" cy="150" r="7"/><text x="260" y="118">Challenge</text>
-            </g>
-            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="480" data-y="50" data-text="End by applying it to their own lives, so they leave with ideas they can call their own.">
-              <circle class="hit" cx="480" cy="50" r="24"/><circle class="pt" cx="480" cy="50" r="7"/><text x="480" y="88">Own</text>
-            </g>
-          </svg>
-          <p class="arc-text" id="arc-text">Start from what they already know.</p>
-        </figure>
-            </div>
-            <div class="p-quote">
-              <div class="voices" data-set="make" aria-label="What students say about working with me"></div>
-            </div>
-            <div class="p-links">
-              <p class="index">
-                <button type="button" data-sheet="courses">Courses</button>
-                <button type="button" data-sheet="curriculum">Curriculum design</button>
-                <button type="button" data-sheet="assessment">Assessment</button>
-                <button type="button" data-sheet="approach">How I plan a lesson →</button>
-              </p>
-            </div>
-          </div>
-
-          <div class="ab-panel pc" data-col="consult">
-            <div class="p-sky">
-              <p class="eyebrow">My research, constellated · tap a star</p>
-              <div class="sky">
-                <svg id="sky" viewBox="0 0 1040 450" role="group" aria-label="A constellation of my research interests. Each star opens a short note."></svg>
-              </div>
-            </div>
-            <div class="p-quote">
-              <div class="voices" data-set="think" aria-label="What students and colleagues say"></div>
-            </div>
-            <div class="p-links">
-              <p class="index">
-                <button type="button" data-sheet="publications">Research</button>
-                <button type="button" data-sheet="papers">Papers</button>
-                <button type="button" data-sheet="posts">Posts</button>
-                <button type="button" data-sheet="ai">The age of AI</button>
-              </p>
-            </div>
+        <div class="ab-sky">
+          <p class="eyebrow">My research, constellated · tap a star</p>
+          <div class="sky">
+            <svg id="sky" viewBox="0 0 1040 450" role="group" aria-label="A constellation of my research interests. Each star opens a short note."></svg>
           </div>
         </div>
+        <p class="index">
+          <button type="button" data-sheet="publications">Research</button>
+          <button type="button" data-sheet="papers">Papers</button>
+          <button type="button" data-sheet="posts">Posts</button>
+          <button type="button" data-sheet="ai">The age of AI</button>
+          <button type="button" data-sheet="testimonials">Testimonials</button>
+        </p>
       </div>
 
       <div class="ab-more write-side">
@@ -487,6 +398,58 @@
 </section>
 
 </main>
+
+<!-- Kept out of sight until a details card on the services board asks for them: the lesson shelf, the two recordings, the study-guide shelf, the arc of a lesson -->
+<div class="stash" id="stash" aria-hidden="true">
+        <p class="eyebrow">What I taught in 2026 · tap a spine</p>
+        <div class="shelf" role="group" aria-label="What I taught in 2026">
+          <button class="book b-mac" type="button" data-item="macbeth"><span>Macbeth</span></button>
+          <button class="book b-temp" type="button" data-item="tempest"><span>The Tempest</span></button>
+          <button class="book b-poems" type="button" data-item="poems" aria-expanded="false"><span>Poems</span></button>
+          <button class="book b-gram" type="button" data-item="grammar"><span>Grammar</span></button>
+          <button class="case b-film" type="button" data-item="film"><span>Film study</span></button>
+          <button class="book b-phil" type="button" data-item="enrichment"><span>Philosophy</span></button>
+        </div>
+        <div class="shelf-detail" id="shelf-detail" aria-live="polite"><p class="caption">Each spine opens a lesson.</p></div>
+        <p class="eyebrow">Watch me teach</p>
+        <div class="lectures">
+          <div class="lecture" data-src="https://drive.google.com/file/d/1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ/preview">
+            <button class="play" type="button" aria-label="Play: first-year metaphysics lecture, live online, 4 May 2021"><span></span></button>
+            <p class="l-cap"><strong>First-year metaphysics, live</strong>FIL110 · 2021 · a class of 485</p>
+          </div>
+          <div class="lecture" data-src="https://drive.google.com/file/d/1JqwCuWJwbXZ4gx45t1xbDxAtxvrOAqL3/preview">
+            <button class="play" type="button" aria-label="Play: honours seminar on esotericism, live online, 21 February 2024"><span></span></button>
+            <p class="l-cap"><strong>Honours seminar, live</strong>FIL710 · 2024 · esotericism</p>
+          </div>
+        </div>
+        <p class="hint">Recorded as they happened · <button class="textlink" type="button" data-sheet="lectures">about these</button></p>
+        <button class="guides-label" type="button" data-sheet="guides"><span class="eyebrow">Study guides I wrote</span><span class="g-list">Five, 2018 to 2026</span></button>
+        <div class="guide-shelf" role="group" aria-label="Study guides I wrote">
+          <button class="gbook" type="button" data-sheet="guide-c5" title="FIL710 · 810 · 2026"><span>Philosophy as a Rite of Rebirth</span></button>
+          <button class="gbook" type="button" data-sheet="guide-c3" title="FIL710 · 2024"><span>The (Secret) History of Thought</span></button>
+          <button class="gbook" type="button" data-sheet="guide-c4" title="FIL220 · 2024"><span>The Good Life</span></button>
+          <button class="gbook" type="button" data-sheet="guide-c2" title="FIL110 · 2021"><span>Metaphysics and Epistemology</span></button>
+          <button class="gbook" type="button" data-sheet="guide-c1" title="FIL251 · 2018"><span>Moral and Political Philosophy</span></button>
+        </div>
+        <p class="hint">Tap a guide to read it here · <button class="textlink" type="button" data-sheet="guides">all five, and the readers</button></p>
+        <figure class="arc">
+          <figcaption class="eyebrow">The arc of a lesson</figcaption>
+          <svg viewBox="0 0 520 300" aria-label="A lesson rises from what learners know, through a challenge, to ideas they own">
+            <path id="arcpath" d="M40 250 C 150 250 170 150 260 150 S 380 50 480 50"/>
+            <circle class="runner" r="4.5" cx="40" cy="250"/>
+            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="40" data-y="250" data-text="Start from what they already know.">
+              <circle class="hit" cx="40" cy="250" r="24"/><circle class="pt" cx="40" cy="250" r="7"/><text x="40" y="286">Known</text>
+            </g>
+            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="260" data-y="150" data-text="Set a challenge they reason through together, in discussion.">
+              <circle class="hit" cx="260" cy="150" r="24"/><circle class="pt" cx="260" cy="150" r="7"/><text x="260" y="118">Challenge</text>
+            </g>
+            <g class="node" tabindex="0" role="button" aria-pressed="false" data-x="480" data-y="50" data-text="End by applying it to their own lives, so they leave with ideas they can call their own.">
+              <circle class="hit" cx="480" cy="50" r="24"/><circle class="pt" cx="480" cy="50" r="7"/><text x="480" y="88">Own</text>
+            </g>
+          </svg>
+          <p class="arc-text" id="arc-text">Start from what they already know.</p>
+        </figure>
+</div>
 
 <!-- ===================== Contact: a slim bar fixed to the bottom of every cabinet, and the small panel that opens from it ===================== -->
 <div class="bar" id="bar">
@@ -1332,7 +1295,7 @@
 
 </div>
 
-<script src="assets/main.js?v=50"></script>
+<script src="assets/main.js?v=51"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

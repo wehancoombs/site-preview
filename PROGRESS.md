@@ -622,3 +622,18 @@ Pictures: `.claude/services-preview/`. The window-less Chrome used for them does
 
 Not on the page any more: the three old cabinet sentences (Teach, Think, Make), the four Make card drawings, the old Write to me cabinet (its parts are in About me and the bar).
 
+## 2026-11-15, evening: his rounds on the three cabinets (v=51 on `services`, on the staging site, not live)
+
+Staging: he asked for a separate live site to test on his phone. It is https://wehancoombs.github.io/site-preview/ (repo `wehancoombs/site-preview`, remote `preview`). After every change: copy `services` to a `preview` branch, add a noindex meta and take out the visit counter, force-push to `preview:main`. He said to treat it as the staging platform, so refresh it without asking. The live site still needs "publish".
+
+What changed, at his word:
+
+- Landing page: the "Write to me" link is gone (the bar has it). The small word under the sentence changes each time the solid changes: ainigma, then nous, psyche, aporia, sympaideia (his own word, rendered συμπαιδεία), maat (a feather hieroglyph), jñāna, ḥokhmah, schola, dào, ubuntu, each with one line. The ten new lines are drafts, marked DRAFT-WEHAN in `main.js`.
+- My services: every item has its own object, named for the item. Teach: quills (Tutoring), words (Writing), a ring of seats (Classes), a raked hall (Lectures). Design: lesson stages (A lesson), a shelf of boxes (A module), a spiral stair (A curriculum). Consult: linked centres that gather into one sphere (A person), the tetraktys, which flickers to ones and noughts now and then (A school), a star tetrahedron with nodes all along its edges (A university). Pointing at an item brings up its object; a tap steps through the tab's objects.
+- Details: each of the ten items opens its own short card over the board (the object is hidden while it is open): a drawing in a ring, the name, the rate as a tag, a few lines or a paragraph, one whole testimonial, then Request / Book a free intro call / More. Classes shows the lesson bookshelf; Lectures shows the two recordings side by side and the study-guide bookshelf; A lesson shows the arc of a lesson. All the words are lifted from the pop-ups and the quotations; the table that says what goes where is `DETAILS` in `main.js`.
+- About me: slimmed to one screen so that it does not repeat the details. Left: headshot, title, the placeholder line, four CVs, bio links. Right: the six figures, the constellation, five links. The shelves, recordings and arc sit in a hidden `#stash` and are borrowed by the details cards.
+
+Tried and taken out again: ten old words on the tetraktys points.
+
+Still open: the white-on-black drawing (his Todoist); nine placeholder lines plus the ten word lines; `../site-text.md` describes the site as it was before this evening's rounds and needs redoing once the design settles; nothing here has been seen on a real phone by me.
+
