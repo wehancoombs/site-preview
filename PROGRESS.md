@@ -601,3 +601,24 @@ Left off the page (all still in the tag `before-services`): the Platonic solids,
 
 Known rough edges: the small label at the top of each pop-up still says Begin, Teach, Think, Make or Contact; "Working with me" still says "Press a Request button anywhere on this page"; the tab title still reads "Teacher, philosopher, maker".
 
+## 2026-11-15, later: the scrolling services page turned down; three cabinets in the earlier look (v=42, not pushed)
+
+Wehan looked at the scrolling services page and said no: go back to the earlier look (starry background, cabinets), with three cabinets, the Map menu back, and a note that the sketch needs a proper white-on-black version for dark mode.
+
+What the site is now (built by `build_cabinets.py` in the session scratchpad, again from the tag `before-services`; the styles are the old file plus one new block at the end):
+
+- Cabinet 1, the landing page (`#threshold`): as it was, Platonic solids and all. The three doors are now two buttons down, My services and About me.
+- Cabinet 2, My services (`#services`): a plain near-black board with a hairline round it and three tabs (Teach, Design, Consult). The list of services is on the board's far left; the turning shapes from the old Make cabinet are in the middle (Teach: the quills and the words; Design: the lesson stages; Consult: the tetraktys). The sketch stands bottom right, mirrored so that it points left at the shape. Details folds the list into a chevron and lays the details over the dimmed shape; the chevron, the cross or Escape brings the list back. On a narrow screen the shape and the sketch sit above the list and the chevron is at the bottom.
+- Cabinet 3, About me (`#about`): headshot, title, the placeholder line, the four CVs and the old Contact links on the left; a second board with the same three tabs on the right. Teach: the two lectures, the six figures, the lesson spines, a quotation. Design: the study guide spines, the arc of a lesson, a quotation, four links. Consult: the constellation, a quotation, four links. This is a first take; he wants to talk it over (tabs, or dots to swipe between sections).
+- The Map menu is back, adjusted: Begin, My services, About me for schools, About me for universities, Contact. The label at the top of each pop-up follows it (My services, For schools, For universities).
+- Contact is still the bar fixed to the bottom, with the small panel for the form. `#write` opens the panel.
+- Light and dark still follow the system setting until the switch is used.
+- Old addresses: `#teach`, `#make` go to My services; `#think` and the old `-detail` addresses go to About me.
+- A change of shape now takes the same time whatever the screen's frame rate.
+
+To do, from him: a white-on-black version of the drawing for dark mode (the present one is the black drawing painted light, which reads as a negative). It is in his Todoist under Personal website. When he has it: save as `assets/wehan-drawing-dark.webp` and use it under dark mode only.
+
+Pictures: `.claude/services-preview/`. The window-less Chrome used for them does not advance the shapes at laptop size, so the Design and Consult tab pictures at laptop size were taken from the preview pane.
+
+Not on the page any more: the three old cabinet sentences (Teach, Think, Make), the four Make card drawings, the old Write to me cabinet (its parts are in About me and the bar).
+
