@@ -642,22 +642,42 @@
   /* ---------- Details: the list folds away into a chevron and the details are laid over the object, in place of a pop-up ---------- */
   const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev');
   let detailFocus = null;
+  // What each item shows when Details is pressed. Nothing here is new wording: the name, line and rate are read from the item itself,
+  // and the rest is lifted from the pop-ups, the arc of a lesson and the quotations already on the page.
+  const part = (id, sel) => { const d = document.createElement('div'); d.innerHTML = library[id].html; return $$(sel, d).map(e => e.innerHTML); };
+  const DETAILS = {
+    tutoring: { lines: () => part('tutoring', '.svc-summary .deliv li'), quote: () => VOICES.make.items[2], request: 'tutoring', more: 'tutoring' },
+    writing: { line: true, lines: () => part('editing', '.svc-summary .deliv li'), quote: () => VOICES.make.items[0], request: 'editing', more: 'editing' },
+    classes: { line: true, inline: true, quote: () => VOICES.teach.items[0],
+      extra: () => '<p class="eyebrow">What I taught in 2026 · tap a spine</p>' + SHELF_HTML + '<div class="shelf-detail" aria-live="polite"><p class="caption">Each spine opens a lesson.</p></div>' },
+    lectures: { line: true, quote: () => VOICES.think.items[6], more: 'courses',
+      extra: () => '<div class="bb-two"><div><p class="eyebrow">Watch me teach</p>' + LECT_HTML + '</div><div><p class="eyebrow">Study guides I wrote</p>' + GUIDES_HTML + '</div></div>' },
+    lesson: { line: true, lines: () => $$('.arc .node').map(n => n.dataset.text), quote: () => VOICES.teach.items[1], request: 'design', more: 'approach' },
+    module: { lines: () => part('design', '.list li').filter((l, i) => i !== 2), long: true, quote: () => VOICES.make.items[4], request: 'design', more: 'design' },
+    curriculum: { line: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
+    person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
+    school: { line: true, lines: () => part('consulting', '.list li'), long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
+    university: { line: true, text: () => part('star-ai', 'p')[1], quote: () => VOICES.think.items[3], request: 'consulting', more: 'ai' }
+  };
+  const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
   function openDetail(id) {
-    const item = library[id];
-    if (!item) return;
+    const d = DETAILS[id], from = $('[data-detail="' + id + '"]');
+    if (!d || !from) return;
+    const it = from.closest('.item'), q = d.quote();
+    const btn = (cls, sheet, label) => '<button' + (cls ? ' class="' + cls + '"' : '') + ' type="button" data-sheet="' + sheet + '">' + label + '</button> ';
     detailFocus = document.activeElement;
-    bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><div class="sheet-body bb-text"></div>';
-    const title = $('.bb-title', bbDetail), text = $('.bb-text', bbDetail);
-    title.textContent = item.title;
-    // A service with a summary shows short: its rate, its three lines, one quotation, and the ways on. The whole of it is one press away.
-    const full = document.createElement('div'); full.innerHTML = item.html;
-    const rate = $('.rate', full), sub = $('.svc-sub', full), proof = $('.proof', full), lines = $$('.svc-summary .deliv li', full);
-    if (lines.length && REQUESTS[id]) {
-      text.innerHTML = '<div class="bb-short"><div>' + (rate ? '<p class="bb-rate">' + rate.innerHTML + '</p>' : '') + (sub ? '<p class="svc-sub">' + sub.innerHTML + '</p>' : '') +
-        '<ul class="bb-lines">' + lines.map(li => '<li>' + li.innerHTML + '</li>').join('') + '</ul></div>' + (proof ? '<blockquote class="bb-proof">' + proof.innerHTML + '</blockquote>' : '') + '</div>' +
-        '<p class="more"><button class="btn solid" type="button" data-sheet="request-' + id + '">Request</button> <button class="btn" type="button" data-sheet="book">Book a free intro call</button> <button type="button" data-sheet="' + id + '">More →</button></p>';
-    } else text.innerHTML = item.html;
-    dressSheet(text); activateEmbeds(text); activateRequest(text); activateRatings(text); initStages(text);
+    bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button>' +
+      '<div class="bb-head"><span class="bb-icon" aria-hidden="true"><svg viewBox="0 0 48 48">' + ART[DETAIL_ART[id]] + '</svg></span><div><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><p class="bb-rate">' + $('.item-rate', it).innerHTML + '</p></div></div>' +
+      '<div class="sheet-body bb-text"><div class="bb-short"><div>' +
+        (d.line ? '<p class="bb-line">' + $('.item-line', it).innerHTML + '</p>' : '') +
+        (d.lines ? '<ul class="bb-lines' + (d.long ? ' long' : '') + '">' + d.lines().map(l => '<li>' + l + '</li>').join('') + '</ul>' : '') +
+        (d.text ? '<p class="bb-para">' + d.text() + '</p>' : '') +
+        (d.extra && d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
+      '</div><blockquote class="bb-proof"><p>' + q[0] + '</p><small>' + q[1] + '</small></blockquote></div>' +
+      (d.extra && !d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
+      '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call') + (d.more ? btn('', d.more, 'More →') : '') + '</p></div>';
+    const title = $('.bb-title', bbDetail);
+    title.textContent = $('h3', it).textContent;
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
     svcStage.classList.add('detail-open');
     title.focus({ preventScroll: true });
@@ -800,8 +820,10 @@
     { id: 'poem-herb', title: 'The Herb Garden', poet: 'Stephen Gray', where: 'Gr 11 · Abbotts' },
     { id: 'poem-poet', title: 'The Poet', poet: 'Shakespeare, A Midsummer Night’s Dream', where: 'Gr 11 · Abbotts' }
   ];
-  const shelfDetail = $('#shelf-detail'), spines = $$('.shelf [data-item]');
-  function showShelf(item) {
+  // Every shelf of lesson spines on the page (About me, and the Classes details) works the same way: a spine shows its line in the box under its own shelf.
+  const SHELF_HTML = $('.shelf').outerHTML;
+  function showShelf(shelf, item) {
+    const shelfDetail = shelf.parentElement.querySelector('.shelf-detail'), spines = $$('[data-item]', shelf);
     spines.forEach(b => { const on = b.dataset.item === item; b.classList.toggle('is-on', on); if (b.dataset.item === 'poems') b.setAttribute('aria-expanded', on ? 'true' : 'false'); });
     if (item === 'poems') {
       shelfDetail.innerHTML = '<div class="fan" role="group" aria-label="The five poems I taught">' + POEMS.map((p, i) =>
@@ -811,7 +833,7 @@
       shelfDetail.innerHTML = '<p class="caption">' + d.cap + ' <button class="textlink" type="button" data-sheet="' + d.sheet + '">Open →</button></p>';
     }
   }
-  spines.forEach(b => b.addEventListener('click', () => showShelf(b.dataset.item)));
+  document.addEventListener('click', e => { const b = e.target.closest('.shelf [data-item]'); if (b) showShelf(b.closest('.shelf'), b.dataset.item); });
 
   /* ---------- The constellation ---------- */
   const NODES = [
@@ -890,13 +912,15 @@
   if (narrowSky.addEventListener) narrowSky.addEventListener('change', placeSky); else if (narrowSky.addListener) narrowSky.addListener(placeSky);
 
   /* ---------- Lectures: the player loads when you press play ---------- */
-  $$('.lecture').forEach(l => {
-    $('.play', l).addEventListener('click', () => {
-      if (l.classList.contains('playing')) return;
-      const f = document.createElement('iframe');
-      f.src = l.dataset.src; f.setAttribute('allow', 'autoplay; fullscreen'); f.setAttribute('allowfullscreen', ''); f.title = $('.l-cap strong', l).textContent;
-      l.appendChild(f); l.classList.add('playing');
-    });
+  const LECT_HTML = $('.lectures').outerHTML, GUIDES_HTML = $('.guide-shelf').outerHTML;   // kept as they are when the page opens, for the Lectures details
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.lecture .play');
+    if (!b) return;
+    const l = b.closest('.lecture');
+    if (l.classList.contains('playing')) return;
+    const f = document.createElement('iframe');
+    f.src = l.dataset.src; f.setAttribute('allow', 'autoplay; fullscreen'); f.setAttribute('allowfullscreen', ''); f.title = $('.l-cap strong', l).textContent;
+    l.appendChild(f); l.classList.add('playing');
   });
 
   /* ---------- The editing typewriter ---------- */
