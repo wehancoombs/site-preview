@@ -615,8 +615,8 @@
   }
   function stepTab(board, d) { const ks = $$('.tabs [data-tab]', board).map(b => b.dataset.tab), k = ks[ks.indexOf(board.dataset.open) + d]; if (k) openTab(board, k); }
   $$('.bb .tabs [data-tab]').forEach(b => b.addEventListener('click', () => openTab(b.closest('.bb'), b.dataset.tab)));
-  // Pointing at a service on the Teach list brings up its shape: the quills for tutoring, the words for writing.
-  $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => { if (svcBoard.dataset.open === 'teach') showShapes('teach', +li.dataset.shape); }));
+  // Pointing at a service on the list brings up its own shape.
+  $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => showShapes(svcBoard.dataset.open, +li.dataset.shape)));
 
   /* ---------- Details: the list folds away into a chevron and the details are laid over the object, in place of a pop-up ---------- */
   const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev');
@@ -1062,22 +1062,80 @@
       const m = clamp01((n - K.at) / 900), w = ph => K.phase === K.from ? (ph === K.phase ? 1 : 0) : ph === K.phase ? m : ph === K.from ? 1 - m : 0;
       const size = TW * .052, labels = [];
       P.forEach((p, i) => {
-        if (w(1) > .02) labels.push({ i, text: K.bits[i], size: size * 1.1, serif: false, alpha: w(1) });
+        if (w(1) > .02) labels.push({ i, text: K.bits[i], size: size * 1.7, serif: false, alpha: w(1) });
         if (w(2) > .02) labels.push({ i, text: TERMS[i], size, serif: true, alpha: w(2) });
       });
       return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: (1 + glow[i] * .9) * (.22 + .78 * w(0)), g: glow[i] })), links: TLINKS, labels };
+    }
+
+    /* 5. Classes: a ring of seats, one of them the teacher's. Talk crosses the ring between seats, not only to and from the front. */
+    function classes(t) {
+      const N = 13, pts = [], links = [], beat = t / 1700, s = Math.floor(beat), a = Math.sin(Math.PI * (beat % 1));
+      const lit = new Array(N).fill(0);
+      for (let k = 0; k < 4; k++) { const x = (s * 5 + k * 3) % N, y = (s * 11 + k * 7 + 4) % N; if (x !== y) { links.push([x, y, .95 * a]); lit[x] = lit[y] = a; } }
+      for (let i = 0; i < N; i++) {
+        const th = i / N * TAU;
+        pts.push({ p: [.82 * Math.sin(th), -.3 + (i ? 0 : .16), .82 * Math.cos(th)], r: (i ? .75 : 1.5) + .5 * lit[i], g: lit[i] });
+        links.push([i, (i + 1) % N, .3]);
+      }
+      return { pts, links, labels: [] };
+    }
+
+    /* 6. Lectures: a lectern, and a raked hall of rows fanning out in front of it. A wave passes back through the rows. */
+    function lectures(t) {
+      const pts = [{ p: [0, -.05, .8], r: 1.6, g: .4 }, { p: [0, -.6, .8], r: 0 }], links = [[0, 1, 1]];
+      for (let row = 0; row < 4; row++) {
+        const n = 5 + row, R = .55 + .3 * row, g = Math.max(0, Math.sin(t * .0022 - row * .95));
+        for (let k = 0; k < n; k++) {
+          const th = (k / (n - 1) - .5) * 1.75;
+          pts.push({ p: [R * Math.sin(th), -.6 + .2 * row, .8 - R * Math.cos(th)], r: .6 + .55 * g, g: g * .8 });
+          if (k) links.push([pts.length - 2, pts.length - 1, .3 + .4 * g]);
+        }
+      }
+      return { pts, links, labels: [] };
+    }
+
+    /* 7. A module: a shelf of lesson boxes side by side, each of its own height, turning one after another. */
+    function moduleShelf(t) {
+      const pts = [], links = [], quads = [], hs = .15;
+      for (let n = 0; n < 5; n++) {
+        const c = t / 5200 - n * .16, th = Math.PI / 2 * (Math.floor(c) + ease(clamp01((c - Math.floor(c)) * 3))), cs = Math.cos(th), sn = Math.sin(th);
+        const h = .3 + .09 * ((n * 3) % 5), cx = (n - 2) * .42, base = pts.length;
+        BOX.forEach(q => { const x = q[0] * hs, z = q[2] * hs; pts.push({ p: [cx + x * cs + z * sn, -.45 + (q[1] + 1) * h, -x * sn + z * cs], r: .3 }); });
+        EDGES.forEach(e => links.push([base + e[0], base + e[1], 1]));
+        FACES.forEach(f => quads.push(f.map(k => base + k)));
+      }
+      pts.push({ p: [-1.08, -.45, 0], r: 0 }, { p: [1.08, -.45, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .5]);   // the shelf they stand on
+      return { pts, links, labels: [], quads };
+    }
+
+    /* 8. A curriculum: a spiral stair. The same ground comes round again, one level higher each time; a light climbs it. */
+    function curriculum(t) {
+      const N = 30, pts = [], links = [], at = (t * .0035) % (N + 6) - 3;
+      for (let i = 0; i < N; i++) {
+        const th = i * .52, y = -.85 + i * 1.7 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2.5);
+        pts.push({ p: [.2 * Math.sin(th), y, .2 * Math.cos(th)], r: 0 }, { p: [.7 * Math.sin(th), y, .7 * Math.cos(th)], r: .5 + .7 * g, g });
+        links.push([2 * i, 2 * i + 1, .45 + .5 * g]);
+        if (i) links.push([2 * i - 1, 2 * i + 1, .7]);
+      }
+      pts.push({ p: [0, -.9, 0], r: 0 }, { p: [0, .9, 0], r: 0 }); links.push([pts.length - 2, pts.length - 1, .35]);
+      return { pts, links, labels: [] };
     }
 
     const SHAPES = [
       { key: 'tutoring', title: 'Tutoring', what: 'Quills', frame: quill },
       { key: 'editing', title: 'Editing', what: 'Words', frame: words },
       { key: 'design', title: 'Learning design', what: 'Lesson stages', frame: blocks },
-      { key: 'consulting', title: 'Philosophical & AI consulting', what: 'Tetraktys', frame: tetraktys }
+      { key: 'consulting', title: 'Philosophical & AI consulting', what: 'Tetraktys', frame: tetraktys },
+      { key: 'classes', what: 'Seats', frame: classes },
+      { key: 'courses', what: 'Hall', frame: lectures },
+      { key: 'design', what: 'Shelf', frame: moduleShelf },
+      { key: 'design', what: 'Stair', frame: curriculum }
     ];
-    const SETS = { teach: [0, 1], design: [2], consult: [3] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
+    const SETS = { teach: [0, 1, 4, 5], design: [2, 6, 7], consult: [3] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
-    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'Consulting'];
-    function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = i === 2 ? 'drag to turn' : 'drag to turn · tap to change'; }
+    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'Consulting', 'Classes', 'Lectures', 'A module', 'A curriculum'];
+    function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = 'drag to turn · tap to change'; }
     function tapShape() { if (SETS[T.set].length > 1) nextShape(); else if (T.cur === 3) stepTerms(); }
     // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.
     function goShape(i) {
