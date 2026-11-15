@@ -561,7 +561,7 @@ Wehan found the quill "a bit off" and was not happy with the inkpot. The Tutorin
 Wehan briefed a sixth cabinet, Counsel, with the services re-sorted (Tutoring under Teach, Lesson plans under Make, consulting under Counsel). It was built and reviewed locally, never pushed. After two looks he decided against the direction and asked to go back to `stable-simple` (26f35a5, the five-cabinet site), bringing over only general upgrades that make sense.
 
 - `main` was reset to `stable-simple`. The whole Counsel build is kept on the local branch `counsel-abandoned` (three commits), in case any of it is wanted later: the `makeStage` wireframe factory, a scene inside a pop-up, the gold 3D tetraktys with a 1s-and-0s state, the Counsel detail cards, the Amethyst colour. Tags `stable-simple` and `before-counsel` are on GitHub and point at the same commit.
-- One general upgrade came over, committed on main, not pushed (v=40): the Make object now starts its thirteen-second wait when the cabinet comes into view, so it no longer changes shape the moment you arrive.
+- One general upgrade came over, pushed live on his "Publish" (v=40, checked on the live site): the Make object now starts its thirteen-second wait when the cabinet comes into view, so it no longer changes shape the moment you arrive.
 - Not brought over, because each only made sense with Counsel: the fourth home button, the Tutoring row, the three-card Make detail, the pop-up chapter moves, the booking pop-up taking another cabinet's colour.
 - `../site-text.md` has the Counsel material removed; its Teach and Make sections were rewritten by hand to match the site as it is.
 
