@@ -157,19 +157,19 @@
   const S = { cur: 4, nxt: -1, mix: 0, ax: .55, ay: .35, vx: 0, vy: 0, tx: 0, ty: 0, drag: null, last: performance.now(), lastSwitch: performance.now(), labelDone: false };
   const elLabel = $('#solid-el'), nameLabel = $('#solid-name');
   // The small word under the sentence changes with the solid: ainigma first, then ten more, each in its own script with a line about it.
-  // DRAFT-WEHAN: the ten lines after the first are drafts.
+  // The lines are his (chat of 2026-11-16).
   const RIDDLES = [
     ['αἴνιγμα', '<em>Ainigma</em>: a riddle. The title of my PhD on Plato, and a fair description of teaching.'],
-    ['νοῦς', '<em>Nous</em>: mind, the part of us that sees for itself. What teaching tries to wake.'],
+    ['νοῦς', '<em>Nous</em>: mind, the eye of the soul. What teaching tries to wake.'],
     ['ψυχή', '<em>Psychē</em>: soul, breath. The whole person who comes to a lesson, not only the intellect.'],
     ['ἀπορία', '<em>Aporia</em>: being at a loss. The honest moment of not knowing, where learning starts.'],
     ['συμπαιδεία', '<em>Sympaideia</em>: learning together. My own word for teaching built on rapport and mutual curiosity.'],
-    ['𓆄', '<em>Maat</em>: truth, balance, right order. Ancient Egypt’s word, written with a feather.'],
-    ['ज्ञान', '<em>Jñāna</em>: knowledge that changes the one who knows. Sanskrit, and kin to the Greek <em>gnōsis</em>.'],
-    ['חכמה', '<em>Ḥokhmah</em>: wisdom. Hebrew, for knowing how to live and not only what is so.'],
-    ['schola', '<em>Schola</em>: leisure, and then school. Latin, from the Greek for time set aside to think.'],
+    ['𓆄', '<em>Maat</em>: truth, balance, right order. The feather the heart was weighed against.'],
+    ['ज्ञान', '<em>Jñāna</em>: knowledge that changes the knower, kin to the Greek <em>gnōsis</em>.'],
+    ['חכמה', '<em>Ḥokhmah</em>: wisdom, knowing how to live, not only what is true.'],
+    ['schola', '<em>Schola</em>: the leisure required to think.'],
     ['道', '<em>Dào</em>: the way. Chinese, for a path that is learnt by walking it.'],
-    ['ubuntu', '<em>Ubuntu</em>: a person is a person through other people. Southern Africa’s word for it.']
+    ['ubuntu', '<em>Ubuntu</em>: <em>umuntu ngumuntu ngabantu</em>, a person is a person through other people.']
   ];
   const riddleBtn = $('.ainigma'), riddleTip = $('#ainigma-tip'); let riddleAt = 0;
   function setLabel(i) {

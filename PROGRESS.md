@@ -739,3 +739,10 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: an older coin (v=65 on `services`, on the staging site, not live)
 
 - No shine left on the coin: the face is one flat, dull colour. It is aged with two SVG noise filters (`#coin-wear` for worn patches, `#coin-pits` for fine pitting) and three small nicks in the rim; the lettering is a little duller. The thick milled edge stays.
+
+## 2026-11-16: his final lines; no drafts left (v=66 on `services`, on the staging site, not live)
+
+- Every DRAFT-WEHAN mark is gone (the build now requires none). His final lines from the chat: the search and shared description; the one-line descriptions of Writing, Classes, Lectures, A lesson and A school (and the Classes pop-up); the third paragraph of the About me pop-up; "I read for the argument first, then the style."; six of the landing-word notes (Nous, Maat, Jñāna, Ḥokhmah, Schola, Ubuntu). The rest he kept as they were.
+- The coin: the nicks are gone; the wear and pitting are a little stronger.
+- The cards have slightly less padding at the top and bottom on a laptop, so that the longer lines fit without scrolling (all ten fit at 1280 by 800).
+- `.claude/export_text.py` lists drafts only if the site has any. Fresh Google Doc "Site text – three-cabinet site" (37 pop-ups, no drafts).
