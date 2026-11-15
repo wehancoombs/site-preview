@@ -746,3 +746,10 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - The coin: the nicks are gone; the wear and pitting are a little stronger.
 - The cards have slightly less padding at the top and bottom on a laptop, so that the longer lines fit without scrolling (all ten fit at 1280 by 800).
 - `.claude/export_text.py` lists drafts only if the site has any. Fresh Google Doc "Site text – three-cabinet site" (37 pop-ups, no drafts).
+
+## 2026-11-16: pop-up text edits from his chat (v=68 on `services`, on the staging site, not live)
+
+- Eighteen edits (`POPUP_EDITS` in the build script, each checked to be found once): Teaching approach, Hoërskool Garsfontein, Writing support, Learning design and tools, Philosophical and AI consulting, Working with me, Curriculum and course development. The School card on the board still shows three points; the new fourth point in the consulting pop-up is for universities.
+- Four lesson fixes (`LESSON_EDITS`): The Herb Garden ("just asking", its four stage notes in the past tense); For Oom Piet (one sentence deleted); South African spelling (centre, analyse, analysing in The Tempest; emphasise in Philosophy for teenagers; also emphasising in The Herb Garden and summarised in a poem lesson); The Poet ("a square circle" both times).
+- The cards have a little less padding at the top again, so that all ten still fit on a laptop.
+- Fresh Google Doc "Site text – three-cabinet site".

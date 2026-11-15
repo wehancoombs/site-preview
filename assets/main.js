@@ -665,7 +665,8 @@
     // A curriculum: his own lines (chat of 2026-11-15).
     curriculum: { line: true, text: () => 'A curriculum is a set of modules in an order that makes sense, so that each one prepares for the next. At the University of Pretoria I designed first- and second-year philosophy modules to fit what came before and after them, and helped plan that order with the department.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
-    school: { line: true, lines: () => part('consulting', '.list li'), long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
+    school: { line: true, lines: () => part('consulting', '.list li').slice(0, 3),   // the fourth point there is for universities
+       long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
     // A university: his own lines (chat of 2026-11-15). What the university receives, on the left; his research and how he assessed his own module, on the right, above the quotation.
     university: { line: true, long: true, head: 'What you receive',
       lines: () => ['A written review of the module’s assessments: which ones a machine can now complete, and which still test the student', 'The weak assessments redesigned, ready to use', 'One meeting with the lecturer to talk it through'],

@@ -1338,7 +1338,7 @@ html.first-visit .me.in { opacity: 1; }
 }
 
 /* A little less air at the top and bottom of a card, so that the longer lines still fit without scrolling on a laptop */
-@media (min-width: 901px) { .bb-detail { padding-top: clamp(12px, 2vh, 22px); padding-bottom: 12px; } .bb-head { margin-bottom: clamp(8px, 1.4vh, 14px); } }
+@media (min-width: 901px) { .bb-detail { padding-top: clamp(10px, 1.4vh, 18px); padding-bottom: 10px; } .bb-head { margin-bottom: clamp(8px, 1.4vh, 14px); } }
 /* A card may have a small heading over its list, and a second column of its own above the quotation (A university) */
 .bb-sub { margin: clamp(10px, 1.8vh, 16px) 0 0; }
 .bb-sub + .bb-lines { margin-top: 2px; }
