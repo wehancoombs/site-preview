@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=60">
+<link rel="stylesheet" href="assets/style.css?v=61">
 </head>
 <body data-chapter="threshold">
 
@@ -83,7 +83,6 @@
       <ul>
         <li><button type="button" data-sheet="about">About me</button></li>
         <li><button type="button" data-sheet="qualifications">Qualifications</button></li>
-        <li><button type="button" data-sheet="why">Why I teach</button></li>
         <li><a href="cv/Wehan-Coombs-CV.pdf" data-track="cv-general" target="_blank" rel="noopener">General CV (PDF) ↓</a></li>
       </ul>
     </section>
@@ -183,7 +182,7 @@
           <a class="cab-door" data-door="teach" href="#teach" data-goto="#teach" data-track="door-teach"><b>Teach</b><small>Tutoring&nbsp;· Writing&nbsp;· Classes&nbsp;· Lectures</small></a>
           <a class="cab-door" data-door="design" href="#design" data-goto="#design" data-track="door-design"><b>Design</b><small>A&nbsp;lesson&nbsp;· A&nbsp;module&nbsp;· A&nbsp;curriculum</small></a>
           <a class="cab-door" data-door="consult" href="#consult" data-goto="#consult" data-track="door-consult"><b>Consult</b><small>A&nbsp;person&nbsp;· A&nbsp;school&nbsp;· A&nbsp;university</small></a>
-          <a class="cab-door" href="#about" data-goto="#about" data-track="door-about"><b>About me</b><small>Qualifications&nbsp;· Research&nbsp;· Referees</small></a>
+          <a class="cab-door" href="#about" data-goto="#about" data-track="door-about"><b>About me</b><small>Qualifications&nbsp;· Research&nbsp;· Resume</small></a>
         </nav>
       </div>
       <div class="cab-object solid-wrap">
@@ -298,7 +297,7 @@
       <div class="ab-side">
         <p class="eyebrow">Pretoria East · South Africa</p>
         <div class="ab-id">
-          <button class="ab-seal" type="button" data-sheet="why" aria-label="Docendo discimus: why I teach">
+          <button class="ab-seal" id="ab-seal" type="button" aria-label="Docendo discimus. Press to spin the coin.">
             <svg viewBox="0 0 120 120" aria-hidden="true">
               <defs><path id="sp-ab" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
               <circle class="seal-ring" cx="60" cy="60" r="56"/>
@@ -310,6 +309,7 @@
         </div>
         <!-- DRAFT-WEHAN -->
         <p class="ab-open">Also open to teaching and lecturing posts.</p>
+        <blockquote class="ab-why">I teach because I have seen what happens when students realise they can think for themselves, and that transformation carries into the rest of their lives. Above all, I keep learning from the people I teach.</blockquote>
       </div>
 
       <div class="ab-main">
@@ -342,7 +342,6 @@
         <p class="ab-btns">
           <button class="btn" type="button" data-sheet="about">About me</button>
           <button class="btn" type="button" data-sheet="qualifications">Qualifications</button>
-          <button class="btn" type="button" data-sheet="why">Why I teach</button>
         </p>
         <p class="index ab-links">
           <a href="https://www.linkedin.com/in/wehan-coombs">LinkedIn</a>
@@ -351,7 +350,7 @@
         </p>
         <p class="ab-resume"><button type="button" data-sheet="resume">My full resume</button></p>
         <p class="ab-note">Referees are listed in my full resume.</p>
-        <p class="ab-foot"><button class="motto" type="button" data-sheet="why"><em>Docendo discimus.</em></button> <span>© 2026 Wehan M. Coombs</span></p>
+        <p class="ab-foot"><span class="motto-wrap"><button class="motto" type="button" aria-describedby="motto-tip"><em>Docendo discimus.</em></button><span id="motto-tip" role="tooltip"><em>Docendo discimus</em>: by teaching, we learn. After Seneca, <em>Letters to Lucilius</em>, 7.8.</span></span> <span>© 2026 Wehan M. Coombs</span></p>
       </div>
     </div>
   </div>
@@ -465,7 +464,7 @@
       <li><b>2025</b> More papers · Reflexive Esotericism at the PSSA, and Animism, Consilience and the Rights of Nature at the South African Society for Environmental Philosophy.</li>
       <li><b>2026</b> Into the classroom · PGCE practicums at Hoërskool Garsfontein and Abbotts College Pretoria East. 120-hour TESOL/TEFL. Honours course: Philosophy as a Rite of Rebirth. PSSA paper with Mitchell Black.</li>
     </ol>
-    <p class="more"><button type="button" data-sheet="qualifications">Qualifications in full →</button> <button type="button" data-sheet="why">Why I teach →</button></p>
+    <p class="more"><button type="button" data-sheet="qualifications">Qualifications in full →</button></p>
   </article>
 
   <article id="s-qualifications" data-art="scroll" data-ch="threshold" data-title="Qualifications">
@@ -483,11 +482,6 @@
       <li>Languages: English (home language), Afrikaans (fluent)</li>
       <li>Full certified academic record available on request</li>
     </ul>
-  </article>
-
-  <article id="s-why" data-art="lamp" data-ch="threshold" data-title="Why I teach">
-    <p>I teach because I have seen what happens when students realise they can think for themselves, and that transformation carries into the rest of their lives. I bring fifteen years of teaching experience to any school or department, along with a collaborative spirit, high professional standards and genuine care. Above all, I keep learning from the people I teach.</p>
-    <p class="motto-line"><em>Docendo discimus.</em> By teaching, we learn.</p>
   </article>
 
   <article id="s-approach" data-art="compass" data-ch="teach" data-title="Teaching approach">
@@ -1176,7 +1170,7 @@
 
 </div>
 
-<script src="assets/main.js?v=60"></script>
+<script src="assets/main.js?v=61"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

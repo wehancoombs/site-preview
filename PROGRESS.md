@@ -713,3 +713,12 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: the papers links come back (v=60 on `services`, on the staging site, not live)
 
 - He was not happy to lose the Papers link under the constellation and the stars' button to the papers. Both are back and open Research and publications at its Conference papers section (`data-at="papers"` on the button, `data-anchor="papers"` on the heading; the click handler scrolls the pop-up there). On the five stars the button reads "Conference papers →".
+
+## 2026-11-16: Why I teach becomes a quotation (v=61 on `services`, on the staging site, not live)
+
+- The pop-up "Why I teach" is gone (37 pop-ups), with its Map entry, its About me button and the button to it inside the pop-up "About me". Its first and last sentences are a quotation under the title on About me; the middle sentence (fifteen years, collaborative spirit) was left out.
+- The motto in the foot of About me has a tooltip: "Docendo discimus: by teaching, we learn. After Seneca, Letters to Lucilius, 7.8." (Seneca wrote "homines dum docent discunt"; the two-word motto is the later short form, hence "after".)
+- The coin beside the title no longer opens anything: pressed, it spins and the whole page sways once (not with reduced motion).
+- The About me box on the landing page reads "Qualifications · Research · Resume", since Referees is no longer a place.
+- About me has two buttons: About me, Qualifications.
+- Site text written again; Google Doc "Site text – three-cabinet site (v61, 37 pop-ups)".

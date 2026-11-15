@@ -722,6 +722,16 @@
     $('.deck-n', bbDetail).textContent = (to + 1) + ' of ' + ls.length;
   });
 
+  /* ---------- The coin beside "About me": pressed, it spins, and the whole page sways once ---------- */
+  const abSeal = $('#ab-seal');
+  if (abSeal) abSeal.addEventListener('click', () => {
+    if (reduced) return;
+    abSeal.classList.remove('spin'); body.classList.remove('sway'); void abSeal.offsetWidth;   // so that a second press starts it again
+    abSeal.classList.add('spin'); body.classList.add('sway');
+    setTimeout(() => { abSeal.classList.remove('spin'); body.classList.remove('sway'); }, 1500);
+    track('coin');
+  });
+
   /* ---------- The sketch fades in the first time the services cabinet comes into view, on a first visit only ---------- */
   const meEl = $('.me');
   if (meEl) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { meEl.classList.add('in'); io.disconnect(); } }, { threshold: .3 }).observe(meEl);
