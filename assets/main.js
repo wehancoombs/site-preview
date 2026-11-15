@@ -1048,10 +1048,24 @@
     const TLINKS = [];
     for (let a = 0; a < P.length; a++) for (let b = a + 1; b < P.length; b++) if (Math.abs(gap3(P[a], P[b]) - nearest) < 1e-6) TLINKS.push([a, b, 1]);
     const glow = P.map(() => 0); let lastSpark = 0;
+    // The ten points can also show as ones and noughts, and then as ten old words. A tap moves on; left alone, it moves on by itself.
+    const TERMS = ['νοῦς', 'ψυχή', 'ἀπορία', 'sympadeia', 'maat', 'ज्ञान', 'חכמה', 'schola', '道', 'ubuntu'];
+    const K = { phase: 0, from: 0, at: 0, flip: 0, bits: P.map((p, i) => i % 2 ? '1' : '0') };
+    function stepTerms() { K.from = K.phase; K.phase = (K.phase + 1) % 3; K.at = performance.now(); }
     function tetraktys(t) {
+      const n = performance.now();
       if (!reduced && t - lastSpark > 520) { lastSpark = t; glow[Math.floor(Math.random() * glow.length)] = 1; }   // now and then one point lights
       for (let i = 0; i < glow.length; i++) glow[i] *= .965;                                                          // and slowly dims
-      return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: 1 + glow[i] * .9, g: glow[i] })), links: TLINKS, labels: [] };
+      if (T.cur !== 3 || T.mixing) { K.phase = K.from = 0; K.at = n - 900; }                                          // it always arrives as points
+      else if (!reduced && n - K.at > (K.phase ? 6500 : 11000)) stepTerms();
+      if (K.phase === 1 && n - K.flip > 130) { K.flip = n; K.bits[Math.floor(Math.random() * K.bits.length)] = Math.random() < .5 ? '0' : '1'; }
+      const m = clamp01((n - K.at) / 900), w = ph => K.phase === K.from ? (ph === K.phase ? 1 : 0) : ph === K.phase ? m : ph === K.from ? 1 - m : 0;
+      const size = TW * .052, labels = [];
+      P.forEach((p, i) => {
+        if (w(1) > .02) labels.push({ i, text: K.bits[i], size: size * 1.1, serif: false, alpha: w(1) });
+        if (w(2) > .02) labels.push({ i, text: TERMS[i], size, serif: true, alpha: w(2) });
+      });
+      return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: (1 + glow[i] * .9) * (.22 + .78 * w(0)), g: glow[i] })), links: TLINKS, labels };
     }
 
     const SHAPES = [
@@ -1062,7 +1076,9 @@
     ];
     const SETS = { teach: [0, 1], design: [2], consult: [3] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
-    function caption(i) { T.named = i; nameEl.textContent = TAB_NAME[T.set]; whatEl.textContent = SHAPES[i].what; hintEl.textContent = SETS[T.set].length > 1 ? 'drag to turn · tap to change' : 'drag to turn'; }
+    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'Consulting'];
+    function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = i === 2 ? 'drag to turn' : 'drag to turn · tap to change'; }
+    function tapShape() { if (SETS[T.set].length > 1) nextShape(); else if (T.cur === 3) stepTerms(); }
     // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.
     function goShape(i) {
       T.want = i; T.since = performance.now();
@@ -1099,12 +1115,12 @@
       const dx = e.clientX - T.drag.x, dy = e.clientY - T.drag.y; T.drag.x = e.clientX; T.drag.y = e.clientY; T.drag.moved += Math.abs(dx) + Math.abs(dy);
       T.ay += dx * .008; T.ax = Math.max(-1.2, Math.min(1.2, T.ax + dy * .008)); T.vy = dx * .0012;
     });
-    tc.addEventListener('pointerup', () => { if (!T.drag) return; const tap = T.drag.moved < 6; T.drag = null; tc.classList.remove('dragging'); if (tap) nextShape(); });
+    tc.addEventListener('pointerup', () => { if (!T.drag) return; const tap = T.drag.moved < 6; T.drag = null; tc.classList.remove('dragging'); if (tap) tapShape(); });
     tc.addEventListener('pointercancel', () => { T.drag = null; tc.classList.remove('dragging'); });
     tc.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft') { T.ay -= .2; e.preventDefault(); }
       else if (e.key === 'ArrowRight') { T.ay += .2; e.preventDefault(); }
-      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextShape(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tapShape(); }
     });
 
     drawTetra = t => {
