@@ -735,3 +735,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: a thicker coin (v=64 on `services`, on the staging site, not live)
 
 - The glint on the rim is gone and the face is lit less. The coin has thickness by a sleight: a second, darker disc six units below the face carries the milling, so the coin reads as seen slightly from above with its edge showing (`.coin-side`, `.coin-mill`, `.coin-back`). It is still a flat drawing; in the spin it turns as one piece.
+
+## 2026-11-16: an older coin (v=65 on `services`, on the staging site, not live)
+
+- No shine left on the coin: the face is one flat, dull colour. It is aged with two SVG noise filters (`#coin-wear` for worn patches, `#coin-pits` for fine pitting) and three small nicks in the rim; the lettering is a little duller. The thick milled edge stays.

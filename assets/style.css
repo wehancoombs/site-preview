@@ -1265,11 +1265,16 @@ html.first-visit .me.in { opacity: 1; }
 /* The coin: a milled edge, a face lit from the upper left, a thin inner ring and a soft shadow. Kept quiet. */
 .ab-seal svg { filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .42)); }
 :root[data-theme="light"] .ab-seal svg { filter: drop-shadow(0 2px 4px rgba(60, 40, 10, .28)); }
-.coin-lit { stop-color: color-mix(in srgb, var(--accent) 70%, #fff); stop-opacity: .2; }
-.coin-mid { stop-color: var(--accent); stop-opacity: .12; }
-.coin-dim { stop-color: color-mix(in srgb, var(--accent) 70%, #000); stop-opacity: .3; }
-.ab-seal .seal-ring, .ab-seal:hover .seal-ring, .ab-seal:focus-visible .seal-ring { fill: url(#coin-face); stroke-width: 1.4; }
-.ab-seal:hover .coin-lit, .ab-seal:focus-visible .coin-lit { stop-opacity: .32; }
+/* An old coin: a flat, dull face with no shine, worn patches, fine pitting, and a few nicks in the rim */
+.ab-seal .seal-ring, .ab-seal:hover .seal-ring, .ab-seal:focus-visible .seal-ring { fill: color-mix(in srgb, var(--accent) 17%, var(--bg)); stroke: color-mix(in srgb, var(--accent) 72%, var(--bg)); stroke-width: 1.6; }
+.coin-wear { fill: color-mix(in srgb, var(--accent) 30%, #000); opacity: .38; }
+.coin-pits { fill: #000; opacity: .42; }
+:root[data-theme="light"] .coin-wear { fill: color-mix(in srgb, var(--accent) 60%, #3a2a10); opacity: .2; }
+:root[data-theme="light"] .ab-seal .seal-text { fill: color-mix(in srgb, var(--accent) 75%, #000); }
+:root[data-theme="light"] .coin-pits { fill: #3a2a10; opacity: .34; }
+.coin-nick { fill: none; stroke: var(--bg); stroke-width: 2; stroke-linecap: round; }
+.ab-seal .seal-text { fill: color-mix(in srgb, var(--accent) 78%, var(--bg)); }
+.ab-seal .seal-letter { fill: color-mix(in srgb, var(--text) 82%, var(--accent)); }
 /* Its thickness: a second disc a little below the face, darker, with the milling on it; the face has a solid back so the edge does not show through */
 .coin-side { fill: color-mix(in srgb, var(--accent) 42%, var(--bg)); stroke: color-mix(in srgb, var(--accent) 70%, #000); stroke-width: 1; }
 .coin-mill { fill: none; stroke: color-mix(in srgb, var(--accent) 80%, #000); stroke-width: 4.2; stroke-dasharray: .9 1.7; opacity: .8; }
