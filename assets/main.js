@@ -610,6 +610,7 @@
     if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
     const s = e.target.closest('[data-sheet]');
     if (s) { e.preventDefault(); const id = s.dataset.sheet, place = library[id] && CH_PLACE[library[id].ch]; if (place && map.classList.contains('on') && body.dataset.chapter !== place.slice(1)) showTarget(place, true); openSheet(id);
+      if (s.dataset.at) { const to = $('[data-anchor="' + s.dataset.at + '"]', sheet); if (to) requestAnimationFrame(() => to.scrollIntoView({ block: 'start' })); }   // a button may open a pop-up at one of its sections
       if (s.closest('#board') && library[id] && !library[id].tone) sheet.dataset.tone = 'c-' + svcBoard.dataset.open;   // a pop-up opened from the board keeps the colour of its tab
       return; }
     const dt = e.target.closest('[data-detail]');
@@ -875,7 +876,7 @@
     { id: 'neo', x: 755, y: 148, r: 7.5, label: 'Neoplatonism',
       body: 'Plotinus, Iamblichus, Proclus. A member of the International Society for Neoplatonic Studies since 2017. In 2026 I designed and taught the honours course <em>Philosophy as a Rite of Rebirth: From Ancient Egypt to Neoplatonism</em>.', more: 'guide-c5' },
     { id: 'theurgy', x: 925, y: 55, r: 5.5, label: 'Theurgy',
-      body: 'Ritual as philosophy in late Platonism. Conference paper: <em>The Curious Case of Neoplatonic Ritual Magic</em>, PSSA, University of KwaZulu-Natal, 2020.' },
+      body: 'Ritual as philosophy in late Platonism. Conference paper: <em>The Curious Case of Neoplatonic Ritual Magic</em>, PSSA, University of KwaZulu-Natal, 2020.', more: 'papers' },
     { id: 'egypt', x: 965, y: 240, r: 5.5, label: 'Ancient Egypt',
       body: 'Where the rite of rebirth begins. The opening movement of the honours course <em>Philosophy as a Rite of Rebirth</em> (FIL710/810, 2026).', more: 'guide-c5' },
     { id: 'eso', x: 670, y: 335, r: 7.5, label: 'Esotericism',
@@ -885,18 +886,18 @@
     { id: 'life', x: 255, y: 342, r: 6.5, label: 'A way of life',
       body: 'Philosophy as practice, not only doctrine. Designed and taught <em>The Good Life</em> (FIL220, 2024).', more: 'guide-c4' },
     { id: 'nature', x: 115, y: 400, r: 5.5, label: 'Animism & nature',
-      body: '<em>Animism, Consilience and the Rights of Nature</em>, co-presented at the South African Society for Environmental Philosophy, North-West University, 2025.' },
+      body: '<em>Animism, Consilience and the Rights of Nature</em>, co-presented at the South African Society for Environmental Philosophy, North-West University, 2025.', more: 'papers' },
     { id: 'rorty', x: 96, y: 246, r: 5.5, label: 'Ethics & politics',
       body: 'An early article, <em>Contingency, irony and morality: a critical review of Rorty’s notion of the liberal utopia</em> (Humanities, 2013). In 2018 I redesigned <em>Introduction to Moral and Political Philosophy</em> for business students.',
       links: [['Read the article', 'https://doi.org/10.3390/h2020313']] },
     { id: 'meta', x: 450, y: 405, r: 5.5, label: 'Metacrisis',
-      body: '<em>Is Philosophy A(gnostic)? Post-disciplinary Interventions in the Time of Metacrisis</em>, PSSA Annual Conference, University of Cape Town, 2026, with Mitchell Black.' },
+      body: '<em>Is Philosophy A(gnostic)? Post-disciplinary Interventions in the Time of Metacrisis</em>, PSSA Annual Conference, University of Cape Town, 2026, with Mitchell Black.', more: 'papers' },
     { id: 'ai', x: 340, y: 55, r: 6.5, label: 'AI & the humanities',
       body: 'What is human teaching for, once a machine can write the essay? My current project, <em>Socratic Pedagogy beyond the AI Horizon</em>, reads Plato’s <em>Phaedrus</em> as a guide to what cannot be automated in learning, and to how teaching should be built around it.', more: 'ai' },
     { id: 'soul', x: 592, y: 60, r: 6, label: 'The soul',
-      body: 'What is embodied, and what survives. Two papers in 2017: <em>Immortal and Separable Soul in Aristotle</em> (PSSA, Rhodes University) and <em>Embodiment in Bloom, Plotinus and Iamblichus</em> (University of the Western Cape).' },
+      body: 'What is embodied, and what survives. Two papers in 2017: <em>Immortal and Separable Soul in Aristotle</em> (PSSA, Rhodes University) and <em>Embodiment in Bloom, Plotinus and Iamblichus</em> (University of the Western Cape).', more: 'papers' },
     { id: 'hidden', x: 500, y: 310, r: 5.5, label: 'Reading hidden texts',
-      body: 'How to read a text that holds something back. Paper: <em>Reflexive Esotericism: Insights from Literary and Theological Hermeneutics</em>, PSSA, 2025.' },
+      body: 'How to read a text that holds something back. Paper: <em>Reflexive Esotericism: Insights from Literary and Theological Hermeneutics</em>, PSSA, 2025.', more: 'papers' },
     { id: 'decol', x: 668, y: 406, r: 6, label: 'Decolonial curricula',
       body: 'An introduction to philosophy that follows it around the globe, not only through the West. I created <em>Introduction to Metaphysics and Epistemology</em> in 2019, and it is still in use at the University of Pretoria in 2026.', more: 'guide-c2' }
   ];
@@ -904,7 +905,7 @@
     ['plato', 'rorty'], ['rorty', 'life'], ['rorty', 'meta'], ['soul', 'plato'], ['soul', 'aristotle'], ['soul', 'neo'], ['hidden', 'eso'], ['hidden', 'plato'], ['decol', 'african'], ['decol', 'egypt'], ['decol', 'life']];
   NODES.forEach(n => {
     const links = (n.links || []).map(l => '<li><a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + '</a></li>').join('');
-    library['star-' + n.id] = { title: n.label, ch: 'think', html: '<p class="when">A star in my research</p><p>' + n.body + '</p>' + (links ? '<ul class="list">' + links + '</ul>' : '') + '<p class="more">' + (n.more ? '<button type="button" data-sheet="' + n.more + '">Go further →</button> ' : '') + '<button type="button" data-sheet="publications">Research and publications →</button></p>' };
+    library['star-' + n.id] = { title: n.label, ch: 'think', html: '<p class="when">A star in my research</p><p>' + n.body + '</p>' + (links ? '<ul class="list">' + links + '</ul>' : '') + '<p class="more">' + (n.more === 'papers' ? '<button type="button" data-sheet="publications" data-at="papers">Conference papers →</button> ' : n.more ? '<button type="button" data-sheet="' + n.more + '">Go further →</button> ' : '') + '<button type="button" data-sheet="publications">Research and publications →</button></p>' };
   });
   const sky = $('#sky'), NS = 'http://www.w3.org/2000/svg';
   const mk = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };

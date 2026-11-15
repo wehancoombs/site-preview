@@ -709,3 +709,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
   - About me has three buttons (About me, Qualifications, Why I teach) and four research links (Papers is gone, since the papers are inside Research). Five stars that had "Go further" to the papers now have only "Research and publications".
   - The build stops if anything on the page still asks for a removed pop-up.
 - Site text written again; Google Doc "Site text – three-cabinet site (v59, 38 pop-ups)".
+
+## 2026-11-16: the papers links come back (v=60 on `services`, on the staging site, not live)
+
+- He was not happy to lose the Papers link under the constellation and the stars' button to the papers. Both are back and open Research and publications at its Conference papers section (`data-at="papers"` on the button, `data-anchor="papers"` on the heading; the click handler scrolls the pop-up there). On the five stars the button reads "Conference papers →".
