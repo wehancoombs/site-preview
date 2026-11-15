@@ -567,3 +567,12 @@ Wehan briefed a sixth cabinet, Counsel, with the services re-sorted (Tutoring un
 
 What he said along the way, worth remembering: a detail page that is a list of text is "terrible, boring"; he wants them visual and alive. The tetraktys he likes is the 3D one.
 
+## 2026-11-15: the services rebuild, started (branch `services`, nothing live)
+
+Wehan briefed a rebuild as a plain services site: who he is, what he sells, what it costs, how to book. First screen: his name and one-sentence description, a line drawing of him pointing at a board of three columns (Teach, Design, Consult); About below it; contact as a slim bar fixed to the bottom of every screen. Light and dark follow the visitor's system setting.
+
+- The live site is tagged `before-services` (f07bae5, on GitHub). To go back he says: "Restore the site to before-services".
+- All new work is on the local branch `services`. `main` and the live site are untouched until he says "publish".
+- His drawing is saved as supplied at `assets/wehan-drawing.webp` (1024 x 1536, black lines on white). A see-through version that takes the text colour is still to be made from it.
+- Status: the list of pieces worth keeping and a short plan were given to him; waiting for his yes before building.
+
