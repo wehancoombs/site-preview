@@ -1048,24 +1048,41 @@
     const TLINKS = [];
     for (let a = 0; a < P.length; a++) for (let b = a + 1; b < P.length; b++) if (Math.abs(gap3(P[a], P[b]) - nearest) < 1e-6) TLINKS.push([a, b, 1]);
     const glow = P.map(() => 0); let lastSpark = 0;
-    // The ten points can also show as ones and noughts, and then as ten old words. A tap moves on; left alone, it moves on by itself.
-    const TERMS = ['νοῦς', 'ψυχή', 'ἀπορία', 'sympadeia', 'maat', 'ज्ञान', 'חכמה', 'schola', '道', 'ubuntu'];
+    // Now and then the ten points flicker into ones and noughts, and back.
     const K = { phase: 0, from: 0, at: 0, flip: 0, bits: P.map((p, i) => i % 2 ? '1' : '0') };
-    function stepTerms() { K.from = K.phase; K.phase = (K.phase + 1) % 3; K.at = performance.now(); }
+    function stepTerms() { K.from = K.phase; K.phase = (K.phase + 1) % 2; K.at = performance.now(); }
     function tetraktys(t) {
       const n = performance.now();
       if (!reduced && t - lastSpark > 520) { lastSpark = t; glow[Math.floor(Math.random() * glow.length)] = 1; }   // now and then one point lights
       for (let i = 0; i < glow.length; i++) glow[i] *= .965;                                                          // and slowly dims
       if (T.cur !== 3 || T.mixing) { K.phase = K.from = 0; K.at = n - 900; }                                          // it always arrives as points
-      else if (!reduced && n - K.at > (K.phase ? 6500 : 11000)) stepTerms();
+      else if (!reduced && n - K.at > (K.phase ? 4500 : 9000)) stepTerms();
       if (K.phase === 1 && n - K.flip > 130) { K.flip = n; K.bits[Math.floor(Math.random() * K.bits.length)] = Math.random() < .5 ? '0' : '1'; }
       const m = clamp01((n - K.at) / 900), w = ph => K.phase === K.from ? (ph === K.phase ? 1 : 0) : ph === K.phase ? m : ph === K.from ? 1 - m : 0;
       const size = TW * .052, labels = [];
       P.forEach((p, i) => {
         if (w(1) > .02) labels.push({ i, text: K.bits[i], size: size * 1.7, serif: false, alpha: w(1) });
-        if (w(2) > .02) labels.push({ i, text: TERMS[i], size, serif: true, alpha: w(2) });
       });
       return { pts: P.map((p, i) => ({ p: [p[0], p[1] - .12, p[2]], r: (1 + glow[i] * .9) * (.22 + .78 * w(0)), g: glow[i] })), links: TLINKS, labels };
+    }
+
+    /* A person: a column of linked centres, with pairs to either side. It gathers itself into a single sphere, rests, and opens out again. */
+    const BODY = [[0, -.85, 0], [0, -.42, 0], [0, 0, 0], [0, .42, 0], [0, .85, 0], [-.46, -.62, .16], [.46, -.62, .16], [-.5, -.02, -.16], [.5, -.02, -.16], [-.42, .6, .16], [.42, .6, .16]];
+    const BLINKS = [[0, 1], [1, 2], [2, 3], [3, 4], [5, 6], [7, 8], [9, 10], [0, 5], [0, 6], [5, 1], [6, 1], [5, 7], [6, 8], [1, 7], [1, 8], [7, 3], [8, 3], [7, 9], [8, 10], [3, 9], [3, 10], [9, 4], [10, 4]].map(l => [l[0], l[1], 1]);
+    function person(t) {
+      const c = pulse(t + 3000, 10000, 4200, 1300), k = 1 - .97 * c, br = .5 + .5 * Math.sin(t * .002);
+      return { pts: BODY.map((p, i) => ({ p: [p[0] * k, p[1] * k, p[2] * k], r: i === 2 ? 1.15 + 2.6 * c + .3 * c * br : (i < 5 ? 1 : .8) * (1 - c), g: i === 2 ? c * .8 : .25 * Math.max(0, Math.sin(t * .0016 - i * .7)) })),
+               links: BLINKS.map(l => [l[0], l[1], 1 - c]), labels: [] };
+    }
+
+    /* A university: a star tetrahedron, two tetrahedra through one another, its eight points lighting and dimming in turn. */
+    const STAR = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]].map(v => v.map(x => x * .56)), STAR8 = STAR.concat(STAR.map(v => v.map(x => -x)));
+    const SLINKS = []; for (let h = 0; h < 2; h++) for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) SLINKS.push([h * 4 + a, h * 4 + b, 1]);
+    const sglow = STAR8.map(() => 0); let sSpark = 0;
+    function merkaba(t) {
+      if (!reduced && t - sSpark > 430) { sSpark = t; sglow[Math.floor(Math.random() * 8)] = 1; }
+      for (let i = 0; i < 8; i++) sglow[i] *= .955;
+      return { pts: STAR8.map((p, i) => ({ p, r: 1 + sglow[i] * 1.1, g: sglow[i] })), links: SLINKS, labels: [] };
     }
 
     /* 5. Classes: a ring of seats, one of them the teacher's. Talk crosses the ring between seats, not only to and from the front. */
@@ -1130,13 +1147,15 @@
       { key: 'classes', what: 'Seats', frame: classes },
       { key: 'courses', what: 'Hall', frame: lectures },
       { key: 'design', what: 'Shelf', frame: moduleShelf },
-      { key: 'design', what: 'Stair', frame: curriculum }
+      { key: 'design', what: 'Stair', frame: curriculum },
+      { key: 'consulting', what: 'Centres', frame: person },
+      { key: 'consulting', what: 'Star', frame: merkaba }
     ];
-    const SETS = { teach: [0, 1, 4, 5], design: [2, 6, 7], consult: [3] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
+    const SETS = { teach: [0, 1, 4, 5], design: [2, 6, 7], consult: [8, 3, 9] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
-    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'Consulting', 'Classes', 'Lectures', 'A module', 'A curriculum'];
+    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'A school', 'Classes', 'Lectures', 'A module', 'A curriculum', 'A person', 'A university'];
     function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = 'drag to turn · tap to change'; }
-    function tapShape() { if (SETS[T.set].length > 1) nextShape(); else if (T.cur === 3) stepTerms(); }
+    function tapShape() { nextShape(); }
     // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.
     function goShape(i) {
       T.want = i; T.since = performance.now();
