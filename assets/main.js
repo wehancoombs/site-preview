@@ -1012,7 +1012,7 @@
     }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => sprites.clear());   // redraw the words once the real typefaces have arrived
     sizeTetra = () => { TW = tc.getBoundingClientRect().width || 300; tc.width = tc.height = Math.round(TW * DPR); tx.setTransform(DPR, 0, 0, DPR, 0, 0); tx.imageSmoothingQuality = 'high'; sprites.clear(); };
-    new IntersectionObserver(es => { T.seen = es[0].isIntersecting; }, { threshold: 0 }).observe(tc);
+    new IntersectionObserver(es => { const now = es[0].isIntersecting; if (now && !T.seen) T.since = performance.now(); T.seen = now; }, { threshold: 0 }).observe(tc);   // the wait for the next shape starts when the cabinet comes into view
     tc.addEventListener('pointerdown', e => { if (e.button) return; T.drag = { x: e.clientX, y: e.clientY, moved: 0 }; tc.classList.add('dragging'); try { tc.setPointerCapture(e.pointerId); } catch (err) {} });
     tc.addEventListener('pointermove', e => {
       if (!T.drag) return;

@@ -556,3 +556,14 @@ Pushed live on his "Publish" (v=39, checked on the live site). The tag `before-q
 
 Wehan found the quill "a bit off" and was not happy with the inkpot. The Tutoring shape is now a larger and a smaller quill writing together: both nibs go round a flat page in curls (about fourteen seconds a turn), each quill trailing behind its nib and rocking with every curl, each leaving a line of ink that fades; the smaller follows half a turn behind and writes over the same line as the larger one's ink fades. One quill is defined once (`QUILL`, nib at the origin) and placed twice by `quill(t)`. The caption under it changed from "Quill" to "Quills" (the one wording change, flagged to him).
 
+## 2026-11-15: the Counsel direction tried and dropped; the site stays at stable-simple
+
+Wehan briefed a sixth cabinet, Counsel, with the services re-sorted (Tutoring under Teach, Lesson plans under Make, consulting under Counsel). It was built and reviewed locally, never pushed. After two looks he decided against the direction and asked to go back to `stable-simple` (26f35a5, the five-cabinet site), bringing over only general upgrades that make sense.
+
+- `main` was reset to `stable-simple`. The whole Counsel build is kept on the local branch `counsel-abandoned` (three commits), in case any of it is wanted later: the `makeStage` wireframe factory, a scene inside a pop-up, the gold 3D tetraktys with a 1s-and-0s state, the Counsel detail cards, the Amethyst colour. Tags `stable-simple` and `before-counsel` are on GitHub and point at the same commit.
+- One general upgrade came over, committed on main, not pushed (v=40): the Make object now starts its thirteen-second wait when the cabinet comes into view, so it no longer changes shape the moment you arrive.
+- Not brought over, because each only made sense with Counsel: the fourth home button, the Tutoring row, the three-card Make detail, the pop-up chapter moves, the booking pop-up taking another cabinet's colour.
+- `../site-text.md` has the Counsel material removed; its Teach and Make sections were rewritten by hand to match the site as it is.
+
+What he said along the way, worth remembering: a detail page that is a list of text is "terrible, boring"; he wants them visual and alive. The tetraktys he likes is the 3D one.
+
