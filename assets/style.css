@@ -1304,6 +1304,17 @@ html.first-visit .me.in { opacity: 1; }
   .p-guides { grid-area: guides; } .p-arc { grid-area: arc; } .p-links { grid-area: links; } .p-sky { grid-area: sky; }
 }
 
+/* A card may have a small heading over its list, and a second column of its own above the quotation (A university) */
+.bb-sub { margin: clamp(10px, 1.8vh, 16px) 0 0; }
+.bb-sub + .bb-lines { margin-top: 2px; }
+.sheet-body .bb-side .bb-para { margin-top: 0; }
+.bb-side .bb-proof { margin-top: clamp(8px, 1.4vh, 12px); padding: 13px 18px 12px; font-size: clamp(15.5px, 1.35vw, 17px); line-height: 1.4; }
+.bb-side .bb-proof::before { height: 16px; font-size: 42px; }
+.bb-side .bb-proof small { margin-top: 6px; }
+.bb-short:has(> .bb-side) { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 20px clamp(20px, 2.6vw, 36px); margin-bottom: clamp(10px, 1.8vh, 16px); }
+.sheet-body .bb-side .bb-para, .bb-side .bb-lines.long li { font-size: clamp(14.5px, 1.2vw, 15.5px); line-height: 1.45; }
+.bb-side .bb-lines.long li, .bb-sub + .bb-lines.long li { padding-top: clamp(4px, .8vh, 7px); padding-bottom: clamp(4px, .8vh, 7px); }
+
 /* The lesson spines on the Classes card: the shelf is short there, so the names are set smaller and closer to the ends of their spines */
 .bb-extra .shelf .book, .bb-extra .shelf .case { padding: 6px 0; white-space: nowrap; }
 .bb-extra .shelf .book { font-size: clamp(12px, 1.75vh, 16px); }
@@ -1383,7 +1394,7 @@ html.first-visit .me.in { opacity: 1; }
   .bb-head { gap: 12px; margin-bottom: 14px; }
   .bb-icon { width: 50px; }
   .bb-head .bb-title { font-size: 28px; }
-  .bb-short.wide { grid-template-columns: minmax(0, 1fr); }
+  .bb-short.wide, .bb-short:has(> .bb-side) { grid-template-columns: minmax(0, 1fr); }
   .deck { padding: 0 58px 16px 0; }
   .deck-next { width: 42px; height: 42px; }
   .bb-extra .deck .lecture .play { width: 52px; height: 52px; }
@@ -1417,7 +1428,7 @@ html.first-visit .me.in { opacity: 1; }
   .cab.home.pane { padding-bottom: calc(var(--bar-h) + 8px); }
   .cab-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .cab-door b { font-size: 20px; }
-  .ab-main .sky { aspect-ratio: 360 / 524; max-height: calc(100vh - 250px); }
+  .ab-main .sky { aspect-ratio: 360 / 548; max-height: calc(100vh - 250px); }
   @supports (height: 100svh) { .ab-main .sky { max-height: calc(100svh - 250px); } }
   .ab-side .eyebrow { display: none; }
   .about-grid { gap: 12px; }

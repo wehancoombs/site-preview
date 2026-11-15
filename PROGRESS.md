@@ -686,3 +686,15 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - The planet is calmer ("more water and less jello"): the wobble is a quarter of what it was and four times slower, a touch sends one slow ring that eases out as on a pond, a drag pulls it gently and it drifts back without bouncing, and the ripples across its face are two slow ones.
 - About me: "10 weeks in charge of classes" is out; "4,000+ students taught" is in, second in the row after "15 years lecturing" (the figure is the one explained in the pop-up "Courses designed and taught", which it opens). The six figures are one row. The ten weeks are still mentioned inside the pop-ups about the two schools.
 - The Google Doc is now simply "Site text – three-cabinet site" (no version in the name); small changes are made in it with find-and-replace, so no new copy each time.
+
+## 2026-11-15, his lines from the chat (v=57 on `services`, on the staging site, not live)
+
+- Tag `draft-stable` (local): the site at v=56, saved at his word before these changes. To go back: "Restore the draft to draft-stable".
+- A curriculum: his line ("Modules ordered so that each builds on the last.") and his card text. No longer drafts.
+- A university: his card. Left: the line, "What you receive" and three points. Right: his research sentence, the two points about his 2026 honours module, and Dr Black's quotation under them (`head` and `side` in DETAILS). The one-line description is kept by him as it is.
+- The constellation has fifteen stars. "Rorty" is "Ethics & politics" (joined to A way of life and Metacrisis; its old link to Plato is gone, since his list of connections did not include it). New: The soul, Reading hidden texts, Decolonial curricula, with his notes and connections; each has a "Go further" button like the other stars (papers, papers, the FIL110 study guide). A way of life moved a little on the wide layout to keep a line clear of it. The phone layout was laid out again in a slightly taller frame (360 by 548); a check in the preview found no name touching another name or star, at laptop or phone size.
+- Writing: one rate, "From R450 an hour", on the board, the card, the pop-up and "Working with me". No "tracked changes" ("comments in the margin"), "comments on the sentences" for "the sentence-level pass", the study-guide and course-material lines and the digital PR line removed, and the small line reads "Essays · Theses".
+- "Working with me", first bullet: "Open Details on any service and press Request. It drafts a message ..."
+- The description shown when the link is shared is the same as the search description.
+- Ten DRAFT-WEHAN placeholders in `index.html` now, plus the ten landing-word lines in `main.js`.
+- Site text written again; fresh Google Doc "Site text – three-cabinet site (fresh, v57)". The earlier one is renamed "OLD ...".

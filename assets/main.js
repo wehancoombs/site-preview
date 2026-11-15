@@ -661,14 +661,14 @@
     // A module: what a module comes with, the modules he has designed (the paragraph that used to sit under A curriculum), and the study guides.
     module: { line: true, inline: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.make.items[4], request: 'design', more: 'design',
       extra: () => '<p class="eyebrow">Study guides I wrote · tap one to read it</p>' + GUIDES_HTML },
-    // DRAFT-WEHAN: A curriculum. His own account of it (2026-11-15): modules stacked so that they make sense together, which he did for first- and second-year modules. He has no document that proves it.
-    curriculum: { line: true, text: () => 'A curriculum is modules stacked in an order that makes sense, at school or at university. At the University of Pretoria I made sure that the first- and second-year modules I designed fitted what came before and after them.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
+    // A curriculum: his own lines (chat of 2026-11-15).
+    curriculum: { line: true, text: () => 'A curriculum is a set of modules in an order that makes sense, so that each one prepares for the next. At the University of Pretoria I designed first- and second-year philosophy modules to fit what came before and after them, and helped plan that order with the department.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
     school: { line: true, lines: () => part('consulting', '.list li'), long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
-    // DRAFT-WEHAN: "My research focuses on" is his phrase; the rest is the question from the pop-up "Teaching in the age of AI". No fellowship, no project title.
-    // The two lines under it (DRAFT-WEHAN too) are facts from the pop-up "Curriculum and course development", and the quotation is from the pop-up "Teaching in the age of AI".
-    university: { line: true, linesLast: true, long: true, text: () => 'My research focuses on teaching in the age of AI: if a machine can produce the standard essay, what part of learning cannot be automated, and how should teaching be built around it?',
-      lines: () => ['My 2026 honours module was assessed through video essays, podcasts and written work', 'Its last assessment was a sit-down essay on an unseen question: the role of philosophy in a world of AI'],
+    // A university: his own lines (chat of 2026-11-15). What the university receives, on the left; his research and how he assessed his own module, on the right, above the quotation.
+    university: { line: true, long: true, head: 'What you receive',
+      lines: () => ['A written review of the module’s assessments: which ones a machine can now complete, and which still test the student', 'The weak assessments redesigned, ready to use', 'One meeting with the lecturer to talk it through'],
+      side: () => '<p class="bb-para">My research is on teaching in the age of AI: what part of learning cannot be automated, and how to build teaching around it.</p><ul class="bb-lines long"><li>My 2026 honours module was assessed through video essays, podcasts and written work</li><li>Its last assessment was a sit-down essay on an unseen question: the role of philosophy in a world of AI</li></ul>',
       quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
@@ -684,11 +684,12 @@
       '<div class="bb-head"><span class="bb-icon" aria-hidden="true"><svg viewBox="0 0 48 48">' + ART[DETAIL_ART[id]] + '</svg></span><div><h3 class="bb-title" id="bb-title" tabindex="-1"></h3><p class="bb-rate">' + $('.item-rate', it).innerHTML + '</p></div></div>' +
       '<div class="sheet-body bb-text"><div class="bb-short' + (d.wide ? ' wide' : '') + '"><div>' +
         (d.line ? '<p class="bb-line">' + $('.item-line', it).innerHTML + '</p>' : '') +
+        (d.head ? '<p class="eyebrow bb-sub">' + d.head + '</p>' : '') +
         (d.lines && !d.linesLast ? ul : '') +
         (d.text ? '<p class="bb-para">' + d.text() + '</p>' : '') +
         (d.lines && d.linesLast ? ul : '') +
         (d.extra && d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
-      '</div><blockquote class="bb-proof"><p>' + q[0] + '</p><small>' + q[1] + '</small></blockquote></div>' +
+      '</div>' + (d.side ? '<div class="bb-side">' + d.side() : '') + '<blockquote class="bb-proof"><p>' + q[0] + '</p><small>' + q[1] + '</small></blockquote>' + (d.side ? '</div>' : '') + '</div>' +
       (d.extra && !d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
       '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call') + (d.more ? btn('', d.more, 'More →') : '') + '</p></div>';
     const title = $('.bb-title', bbDetail);
@@ -881,19 +882,26 @@
       body: 'Hidden teachings, and how to read them. Honours course: <em>The (Secret) History of Thought</em> (2024, 2025). Paper: <em>Reflexive Esotericism: Insights from Literary and Theological Hermeneutics</em>, PSSA, 2025.', more: 'guide-c3' },
     { id: 'african', x: 880, y: 405, r: 6.5, label: 'African esotericism',
       body: 'Postdoctoral Research Fellow at the University of Johannesburg, 2024 to 2026: <em>Platonic and African Esotericism</em>, with an eye on decolonial curricula.', more: 'posts' },
-    { id: 'life', x: 265, y: 325, r: 6.5, label: 'A way of life',
+    { id: 'life', x: 255, y: 342, r: 6.5, label: 'A way of life',
       body: 'Philosophy as practice, not only doctrine. Designed and taught <em>The Good Life</em> (FIL220, 2024).', more: 'guide-c4' },
     { id: 'nature', x: 115, y: 400, r: 5.5, label: 'Animism & nature',
       body: '<em>Animism, Consilience and the Rights of Nature</em>, co-presented at the South African Society for Environmental Philosophy, North-West University, 2025.', more: 'papers' },
-    { id: 'rorty', x: 75, y: 250, r: 5, label: 'Rorty',
-      body: 'An early article: <em>Contingency, irony and morality: a critical review of Rorty’s notion of the liberal utopia</em>, Humanities, 2013.',
+    { id: 'rorty', x: 96, y: 246, r: 5.5, label: 'Ethics & politics',
+      body: 'An early article, <em>Contingency, irony and morality: a critical review of Rorty’s notion of the liberal utopia</em> (Humanities, 2013). In 2018 I redesigned <em>Introduction to Moral and Political Philosophy</em> for business students.',
       links: [['Read the article', 'https://doi.org/10.3390/h2020313']] },
     { id: 'meta', x: 450, y: 405, r: 5.5, label: 'Metacrisis',
       body: '<em>Is Philosophy A(gnostic)? Post-disciplinary Interventions in the Time of Metacrisis</em>, PSSA Annual Conference, University of Cape Town, 2026, with Mitchell Black.', more: 'papers' },
     { id: 'ai', x: 340, y: 55, r: 6.5, label: 'AI & the humanities',
-      body: 'What is human teaching for, once a machine can write the essay? My current project, <em>Socratic Pedagogy beyond the AI Horizon</em>, reads Plato’s <em>Phaedrus</em> as a guide to what cannot be automated in learning, and to how teaching should be built around it.', more: 'ai' }
+      body: 'What is human teaching for, once a machine can write the essay? My current project, <em>Socratic Pedagogy beyond the AI Horizon</em>, reads Plato’s <em>Phaedrus</em> as a guide to what cannot be automated in learning, and to how teaching should be built around it.', more: 'ai' },
+    { id: 'soul', x: 592, y: 60, r: 6, label: 'The soul',
+      body: 'What is embodied, and what survives. Two papers in 2017: <em>Immortal and Separable Soul in Aristotle</em> (PSSA, Rhodes University) and <em>Embodiment in Bloom, Plotinus and Iamblichus</em> (University of the Western Cape).', more: 'papers' },
+    { id: 'hidden', x: 500, y: 310, r: 5.5, label: 'Reading hidden texts',
+      body: 'How to read a text that holds something back. Paper: <em>Reflexive Esotericism: Insights from Literary and Theological Hermeneutics</em>, PSSA, 2025.', more: 'papers' },
+    { id: 'decol', x: 668, y: 406, r: 6, label: 'Decolonial curricula',
+      body: 'An introduction to philosophy that follows it around the globe, not only through the West. I created <em>Introduction to Metaphysics and Epistemology</em> in 2019, and it is still in use at the University of Pretoria in 2026.', more: 'guide-c2' }
   ];
-  const EDGES = [['plato', 'aristotle'], ['plato', 'neo'], ['plato', 'eso'], ['plato', 'life'], ['plato', 'rorty'], ['neo', 'theurgy'], ['neo', 'egypt'], ['theurgy', 'egypt'], ['eso', 'african'], ['eso', 'neo'], ['eso', 'meta'], ['life', 'nature'], ['life', 'meta'], ['nature', 'meta'], ['african', 'egypt'], ['plato', 'ai'], ['ai', 'life']];
+  const EDGES = [['plato', 'aristotle'], ['plato', 'neo'], ['plato', 'eso'], ['plato', 'life'], ['neo', 'theurgy'], ['neo', 'egypt'], ['theurgy', 'egypt'], ['eso', 'african'], ['eso', 'neo'], ['eso', 'meta'], ['life', 'nature'], ['life', 'meta'], ['nature', 'meta'], ['african', 'egypt'], ['plato', 'ai'], ['ai', 'life'],
+    ['rorty', 'life'], ['rorty', 'meta'], ['soul', 'plato'], ['soul', 'aristotle'], ['soul', 'neo'], ['hidden', 'eso'], ['hidden', 'plato'], ['decol', 'african'], ['decol', 'egypt'], ['decol', 'life']];
   NODES.forEach(n => {
     const links = (n.links || []).map(l => '<li><a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + '</a></li>').join('');
     library['star-' + n.id] = { title: n.label, ch: 'think', html: '<p class="when">A star in my research</p><p>' + n.body + '</p>' + (links ? '<ul class="list">' + links + '</ul>' : '') + '<p class="more">' + (n.more ? '<button type="button" data-sheet="' + n.more + '">Go further →</button> ' : '') + '<button type="button" data-sheet="publications">Research and publications →</button></p>' };
@@ -902,7 +910,8 @@
   const mk = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
   const put = (e, a) => { for (const k in a) e.setAttribute(k, a[k]); };
   // On a phone the same twelve stars are laid out again in a tall frame, so that every star and every name fits the screen with no sideways scrolling.
-  const TALL = { ai: [112, 42], theurgy: [290, 46], aristotle: [62, 132], neo: [238, 130], rorty: [44, 236], plato: [172, 236], egypt: [308, 222], life: [78, 340], eso: [254, 332], nature: [74, 452], meta: [178, 420], african: [264, 492] };
+  const TALL = { ai: [100, 38], theurgy: [304, 44], aristotle: [56, 126], soul: [184, 112], neo: [282, 130], rorty: [68, 220], plato: [182, 214], egypt: [314, 214], life: [64, 318], hidden: [172, 304], eso: [276, 322],
+    meta: [140, 404], decol: [262, 402], nature: [74, 484], african: [238, 500] };
   const byId = {}; NODES.forEach(n => { byId[n.id] = n; });
   const edgeEls = EDGES.map(([a, b]) => { const l = mk('line', {}); l.dataset.a = a; l.dataset.b = b; sky.appendChild(l); return l; });
   const nodeEls = {};
@@ -929,7 +938,7 @@
   const narrowSky = matchMedia('(max-width: 640px)');
   function placeSky() {
     const tall = narrowSky.matches, k = tall ? .72 : 1, at = n => tall ? TALL[n.id] : [n.x, n.y];
-    sky.setAttribute('viewBox', tall ? '0 0 360 524' : '0 0 1040 450'); sky.classList.toggle('tall', tall);
+    sky.setAttribute('viewBox', tall ? '0 0 360 548' : '0 0 1040 450'); sky.classList.toggle('tall', tall);
     NODES.forEach(n => {
       const p = at(n), r = n.r * k;
       put(n.hit, { cx: p[0], cy: p[1], r: tall ? 24 : 28 }); put(n.glow, { cx: p[0], cy: p[1], r: r * 2.4 }); put(n.dot, { cx: p[0], cy: p[1], r: r }); put(n.tx, { x: p[0], y: p[1] + r + (tall ? 17 : 24) });
