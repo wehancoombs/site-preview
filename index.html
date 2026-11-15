@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=62">
+<link rel="stylesheet" href="assets/style.css?v=63">
 </head>
 <body data-chapter="threshold">
 
@@ -299,8 +299,14 @@
         <div class="ab-id">
           <button class="ab-seal" id="ab-seal" type="button" aria-label="Docendo discimus. Press to spin the coin.">
             <svg viewBox="0 0 120 120" aria-hidden="true">
-              <defs><path id="sp-ab" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
-              <circle class="seal-ring" cx="60" cy="60" r="56"/>
+              <defs>
+                <path id="sp-ab" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/>
+                <radialGradient id="coin-face" cx="34%" cy="28%" r="80%"><stop class="coin-lit" offset="0"/><stop class="coin-mid" offset=".55"/><stop class="coin-dim" offset="1"/></radialGradient>
+              </defs>
+              <circle class="coin-edge" cx="60" cy="60" r="58.2"/>
+              <circle class="seal-ring" cx="60" cy="60" r="55.5"/>
+              <circle class="coin-shine" cx="60" cy="60" r="53" transform="rotate(-158 60 60)"/>
+              <circle class="coin-inner" cx="60" cy="60" r="35.5"/>
               <text class="seal-text"><textPath href="#sp-ab">Docendo discimus · Docendo discimus · </textPath></text>
               <text class="seal-letter" x="60" y="75">W</text>
               <path class="seal-hex" d="M60,35 L81.7,72.5 L38.3,47.5 L60,85 L81.7,47.5 L38.3,72.5 Z"/>
@@ -1171,7 +1177,7 @@
 
 </div>
 
-<script src="assets/main.js?v=62"></script>
+<script src="assets/main.js?v=63"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

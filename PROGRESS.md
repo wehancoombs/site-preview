@@ -726,3 +726,8 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: the coin's signs (v=62 on `services`, on the staging site, not live)
 
 - The page sway is gone. While the coin spins, its W flickers through phi, the unicursal hexagram (drawn in the seal as a path), Om, yin and yang, the eye of Ra (the hieroglyph U+13080) and back to W, 135 ms each. "Ohm" was read as Om.
+
+## 2026-11-16: the coin, a little fancier (v=63 on `services`, on the staging site, not live)
+
+- Each sign on the coin shows for a fifth of a second (200 ms); the spin lasts 1.65 s to hold all six.
+- The coin has a milled edge (a dashed ring), a face lit from the upper left (a radial gradient), a thin inner ring, a short highlight on the rim and a soft shadow. He asked for "a little 3d, textured ... dont overdo it".

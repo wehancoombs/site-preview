@@ -733,8 +733,8 @@
       coinTimers.forEach(clearTimeout); showSign('W');
       abSeal.classList.remove('spin'); void abSeal.offsetWidth;   // so that a second press starts it again
       abSeal.classList.add('spin');
-      coinTimers = SIGNS.map((s, i) => setTimeout(() => showSign(s), 240 + i * 135));
-      coinTimers.push(setTimeout(() => abSeal.classList.remove('spin'), 1400));
+      coinTimers = SIGNS.map((s, i) => setTimeout(() => showSign(s), 260 + i * 200));   // a fifth of a second for each sign
+      coinTimers.push(setTimeout(() => abSeal.classList.remove('spin'), 1750));
       track('coin');
     });
   }
