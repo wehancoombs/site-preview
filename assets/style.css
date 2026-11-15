@@ -1265,14 +1265,17 @@ html.first-visit .me.in { opacity: 1; }
 /* The coin: a milled edge, a face lit from the upper left, a thin inner ring and a soft shadow. Kept quiet. */
 .ab-seal svg { filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .42)); }
 :root[data-theme="light"] .ab-seal svg { filter: drop-shadow(0 2px 4px rgba(60, 40, 10, .28)); }
-.coin-lit { stop-color: color-mix(in srgb, var(--accent) 55%, #fff); stop-opacity: .34; }
+.coin-lit { stop-color: color-mix(in srgb, var(--accent) 70%, #fff); stop-opacity: .2; }
 .coin-mid { stop-color: var(--accent); stop-opacity: .12; }
 .coin-dim { stop-color: color-mix(in srgb, var(--accent) 70%, #000); stop-opacity: .3; }
 .ab-seal .seal-ring, .ab-seal:hover .seal-ring, .ab-seal:focus-visible .seal-ring { fill: url(#coin-face); stroke-width: 1.4; }
-.ab-seal:hover .coin-lit, .ab-seal:focus-visible .coin-lit { stop-opacity: .5; }
-.coin-edge { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-dasharray: 1.1 1.9; opacity: .75; }
+.ab-seal:hover .coin-lit, .ab-seal:focus-visible .coin-lit { stop-opacity: .32; }
+/* Its thickness: a second disc a little below the face, darker, with the milling on it; the face has a solid back so the edge does not show through */
+.coin-side { fill: color-mix(in srgb, var(--accent) 42%, var(--bg)); stroke: color-mix(in srgb, var(--accent) 70%, #000); stroke-width: 1; }
+.coin-mill { fill: none; stroke: color-mix(in srgb, var(--accent) 80%, #000); stroke-width: 4.2; stroke-dasharray: .9 1.7; opacity: .8; }
+.coin-back { fill: var(--bg); }
+.ab-seal svg { margin-bottom: 5%; }
 .coin-inner { fill: none; stroke: var(--accent); stroke-width: .8; opacity: .55; }
-.coin-shine { fill: none; stroke: color-mix(in srgb, var(--accent) 35%, #fff); stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 62 271; opacity: .5; }
 @keyframes coin-spin { to { transform: rotateY(1080deg); } }
 .seal-hex { display: none; fill: none; stroke: var(--text); stroke-width: 2.4; stroke-linejoin: round; }
 .ab-seal.hex .seal-hex { display: block; }

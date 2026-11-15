@@ -731,3 +731,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 
 - Each sign on the coin shows for a fifth of a second (200 ms); the spin lasts 1.65 s to hold all six.
 - The coin has a milled edge (a dashed ring), a face lit from the upper left (a radial gradient), a thin inner ring, a short highlight on the rim and a soft shadow. He asked for "a little 3d, textured ... dont overdo it".
+
+## 2026-11-16: a thicker coin (v=64 on `services`, on the staging site, not live)
+
+- The glint on the rim is gone and the face is lit less. The coin has thickness by a sleight: a second, darker disc six units below the face carries the milling, so the coin reads as seen slightly from above with its edge showing (`.coin-side`, `.coin-mill`, `.coin-back`). It is still a flat drawing; in the spin it turns as one piece.
