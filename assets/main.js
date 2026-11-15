@@ -1152,19 +1152,21 @@
     // It answers a touch: pressed, it sends out a ring and wobbles; dragged, it is pulled along and swings back; a pointer passing over it is enough to stir it.
     const ORB = { kick: 0, x: 0, y: 0, vx: 0, vy: 0, rings: [], last: 0, px: 0, py: 0 };
     const orbOn = () => T.cur === 8 && !T.mixing && !reduced;
+    // It is water, not jelly: everything it does is slow, and it settles without bouncing.
+    const RING_MS = 3200;
     function orbPoke(by, gap) { const n = performance.now(); ORB.kick = Math.min(1, ORB.kick + by); if (n - ORB.last > gap) { ORB.last = n; ORB.rings.push(n); } }
-    tc.addEventListener('pointerdown', e => { ORB.px = e.clientX; ORB.py = e.clientY; if (orbOn()) orbPoke(.9, 0); });
+    tc.addEventListener('pointerdown', e => { ORB.px = e.clientX; ORB.py = e.clientY; if (orbOn()) orbPoke(.55, 500); });
     tc.addEventListener('pointermove', e => {
       const dx = e.clientX - ORB.px, dy = e.clientY - ORB.py, far = Math.abs(dx) + Math.abs(dy); ORB.px = e.clientX; ORB.py = e.clientY;
       if (!orbOn() || far < 1 || far > 90) return;
-      if (T.drag) { ORB.vx += dx * .0016; ORB.vy += dy * .0016; orbPoke(.2, 240); } else orbPoke(.05, 800);
+      if (T.drag) { ORB.vx += dx * .0005; ORB.vy += dy * .0005; orbPoke(.05, 1100); } else orbPoke(.012, 2600);
     });
     function person(t) {
-      ORB.vx = (ORB.vx - ORB.x * .05) * .9; ORB.vy = (ORB.vy - ORB.y * .05) * .9;   // a spring back to the middle
-      ORB.x = Math.max(-.3, Math.min(.3, ORB.x + ORB.vx)); ORB.y = Math.max(-.3, Math.min(.3, ORB.y + ORB.vy)); ORB.kick *= .975;
-      const n = performance.now(); ORB.rings = ORB.rings.filter(s => n - s < 1500);
-      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .33, pulse: .5 + .5 * Math.sin(t * .0021), wave: (t % 3400) / 3400,
-        dx: ORB.x, dy: ORB.y, kick: ORB.kick, wob: t * .012, rings: ORB.rings.map(s => (n - s) / 1500) } };
+      ORB.vx = (ORB.vx - ORB.x * .012) * .86; ORB.vy = (ORB.vy - ORB.y * .012) * .86;   // it drifts back to the middle, and does not overshoot
+      ORB.x = Math.max(-.22, Math.min(.22, ORB.x + ORB.vx)); ORB.y = Math.max(-.22, Math.min(.22, ORB.y + ORB.vy)); ORB.kick *= .988;
+      const n = performance.now(); ORB.rings = ORB.rings.filter(s => n - s < RING_MS);
+      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .33, pulse: .5 + .5 * Math.sin(t * .0011), wave: (t % 6000) / 6000,
+        dx: ORB.x, dy: ORB.y, kick: ORB.kick, wob: t * .0026, rip: t / 5200, rings: ORB.rings.map(s => (n - s) / RING_MS) } };
     }
 
     /* A university: a star tetrahedron, two tetrahedra through one another, its points lighting and dimming in turn. */
@@ -1356,16 +1358,17 @@
           const W = R * (1.05 + 1.5 * o.wave);   // a ring of light leaving it
           tx.lineWidth = 1.6; tx.strokeStyle = 'rgba(' + col + ',' + (.55 * k * (1 - o.wave) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, W, 0, TAU); tx.stroke();
           for (const ph of o.rings) {   // the rings a touch sends out
-            tx.lineWidth = .7 + 2.2 * (1 - ph); tx.strokeStyle = 'rgba(' + col + ',' + (.7 * k * (1 - ph) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, R * (1 + 2.3 * ph), 0, TAU); tx.stroke();
+            const e = 1 - (1 - ph) * (1 - ph);   // a ring slows as it spreads, as on a pond
+            tx.lineWidth = .6 + 1.3 * (1 - ph); tx.strokeStyle = 'rgba(' + col + ',' + (.5 * k * (1 - ph) * (1 - ph) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, R * (1 + 1.9 * e), 0, TAU); tx.stroke();
           }
-          const wb = .13 * o.kick * Math.sin(o.wob);   // touched, the core wobbles like a drop of water: wider, then taller, and settling
+          const wb = .03 * o.kick * Math.sin(o.wob);   // touched, the core gives a little, slowly, and settles
           tx.save(); tx.translate(c.x, c.y); tx.rotate(o.wob * .21); tx.scale(1 + wb, 1 - wb); tx.rotate(-o.wob * .21);
           g = tx.createRadialGradient(-R * .38, -R * .42, R * .04, 0, 0, R);   // the core: lit from the upper left, in shadow at the lower right
           g.addColorStop(0, 'rgba(' + mixc(255, L ? .5 : .82) + ',' + fade.toFixed(3) + ')'); g.addColorStop(.45, 'rgba(' + col + ',' + fade.toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + mixc(0, L ? .45 : .62) + ',' + fade.toFixed(3) + ')');
           tx.fillStyle = g; tx.beginPath(); tx.arc(0, 0, R, 0, TAU); tx.fill();
           if (o.kick > .03) {   // and ripples cross its face
-            tx.save(); tx.clip(); tx.lineWidth = 1.4;
-            for (let i = 0; i < 3; i++) { const q = (o.wob * .05 + i / 3) % 1; tx.strokeStyle = 'rgba(' + mixc(255, L ? .55 : .85) + ',' + (.5 * o.kick * (1 - q) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(-R * .38, -R * .42, R * 1.9 * q, 0, TAU); tx.stroke(); }
+            tx.save(); tx.clip(); tx.lineWidth = 1.1;
+            for (let i = 0; i < 2; i++) { const q = (o.rip + i / 2) % 1; tx.strokeStyle = 'rgba(' + mixc(255, L ? .55 : .85) + ',' + (.32 * Math.min(1, o.kick * 1.6) * Math.sin(Math.PI * q) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(-R * .38, -R * .42, R * 1.9 * q, 0, TAU); tx.stroke(); }
             tx.restore();
           }
           tx.lineWidth = 1.2; tx.strokeStyle = 'rgba(' + mixc(255, L ? .2 : .5) + ',' + (.7 * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(0, 0, R, 0, TAU); tx.stroke();

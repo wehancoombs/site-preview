@@ -680,3 +680,9 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - About me: the motto is back in the foot beside the copyright line (the seal stays); the resume link reads "My full resume".
 - Site text and Google Doc refreshed: "Site text – three-cabinet site (v55, 15 Nov 2026)". The v53 and v54 docs are renamed "OLD ..." for him to delete.
 - His rule from this round: anything mentioned that has a link gets the link.
+
+## 2026-11-15, one more (v=56 on `services`, on the staging site, not live)
+
+- The planet is calmer ("more water and less jello"): the wobble is a quarter of what it was and four times slower, a touch sends one slow ring that eases out as on a pond, a drag pulls it gently and it drifts back without bouncing, and the ripples across its face are two slow ones.
+- About me: "10 weeks in charge of classes" is out; "4,000+ students taught" is in, second in the row after "15 years lecturing" (the figure is the one explained in the pop-up "Courses designed and taught", which it opens). The six figures are one row. The ten weeks are still mentioned inside the pop-ups about the two schools.
+- The Google Doc is now simply "Site text – three-cabinet site" (no version in the name); small changes are made in it with find-and-replace, so no new copy each time.

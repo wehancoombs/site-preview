@@ -1242,7 +1242,7 @@ html.first-visit .me.in { opacity: 1; }
 .ab-side { grid-area: side; min-width: 0; }
 .ab-more { grid-area: more; min-width: 0; align-self: start; }
 .ab-main { grid-area: main; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2.4vh, 24px); }
-.ab-figs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px clamp(18px, 2.6vw, 40px); }
+.ab-figs .stats { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px clamp(12px, 1.8vw, 26px); }   /* six figures in one row */
 .ab-figs .stats b { font-size: clamp(32px, 5vh, 46px); }
 .ab-sky .eyebrow { margin: 0 0 6px; }
 .ab-main .sky { aspect-ratio: auto; height: clamp(220px, calc(100vh - 390px), 500px); overflow: visible; margin: 0; padding: 0; }
@@ -1399,7 +1399,7 @@ html.first-visit .me.in { opacity: 1; }
   /* One column: who he is, the figures, the CVs and links; the constellation comes last and has a view to itself */
   .ab-main { display: contents; }
   .ab-side { order: 0; } .ab-figs { order: 1; } .ab-more { order: 2; } .ab-sky { order: 3; } .ab-main .index { order: 4; }
-  .ab-figs { grid-template-columns: minmax(0, 1fr); }
+  .ab-figs .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 14px; }
   .ab-board .arc svg { max-height: 30vh; }
 }
 @media (max-width: 760px) {
@@ -1421,7 +1421,6 @@ html.first-visit .me.in { opacity: 1; }
   @supports (height: 100svh) { .ab-main .sky { max-height: calc(100svh - 250px); } }
   .ab-side .eyebrow { display: none; }
   .about-grid { gap: 12px; }
-  .ab-figs { gap: 8px; }
   .ab-figs .stats b { font-size: 28px; }
   .bb-extra .shelf { height: 172px; }   /* on a phone the spines are a fixed 150px tall, so the shelf is made tall enough to hold them */
   .home-id .hero-face { width: 78px; }
