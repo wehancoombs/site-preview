@@ -1263,8 +1263,9 @@ html.first-visit .me.in { opacity: 1; }
 .ab-seal:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .ab-seal.spin svg { animation: coin-spin 1.3s cubic-bezier(.3, .1, .2, 1); }
 @keyframes coin-spin { to { transform: rotateY(1080deg); } }
-body.sway main, body.sway .top, body.sway .bar { animation: page-sway 1.3s ease-in-out; transform-origin: 50% 40%; }
-@keyframes page-sway { 0%, 100% { transform: none; } 18% { transform: rotate(.7deg) translateX(5px); } 40% { transform: rotate(-.55deg) translateX(-4px); } 62% { transform: rotate(.3deg) translateX(2px); } 82% { transform: rotate(-.12deg); } }
+.seal-hex { display: none; fill: none; stroke: var(--text); stroke-width: 2.4; stroke-linejoin: round; }
+.ab-seal.hex .seal-hex { display: block; }
+.ab-seal.hex .seal-letter { visibility: hidden; }
 /* Why he teaches: a quotation under the title, where the pop-up used to be a button */
 .ab-why { margin: clamp(10px, 1.8vh, 16px) 0 0; padding: 0 0 0 14px; border-left: 2px solid var(--accent); font: italic 400 clamp(15.5px, 2.1vh, 17.5px)/1.45 var(--serif); color: var(--text-2); }
 .ab-side { padding-bottom: clamp(2px, .6vh, 6px); }

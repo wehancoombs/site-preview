@@ -722,15 +722,22 @@
     $('.deck-n', bbDetail).textContent = (to + 1) + ' of ' + ls.length;
   });
 
-  /* ---------- The coin beside "About me": pressed, it spins, and the whole page sways once ---------- */
+  /* ---------- The coin beside "About me": pressed, it spins, and as it spins its W flickers through five signs and back,
+     almost too fast to be sure of: phi, the unicursal hexagram, Om, yin and yang, the eye of Ra ---------- */
   const abSeal = $('#ab-seal');
-  if (abSeal) abSeal.addEventListener('click', () => {
-    if (reduced) return;
-    abSeal.classList.remove('spin'); body.classList.remove('sway'); void abSeal.offsetWidth;   // so that a second press starts it again
-    abSeal.classList.add('spin'); body.classList.add('sway');
-    setTimeout(() => { abSeal.classList.remove('spin'); body.classList.remove('sway'); }, 1500);
-    track('coin');
-  });
+  if (abSeal) {
+    const letter = $('.seal-letter', abSeal), SIGNS = ['Φ', 'hex', 'ॐ', '☯︎', '𓂀', 'W']; let coinTimers = [];
+    const showSign = s => { abSeal.classList.toggle('hex', s === 'hex'); if (s !== 'hex') letter.textContent = s; };
+    abSeal.addEventListener('click', () => {
+      if (reduced) return;
+      coinTimers.forEach(clearTimeout); showSign('W');
+      abSeal.classList.remove('spin'); void abSeal.offsetWidth;   // so that a second press starts it again
+      abSeal.classList.add('spin');
+      coinTimers = SIGNS.map((s, i) => setTimeout(() => showSign(s), 240 + i * 135));
+      coinTimers.push(setTimeout(() => abSeal.classList.remove('spin'), 1400));
+      track('coin');
+    });
+  }
 
   /* ---------- The sketch fades in the first time the services cabinet comes into view, on a first visit only ---------- */
   const meEl = $('.me');

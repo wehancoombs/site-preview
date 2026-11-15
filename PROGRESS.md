@@ -722,3 +722,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - The About me box on the landing page reads "Qualifications · Research · Resume", since Referees is no longer a place.
 - About me has two buttons: About me, Qualifications.
 - Site text written again; Google Doc "Site text – three-cabinet site (v61, 37 pop-ups)".
+
+## 2026-11-16: the coin's signs (v=62 on `services`, on the staging site, not live)
+
+- The page sway is gone. While the coin spins, its W flickers through phi, the unicursal hexagram (drawn in the seal as a path), Om, yin and yang, the eye of Ra (the hieroglyph U+13080) and back to W, 135 ms each. "Ohm" was read as Om.
