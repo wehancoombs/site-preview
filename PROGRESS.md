@@ -672,3 +672,11 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - One palette everywhere: `--teach`, `--think` and `--make` now point at the green, purple and orange, so the Map, the CVs menu and every pop-up follow. Service pop-ups carry `data-tone` (tutoring, writing, classes green; consulting and "Teaching in the age of AI" purple; design is orange by its chapter), request sheets likewise, and a pop-up opened from the board keeps the colour of the open tab. The lesson and study-guide pop-ups keep the colours of their spines.
 - `../site-text.md` written again by `.claude/export_text.py`; the Google Doc is now "Site text – three-cabinet site (v54, 15 Nov 2026)" (the v53 one is renamed "OLD (replaced by v54) ..." and can be deleted).
 - For a chat (prompt given to him): the curriculum wording and what could stand as proof; what a university gets from an AI review; which stars to add to the constellation; the fifteen drafts.
+
+## 2026-11-15, last round of the night (v=55 on `services`, on the staging site, not live)
+
+- The planet (A person) answers a touch: pressed, it sends out a ring and wobbles like a drop of water, with ripples crossing its face; dragged, it is pulled along and swings back; a pointer passing over it stirs it a little (`ORB` in `main.js`). Still with reduced motion.
+- The stair (A curriculum): the lessons in each step lie flat, as tiles of their own length and width.
+- About me: the motto is back in the foot beside the copyright line (the seal stays); the resume link reads "My full resume".
+- Site text and Google Doc refreshed: "Site text – three-cabinet site (v55, 15 Nov 2026)". The v53 and v54 docs are renamed "OLD ..." for him to delete.
+- His rule from this round: anything mentioned that has a link gets the link.

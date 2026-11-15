@@ -1149,8 +1149,22 @@
 
     /* A person: a small planet with an aura. The core is solid and shaded; the aura swells and fades, and a ring of light leaves it now and then.
        Its one point is its centre, which is where the other shapes gather when they change into it. */
+    // It answers a touch: pressed, it sends out a ring and wobbles; dragged, it is pulled along and swings back; a pointer passing over it is enough to stir it.
+    const ORB = { kick: 0, x: 0, y: 0, vx: 0, vy: 0, rings: [], last: 0, px: 0, py: 0 };
+    const orbOn = () => T.cur === 8 && !T.mixing && !reduced;
+    function orbPoke(by, gap) { const n = performance.now(); ORB.kick = Math.min(1, ORB.kick + by); if (n - ORB.last > gap) { ORB.last = n; ORB.rings.push(n); } }
+    tc.addEventListener('pointerdown', e => { ORB.px = e.clientX; ORB.py = e.clientY; if (orbOn()) orbPoke(.9, 0); });
+    tc.addEventListener('pointermove', e => {
+      const dx = e.clientX - ORB.px, dy = e.clientY - ORB.py, far = Math.abs(dx) + Math.abs(dy); ORB.px = e.clientX; ORB.py = e.clientY;
+      if (!orbOn() || far < 1 || far > 90) return;
+      if (T.drag) { ORB.vx += dx * .0016; ORB.vy += dy * .0016; orbPoke(.2, 240); } else orbPoke(.05, 800);
+    });
     function person(t) {
-      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .33, pulse: .5 + .5 * Math.sin(t * .0021), wave: (t % 3400) / 3400 } };
+      ORB.vx = (ORB.vx - ORB.x * .05) * .9; ORB.vy = (ORB.vy - ORB.y * .05) * .9;   // a spring back to the middle
+      ORB.x = Math.max(-.3, Math.min(.3, ORB.x + ORB.vx)); ORB.y = Math.max(-.3, Math.min(.3, ORB.y + ORB.vy)); ORB.kick *= .975;
+      const n = performance.now(); ORB.rings = ORB.rings.filter(s => n - s < 1500);
+      return { pts: [{ p: [0, 0, 0], r: 0 }], links: [], labels: [], orb: { r: .33, pulse: .5 + .5 * Math.sin(t * .0021), wave: (t % 3400) / 3400,
+        dx: ORB.x, dy: ORB.y, kick: ORB.kick, wob: t * .012, rings: ORB.rings.map(s => (n - s) / 1500) } };
     }
 
     /* A university: a star tetrahedron, two tetrahedra through one another, its points lighting and dimming in turn. */
@@ -1223,7 +1237,7 @@
       return { pts, links, labels: [], quads };
     }
 
-    /* 8. A curriculum: a spiral stair, and every step of it is a module: a row of lesson boxes, laid from the post outwards, like the row above.
+    /* 8. A curriculum: a spiral stair, and every step of it is a module: a row of lessons laid flat, from the post outwards.
        The same ground comes round again, one level higher each time; a light climbs it, a module at a time. */
     const STEP = [.9, 1.16, .78, 1.06, .86];   // five lessons to a step
     function curriculum(t) {
@@ -1232,8 +1246,8 @@
         const th = i * .56, y = -.88 + i * 1.6 / (N - 1), g = Math.max(0, 1 - Math.abs(i - at) / 2), sn = Math.sin(th), cs = Math.cos(th);
         let r = .13;
         for (let b = 0; b < STEP.length; b++) {
-          const k = STEP[(b + i) % STEP.length], s = .052 * k, h = .062 * k, rc = r + s, base = pts.length; r += 2 * s + .022;
-          BOX.forEach(q => { const u = rc + q[0] * s, v = q[2] * s; pts.push({ p: [u * sn + v * cs, y + (q[1] + 1) * h, u * cs - v * sn], r: 0 }); });
+          const k = STEP[(b + i) % STEP.length], s = .056 * k, w = .1 * k, rc = r + s, base = pts.length; r += 2 * s + .016;   // each lesson lies flat: a tile, as long and as wide as its size
+          BOX.forEach(q => { const u = rc + q[0] * s, v = q[2] * w; pts.push({ p: [u * sn + v * cs, y + q[1] * .014, u * cs - v * sn], r: 0 }); });
           EDGES.forEach(e => links.push([base + e[0], base + e[1], .5 + .5 * g]));
           FACES.forEach(f => { const q = f.map(n => base + n); q.a = 1 + 5 * g; quads.push(q); });
         }
@@ -1334,17 +1348,28 @@
       const paint = (S, pos, fade) => {
         if (fade <= .01) return;
         if (S.orb) {   // a planet and its aura
-          const c = pos(0), o = S.orb, R = sc * o.r * (.35 + .65 * fade), A = R * (2.05 + .4 * o.pulse), L = pal.light, k = L ? 1.35 : 1;
+          const p0 = pos(0), o = S.orb, c = { x: p0.x + o.dx * sc * fade, y: p0.y + o.dy * sc * fade }, R = sc * o.r * (.35 + .65 * fade), A = R * (2.05 + .4 * o.pulse + .3 * o.kick), L = pal.light, k = L ? 1.35 : 1;
           const mixc = (to, m) => [T.col.r, T.col.g, T.col.b].map(v => Math.round(v + (to - v) * m)).join(','), rg = (x, y, r0, r1) => tx.createRadialGradient(x, y, r0, c.x, c.y, r1);
           let g = rg(c.x, c.y, R * .92, A);   // the aura: densest against the planet, gone at its edge; it swells and fades
           g.addColorStop(0, 'rgba(' + col + ',' + Math.min(1, (.5 - .16 * o.pulse) * k * fade).toFixed(3) + ')'); g.addColorStop(.4, 'rgba(' + col + ',' + (.17 * k * fade).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
           tx.fillStyle = g; tx.beginPath(); tx.arc(c.x, c.y, A, 0, TAU); tx.fill();
           const W = R * (1.05 + 1.5 * o.wave);   // a ring of light leaving it
           tx.lineWidth = 1.6; tx.strokeStyle = 'rgba(' + col + ',' + (.55 * k * (1 - o.wave) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, W, 0, TAU); tx.stroke();
-          g = rg(c.x - R * .38, c.y - R * .42, R * .04, R);   // the core: lit from the upper left, in shadow at the lower right
+          for (const ph of o.rings) {   // the rings a touch sends out
+            tx.lineWidth = .7 + 2.2 * (1 - ph); tx.strokeStyle = 'rgba(' + col + ',' + (.7 * k * (1 - ph) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, R * (1 + 2.3 * ph), 0, TAU); tx.stroke();
+          }
+          const wb = .13 * o.kick * Math.sin(o.wob);   // touched, the core wobbles like a drop of water: wider, then taller, and settling
+          tx.save(); tx.translate(c.x, c.y); tx.rotate(o.wob * .21); tx.scale(1 + wb, 1 - wb); tx.rotate(-o.wob * .21);
+          g = tx.createRadialGradient(-R * .38, -R * .42, R * .04, 0, 0, R);   // the core: lit from the upper left, in shadow at the lower right
           g.addColorStop(0, 'rgba(' + mixc(255, L ? .5 : .82) + ',' + fade.toFixed(3) + ')'); g.addColorStop(.45, 'rgba(' + col + ',' + fade.toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + mixc(0, L ? .45 : .62) + ',' + fade.toFixed(3) + ')');
-          tx.fillStyle = g; tx.beginPath(); tx.arc(c.x, c.y, R, 0, TAU); tx.fill();
-          tx.lineWidth = 1.2; tx.strokeStyle = 'rgba(' + mixc(255, L ? .2 : .5) + ',' + (.7 * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(c.x, c.y, R, 0, TAU); tx.stroke();
+          tx.fillStyle = g; tx.beginPath(); tx.arc(0, 0, R, 0, TAU); tx.fill();
+          if (o.kick > .03) {   // and ripples cross its face
+            tx.save(); tx.clip(); tx.lineWidth = 1.4;
+            for (let i = 0; i < 3; i++) { const q = (o.wob * .05 + i / 3) % 1; tx.strokeStyle = 'rgba(' + mixc(255, L ? .55 : .85) + ',' + (.5 * o.kick * (1 - q) * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(-R * .38, -R * .42, R * 1.9 * q, 0, TAU); tx.stroke(); }
+            tx.restore();
+          }
+          tx.lineWidth = 1.2; tx.strokeStyle = 'rgba(' + mixc(255, L ? .2 : .5) + ',' + (.7 * fade).toFixed(3) + ')'; tx.beginPath(); tx.arc(0, 0, R, 0, TAU); tx.stroke();
+          tx.restore();
         }
         if (S.quads) {   // the sides of the box, faintly glazed; a side can be lit more than the rest
           for (const q of S.quads) { tx.fillStyle = 'rgba(' + col + ',' + (.05 * (q.a || 1) * fade).toFixed(3) + ')'; tx.beginPath(); q.forEach((i, k) => { const p = pos(i); if (k) tx.lineTo(p.x, p.y); else tx.moveTo(p.x, p.y); }); tx.closePath(); tx.fill(); }
