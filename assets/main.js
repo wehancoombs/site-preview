@@ -258,8 +258,9 @@
   let cur = 0;
   function paintPager() { prevBtn.disabled = cur === 0; nextBtn.disabled = cur === panes.length - 1; }
   function markPane(i) {
-    cur = i;
     const ch = panes[i].closest('section').id;
+    if (i !== cur) track('see-' + ch);   // counted: a visitor arrives at this pane, by a button or by scrolling
+    cur = i;
     body.dataset.chapter = ch;
     dots.forEach(d => { if (d.getAttribute('href') === '#' + ch) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
     paintPager();
@@ -420,7 +421,7 @@
         b.disabled = true; b.textContent = 'Sending…';
         fetch(FORM_URL, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: from.value, message: text, _subject: r.subject, _gotcha: trap.value }) })
-          .then(res => { if (!res.ok) throw new Error(res.status); b.textContent = 'Sent ✓ I will reply by email'; })
+          .then(res => { if (!res.ok) throw new Error(res.status); b.textContent = 'Sent ✓ I will reply by email'; track('sent-' + form.dataset.kind); })
           .catch(() => { b.disabled = false; b.textContent = 'Could not send. Try the email buttons'; setTimeout(() => { b.textContent = 'Send from here'; }, 3000); });
         return;
       }
@@ -540,6 +541,7 @@
   function openSheet(id) {
     const item = library[id];
     if (!item) return;
+    track('open-' + id);
     clearTimeout(sheetTimer);
     if (map.classList.contains('on')) closeMap(true);
     closePanel();
@@ -620,7 +622,7 @@
   // One listener for every "open this" button on the page, in the map and inside sheets.
   document.addEventListener('click', e => {
     const c = e.target.closest('[data-copy]');
-    if (c) { e.preventDefault(); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
+    if (c) { e.preventDefault(); track('copy-address'); copyText(c.dataset.copy).then(() => flash(c, 'Copied ✓'), () => flash(c, 'Could not copy')); return; }
     const s = e.target.closest('[data-sheet]');
     if (s) { e.preventDefault(); const id = s.dataset.sheet, place = library[id] && CH_PLACE[library[id].ch]; if (place && map.classList.contains('on') && body.dataset.chapter !== place.slice(1)) showTarget(place, true); openSheet(id);
       if (s.dataset.at) { const to = $('[data-anchor="' + s.dataset.at + '"]', sheet); if (to) requestAnimationFrame(() => to.scrollIntoView({ block: 'start' })); }   // a button may open a pop-up at one of its sections
@@ -709,7 +711,7 @@
     if (!d || !from) return;
     stash.appendChild(arcFig);   // the arc goes back to its shelf before the card is redrawn
     const it = from.closest('.item'), q = d.quote();
-    const btn = (cls, sheet, label) => '<button' + (cls ? ' class="' + cls + '"' : '') + ' type="button" data-sheet="' + sheet + '">' + label + '</button> ';
+    const btn = (cls, sheet, label, what) => '<button' + (cls ? ' class="' + cls + '"' : '') + ' type="button" data-sheet="' + sheet + '" data-track="' + what + '-' + id + '">' + label + '</button> ';   // counted by service: request-lesson, book-school, more-tutoring
     const ul = d.lines ? '<ul class="bb-lines' + (d.long ? ' long' : '') + '">' + d.lines().map(l => '<li>' + l + '</li>').join('') + '</ul>' : '';
     detailFocus = document.activeElement;
     bbDetail.innerHTML = '<button class="close" type="button" data-detail-close aria-label="Close">×</button>' +
@@ -723,7 +725,7 @@
         (d.extra && d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
       '</div>' + (d.side ? '<div class="bb-side">' + d.side() : '') + '<blockquote class="bb-proof"><p>' + q[0] + '</p><small>' + q[1] + '</small></blockquote>' + (d.side ? '</div>' : '') + '</div>' +
       (d.extra && !d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
-      '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call') + (d.more ? btn('', d.more, 'More →') : '') + '</p></div>';
+      '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request', 'request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call', 'book') + (d.more ? btn('', d.more, 'More →', 'more') : '') + '</p></div>';
     const title = $('.bb-title', bbDetail);
     title.textContent = $('.item-name', it).textContent;
     if (d.arc) $('.bb-arc-slot', bbDetail).appendChild(arcFig);   // the real drawing is moved in, so that it keeps running
@@ -799,7 +801,7 @@
     if (refocus && panelFocus && panelFocus.focus) panelFocus.focus({ preventScroll: true });
     panelFocus = null;
   }
-  panelBtns.forEach(b => b.addEventListener('click', e => { e.stopPropagation(); if (panel.classList.contains('on')) closePanel(true); else openPanel(); }));
+  panelBtns.forEach(b => b.addEventListener('click', e => { e.stopPropagation(); if (panel.classList.contains('on')) closePanel(true); else { openPanel(); track(b.dataset.track); } }));   // counted here: the click is stopped before the page's own counter sees it
   $('#panel-close').addEventListener('click', () => closePanel(true));
   document.addEventListener('click', e => { if (panel.classList.contains('on') && !e.target.closest('#panel')) closePanel(); });
 

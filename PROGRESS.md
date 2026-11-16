@@ -814,3 +814,36 @@ His three comments, answered in chat and not yet acted on: (a) Lessons card quot
 
 The text export now also lists the five landing testimonials of the trial.
 
+## 2026-11-16: the Map rebuilt, two quotations, "essays" (v=78 on `services`, on the staging site, not live)
+
+- **The Map** mirrors the site as it is: Begin; My services (Teach, Design and Consult side by side, each with its services, then Working with me and Book a free intro call); About me (About me, Qualifications, Research & publications, Posts, The age of AI, Testimonials, My full resume); CVs (the four PDFs); Contact (Write to me, LinkedIn). A service in the Map opens its details card (`data-svc`). The school and lesson pop-ups are no longer listed there; they are reached from the cards. The order of the pop-ups (for the arrows and "3 of 7" inside a pop-up) used to be read off the Map and is now written out in main.js (`ORDER`).
+- **Lessons card quotation:** "The lesson plans were well crafted and engaged learners, allowing them to partake and ask questions." (Mentor teacher, Hoërskool Garsfontein · formal assessment, 2026). His chat read it from a handwritten, scanned form (Mentor Assessment 2, 27 May 2026) and said to check it against the original before it goes live.
+- **For You card quotation:** "…he has been a guide and mentor to me there as much as in the academy." (Dr Mitchell-Ron Black · research collaborator, 2026). His chat advised asking Dr Black first; he said to use it without waiting. The earlier Black quotation is still in the Testimonials pop-up.
+- **"essays"** is cut from "A plan for the term, with marked practice" at its source, so the box, the card and the Tutoring pop-up all match ("yes dropping the word 'essay' was deliberate").
+- The landing testimonials stay ("keep testimonials").
+
+## 2026-11-16: the final pass (v=79 on `services`, on the staging site, not live)
+
+He asked for a final pass on the whole site, whether it funnels customers, and whether the visit counter works.
+
+**Checked by script (`audit.py`, session scratchpad):** no duplicate ids, every pop-up a button names exists, no local file missing, every outside link answers (the 403/999 answers are sites refusing a script, not broken links), no placeholder, WhatsApp or phone number, no z-spellings in the text.
+
+**The visit counter.** The live site loads GoatCounter's script and sends a count for each visit (seen in the browser: a request to `wehancoombs.goatcounter.com/count`). The dashboard needs his sign-in, so the recorded numbers were not seen. The staging copy leaves the counter out on purpose.
+
+**Fixed without new wording:**
+- Counting. "Write to me" on the bar and the single phone button "Book a free intro call · Write to me" were never counted (their click was stopped before the counter saw it); fixed. Newly counted: arriving at a pane (`see-services`, `see-about`), every pop-up opened (`open-<id>`), Request / Book / More on each card by service (`request-lesson`, `book-school`, `more-tutoring`), a message that was really sent (`sent-<kind>`), the address copied (`copy-address`). Tried in the preview with a stand-in counter.
+- Booking pop-up: "Open the booking page" now sits above the calendar (it was under a tall frame, out of sight if the calendar is slow or blocked), and "write to me" in its note opens the form.
+- The site text now shows the request form's own words (it used to leave the form out).
+
+**An independent first-visitor review** (a second agent, four visitors: a parent, a postgraduate, a principal, a head of department) found the contact routes sound (the bar on every screen, four ways to send, about four clicks from landing to a sent message) but the information before contact uneven. Left for his decision, most valuable first:
+1. "Send from here" (Formspree) has never been confirmed with a real message.
+2. The Tutoring box and card do not say school English or grades until the pop-up; the lines exist there.
+3. The For Your School card is vaguer than its box (general consulting bullets, a first-year student's quotation).
+4. The consulting request form does not mention an AI policy, a review or a university, and a message does not say which card it came from.
+5. The Lectures card gives an employer no way to write and no link to the Academic CV.
+6. Not answered anywhere: how soon he replies, what "From R350" depends on, where in-person sessions happen, how to send a document and roughly what a chapter costs, a price for For You.
+7. Old names: pop-up titles "Tutoring and TEFL", "Learning design and tools", "Philosophical and AI consulting"; the small labels "For schools" / "For universities" in pop-ups; "Working with me" lists the old names and says "Open Details".
+8. Numbers that disagree: "5 self-designed modules" against "4 from scratch, 1 partly redesigned"; "15 years lecturing" against posts that start lecturing in 2014; "a class of about 300" against "294 of 734"; the headline 4.81 is six students.
+9. The search title and description do not name what people search for.
+10. "Taking new clients for 2027" may read as "not available now".
+
