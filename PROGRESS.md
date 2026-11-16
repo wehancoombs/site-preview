@@ -753,3 +753,10 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - Four lesson fixes (`LESSON_EDITS`): The Herb Garden ("just asking", its four stage notes in the past tense); For Oom Piet (one sentence deleted); South African spelling (centre, analyse, analysing in The Tempest; emphasise in Philosophy for teenagers; also emphasising in The Herb Garden and summarised in a poem lesson); The Poet ("a square circle" both times).
 - The cards have a little less padding at the top again, so that all ten still fit on a laptop.
 - Fresh Google Doc "Site text – three-cabinet site".
+
+## 2026-11-16: the services list as buttons (v=69 on `services`, on the staging site, not live)
+
+- Tag `before-buttons` (local): the site at v=68, saved at his word before this change. To go back: "Restore the draft to before-buttons".
+- A trial he asked to see: each service on the board is one large button (`.item-btn`) with its name, its price and "click for details" ("tap for details" on a touch screen) in place of the small Details link. The one-line description is no longer shown in the list; it is still in the page (hidden) because the details card reads it. With a pointer, a button swells a little on hover; on a phone the name and the hint share a line so that four buttons fit one screen.
+- Consult names: For You, For Your School, For Your University (on the buttons, the card titles and under the objects). The Consult box on the landing page still reads "A person · A school · A university".
+- Fresh Google Doc "Site text – three-cabinet site".

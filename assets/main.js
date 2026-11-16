@@ -695,7 +695,7 @@
       (d.extra && !d.inline ? '<div class="bb-extra compact room">' + d.extra() + '</div>' : '') +
       '<p class="more">' + (d.request ? btn('btn solid', 'request-' + d.request, 'Request') : '') + btn(d.request ? 'btn' : 'btn solid', 'book', 'Book a free intro call') + (d.more ? btn('', d.more, 'More →') : '') + '</p></div>';
     const title = $('.bb-title', bbDetail);
-    title.textContent = $('h3', it).textContent;
+    title.textContent = $('.item-name', it).textContent;
     if (d.arc) $('.bb-arc-slot', bbDetail).appendChild(arcFig);   // the real drawing is moved in, so that it keeps running
     const first = $('.deck .lecture', bbDetail); if (first) first.classList.add('front');
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
@@ -1301,7 +1301,7 @@
     ];
     const SETS = { teach: [0, 1, 4, 5], design: [2, 6, 7], consult: [8, 3, 9] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
-    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'A school', 'Classes', 'Lectures', 'A module', 'A curriculum', 'A person', 'A university'];
+    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'For Your School', 'Classes', 'Lectures', 'A module', 'A curriculum', 'For You', 'For Your University'];
     function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = 'drag to turn · tap to change'; }
     function tapShape() { nextShape(); }
     // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.

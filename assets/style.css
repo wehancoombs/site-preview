@@ -1171,6 +1171,21 @@ body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(-
 .item-line { margin: 3px 0 0; font-size: clamp(13.5px, calc(var(--u) * 1.2), 17px); line-height: 1.4; color: var(--text-2); }
 .item-rate { margin: clamp(2px, calc(var(--u) * .35), 6px) 0 0; font: italic 500 clamp(13.5px, calc(var(--u) * 1.12), 16.5px)/1.3 var(--serif); color: var(--accent); }
 
+/* The services as buttons: large, with the name, the price and "click for details"; a button swells a little under the pointer */
+.bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { display: flex; flex-direction: column; gap: clamp(8px, 1.5vh, 14px); height: 100%; box-sizing: border-box; padding: clamp(8px, 1.4vh, 14px) 0; }
+.item { flex: 1 1 0; min-height: 0; max-height: 152px; display: flex; padding: 0; }
+.item + .item { border-top: 0; }
+.item-btn { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(3px, .7vh, 7px); padding: 8px clamp(14px, 1.4vw, 20px); cursor: pointer; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--accent) 7%, transparent); transition: transform .3s var(--ease), background-color .3s, border-color .3s, box-shadow .3s; }
+.item-btn:focus-visible { transform: scale(1.045); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 17%, transparent); box-shadow: 0 16px 30px -18px #000; }
+@media (hover: hover) { .item-btn:hover { transform: scale(1.045); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 17%, transparent); box-shadow: 0 16px 30px -18px #000; } .item-btn:hover .item-hint::after { color: var(--accent); } }   /* only where there is a pointer: on a phone a tapped button would stay swollen */
+.item-btn:active { transform: scale(1.01); }
+.item-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.item-name { font: 500 clamp(22px, calc(var(--u) * 2.25), 33px)/1.08 var(--serif); letter-spacing: -.01em; color: var(--text); }
+.item .item-rate { margin: 0; font-size: clamp(13px, calc(var(--u) * 1.05), 15.5px); }
+.item-hint::after { content: "click for details"; font: 600 10px/1 var(--sans); letter-spacing: .17em; text-transform: uppercase; color: var(--text-3); transition: color .3s; }
+.item-btn:focus-visible .item-hint::after { color: var(--accent); }
+@media (hover: none) { .item-hint::after { content: "tap for details"; } }
+
 /* The chevron the list folds into */
 .bb-chev { all: unset; box-sizing: border-box; position: absolute; left: 0; top: 0; bottom: 0; width: 46px; display: grid; place-items: center; cursor: pointer; color: var(--accent); border-right: 1px solid var(--line); opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), background-color .3s; }
 .bb-chev svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -1413,10 +1428,13 @@ html.first-visit .me.in { opacity: 1; }
   .bb .solid-label { font-size: 15px; padding-left: 4px; }
   .bb-menu { overflow: visible; padding: 0 14px 2px; border-right: 0; border-top: 1px solid var(--line); }
   .bb-menu .items { width: auto; }
-  .item { padding: 8px 0; }
-  .item h3 { font-size: 21px; }
-  .item-line { font-size: 15px; }
-  .item-rate { font-size: 14.5px; margin-top: 3px; }
+  .bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { height: auto; gap: 8px; padding: 10px 0 8px; }
+  .item { flex: none; max-height: none; }
+  .item-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; row-gap: 3px; padding: 9px 14px 10px; }   /* the name and "tap for details" share a line, the price sits under them */
+  .item-name { grid-column: 1; grid-row: 1; font-size: 22px; }
+  .item-hint { grid-column: 2; grid-row: 1; }
+  .item .item-rate { grid-column: 1 / -1; }
+  .item .item-rate { font-size: 14px; }
   .me { right: 2px; bottom: auto; top: calc(46px + var(--st-h) - var(--me-h)); }
   .bb-chev { position: static; order: 3; flex: none; width: auto; height: 42px; border-right: 0; border-top: 1px solid var(--line); display: none; }
   .bb-chev svg { transform: rotate(-90deg); }
@@ -1474,6 +1492,7 @@ html.first-visit .me.in { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   html.first-visit .me, html.first-visit .me.in { opacity: 1; transition: none; }
-  .bb-body, .bb-menu, .bb-chev, .ab-panel, .panel, .bb .tetra { transition: none !important; }
+  .bb-body, .bb-menu, .bb-chev, .ab-panel, .panel, .bb .tetra, .item-btn { transition: none !important; }
+  .item-btn:hover, .item-btn:focus-visible { transform: none !important; }
   .bb-detail, .bb-head, .bb-short > *, .bb-extra, .bb-text > .more { animation: none; }
 }
