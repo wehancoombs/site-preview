@@ -1186,6 +1186,16 @@ body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(-
 .item-btn:focus-visible .item-hint::after { color: var(--accent); }
 @media (hover: none) { .item-hint::after { content: "tap for details"; } }
 
+/* The one-line description of a service: a tooltip beside its button, where there is a pointer and room for it */
+.item .item-line { display: none; }
+@media (hover: hover) and (min-width: 901px) {
+  .bb-menu { overflow: visible; }
+  .stage.detail-open .bb-menu { overflow: hidden; }
+  .item-btn { position: relative; }
+  .item .item-line { display: block; position: absolute; left: calc(100% + 14px); top: 50%; z-index: 5; width: max-content; max-width: 30ch; margin: 0; padding: 9px 13px; transform: translate(-6px, -50%); opacity: 0; pointer-events: none; font: italic 500 16px/1.35 var(--serif); color: var(--text); background: var(--surface); border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 10px; box-shadow: 0 14px 30px -16px #000; transition: opacity .25s, transform .25s var(--ease); }
+  .item-btn:hover .item-line, .item-btn:focus-visible .item-line { opacity: 1; transform: translate(0, -50%); }
+}
+
 /* The chevron the list folds into */
 .bb-chev { all: unset; box-sizing: border-box; position: absolute; left: 0; top: 0; bottom: 0; width: 46px; display: grid; place-items: center; cursor: pointer; color: var(--accent); border-right: 1px solid var(--line); opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), background-color .3s; }
 .bb-chev svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }

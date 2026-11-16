@@ -760,3 +760,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - A trial he asked to see: each service on the board is one large button (`.item-btn`) with its name, its price and "click for details" ("tap for details" on a touch screen) in place of the small Details link. The one-line description is no longer shown in the list; it is still in the page (hidden) because the details card reads it. With a pointer, a button swells a little on hover; on a phone the name and the hint share a line so that four buttons fit one screen.
 - Consult names: For You, For Your School, For Your University (on the buttons, the card titles and under the objects). The Consult box on the landing page still reads "A person · A school · A university".
 - Fresh Google Doc "Site text – three-cabinet site".
+
+## 2026-11-16: the descriptions back as tooltips (v=70 on `services`, on the staging site, not live)
+
+- He likes the buttons. Each service's one-line description is back as a tooltip that appears to the right of its button, over the board, on hover or keyboard focus. Only where there is a pointer and the screen is wider than 900px; on a phone it stays off (the line is on the card).
