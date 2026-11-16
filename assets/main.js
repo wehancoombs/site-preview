@@ -372,13 +372,14 @@
     tutoring: { ch: 'make', title: 'Request tutoring', subject: 'Tutoring request', intro: 'Tell me the subject, the level and when suits you. I reply with a plan, a rate and a start date.', body: 'Hi Wehan,\n\nI’d like to ask about tutoring.\n\nSubject and grade or level: \nWhen and how often: \nIn person or online: \n\nThanks,\n' },
     editing: { ch: 'make', title: 'Request writing support', subject: 'Writing support request', intro: 'Tell me what the document is and when you need it back. I reply with a rate and a date.', body: 'Hi Wehan,\n\nI’d like to ask about writing support.\n\nWhat the document is and roughly how long: \nWhen I need it back: \n\nThanks,\n' },
     design: { ch: 'make', title: 'Request learning design', subject: 'Learning design request', intro: 'Tell me what you need built and who it is for. I reply with a plan, a rate and a timeline.', body: 'Hi Wehan,\n\nI’d like to ask about learning design.\n\nWhat I need built: \nWho it is for: \nWhen I need it: \n\nThanks,\n' },
-    consulting: { ch: 'make', title: 'Request consulting', subject: 'Consulting request', intro: 'Tell me the question and who it is for. I reply with a proposal and a rate.', body: 'Hi Wehan,\n\nI’d like to talk about philosophical and AI consulting.\n\nFor me personally, or for a school, team or organisation: \nThe question or situation: \nA talk, a workshop, a written brief, or a conversation: \n\nThanks,\n' },
+    consulting: { ch: 'make', title: 'Request consulting', subject: 'Consulting request', intro: 'Tell me the question and who it is for. I reply with a proposal and a rate.', body: 'Hi Wehan,\n\nI’d like to talk about philosophical and AI consulting.\n\nThe question or situation: \n\nThanks,\n' },
+    institution: { ch: 'make', title: 'Request consulting', subject: 'Consulting request', intro: 'Tell me the question and who it is for. I reply with a proposal and a rate.', body: 'Hi Wehan,\n\nI’d like to talk about consulting.\n\nSchool or university, and department: \nWhat you need (an AI policy, a staff workshop, or an AI review): \nHow many staff, modules or departments: \nWhen you need it by: \n\nThanks,\n' },
     any: { ch: 'write', title: 'Write to me', subject: 'Hello', intro: 'For anything else: a post, a reference, a question, a hello.', body: 'Hi Wehan,\n\n\n\nThanks,\n' }
   };
   const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   Object.keys(REQUESTS).forEach(k => {
     const r = REQUESTS[k];
-    library['request-' + k] = { title: r.title, ch: r.ch, tone: { tutoring: 'c-teach', editing: 'c-teach', consulting: 'c-consult' }[k], html:
+    library['request-' + k] = { title: r.title, ch: r.ch, tone: { tutoring: 'c-teach', editing: 'c-teach', consulting: 'c-consult', institution: 'c-consult' }[k], html:
       '<p class="when">' + r.intro + '</p>' +
       '<div class="req" data-kind="' + k + '">' +
         '<label class="req-label" for="req-from">Your email <small>so that I can reply</small></label>' +
@@ -685,18 +686,21 @@
     // A curriculum: his own lines (chat of 2026-11-15).
     curriculum: { line: true, text: () => 'A curriculum is a set of modules in an order that makes sense, so that each one prepares for the next. At the University of Pretoria I designed first- and second-year philosophy modules to fit what came before and after them, and helped plan that order with the department.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
     person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => ['…he has been a guide and mentor to me there as much as in the academy.', 'Dr Mitchell-Ron Black · research collaborator, 2026'], request: 'consulting', more: 'consulting' },
-    school: { line: true, lines: () => part('consulting', '.list li').slice(0, 3),   // the fourth point there is for universities
-       long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
+    // A school: his own list of what the school receives (chat of 2026-11-16), in place of the three general consulting points.
+    school: { line: true, long: true, head: 'What you receive',
+      lines: () => ['An AI policy written for your school, or your current one revised', 'A workshop for your staff, at the school or online', 'A follow-up meeting to see how the policy is working'],
+      quote: () => VOICES.teach.items[4], request: 'institution', more: 'consulting' },
     // A university: his own lines (chat of 2026-11-15). What the university receives, on the left; his research and how he assessed his own module, on the right, above the quotation.
     university: { line: true, long: true, head: 'What you receive',
       lines: () => ['A written review of the module’s assessments: which ones a machine can now complete, and which still test the student', 'The weak assessments redesigned, ready to use', 'A meeting with your staff to talk it through'],
       side: () => '<p class="bb-para">My research is on teaching in the age of AI: what part of learning cannot be automated, and how to build teaching around it.</p><ul class="bb-lines long"><li>My 2026 honours module was assessed through video essays, podcasts and written work</li><li>Its last assessment was a sit-down essay on an unseen question: the role of philosophy in a world of AI</li></ul>',
-      quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
+      quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'institution', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
-  // What each box shows at a glance under its one-line description: two points. Those for Tutoring and Writing are read from their details cards;
-  // the other eight pairs are his own lines (chat of 2026-11-16). The text export reads the eight from here, so keep one service to a line.
-  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2),
+  // What each box shows at a glance under its one-line description: two points. Those for Writing are read from its details card;
+  // the other nine pairs are his own lines (chats of 2026-11-16). The text export reads the eight from here, so keep one service to a line.
+  const PEEK = { writing: () => DETAILS.writing.lines().slice(0, 2),
+    tutoring: () => ['School English, Grades 10 to 12', 'Home Language and First Additional Language'],
     classes: () => ['At your school or venue, or live online', 'One session or a short series'],
     lectures: () => ['In person, live online or recorded', 'One lecture or a whole module'],
     lesson: () => ['Fitted to CAPS or your own curriculum', 'Plan, slides and worksheets as the lesson needs'],

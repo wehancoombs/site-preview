@@ -847,3 +847,23 @@ He asked for a final pass on the whole site, whether it funnels customers, and w
 9. The search title and description do not name what people search for.
 10. "Taking new clients for 2027" may read as "not available now".
 
+## 2026-11-16: his final text changes, the CVs, and PUBLISHED (v=80, live)
+
+His word: "Final changes below then push to my LIVE SITE and fix all the CV's to wehancoombs.com".
+
+**Text (from his chat, applied as given):**
+1. Tutoring box points: "School English, Grades 10 to 12" and "Home Language and First Additional Language".
+2. For Your School card: a "What you receive" list of three lines. It replaces the three general consulting points that were there (they are still in the consulting pop-up); with both, the card would not fit.
+3. Request on the For Your School and For Your University cards opens a new message for institutions (`REQUESTS.institution`); For You keeps the old one less two lines.
+4. "Working with me" has five more lines under How it works (reply within two working days; what R350 is for; where sessions are; how to send writing; For You is R450 an hour). For You shows "R450 an hour" on its box and card, and has its own line in Rates; the last Rates line now names "Classes and lectures, Design, For Your School, For Your University" so that it does not contradict it.
+5. Pop-up titles: "Tutoring", "Lessons, modules and curricula", "Consulting: for you, your school, your university".
+6. "15 years teaching at university"; Philosophy of Medicine is "a class of more than 700" (the About me pop-up and the note on the 4,000 figure). "5 self-designed modules" kept.
+7. Search title and description: no change.
+8. "Taking new clients now" in all seven places.
+
+**The domain.** He had already added the `CNAME` file on GitHub (commit 852821f on `main`, "wehancoombs.com") and pointed the domain at GitHub Pages. wehancoombs.github.io now redirects to http://wehancoombs.com/. On 2026-11-16 the secure address (https) did not yet work: GitHub had not issued the certificate. There is no `www` record. The `CNAME` file lives on `main` only; `services` does not have it, so the staging copy is not affected. **When publishing, merge `services` into `main`; never replace `main` with `services`, or the CNAME file is lost and the domain stops working.**
+
+**The CVs.** The website line in all five CVs (FET, PhD, Freelance, General, and the Afrikaans general one) reads "wehancoombs.com" and links to http://wehancoombs.com (http, because https did not work yet; with Enforce HTTPS on, it will redirect). Re-rendered, every page overflow 0; old copies archived in Drive as "(before 2026-11-16)"; the four English ones copied into `cv/` here. The QR codes point at the full resume Google Docs and needed no change.
+
+**Published** by merging `services` into `main` (keeping `CNAME`) and pushing. The live site was v=40 (the five-cabinet site, tag `before-services`) until then.
+
