@@ -776,3 +776,16 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 - The two recordings on the Lectures card show a still: Google Drive's own preview picture, loaded from drive.google.com/thumbnail by file id (not saved in the repo), darkened at the foot under the caption.
 - A tab pressed while a details card is open on that same tab closes the card and brings the list back.
 - Fresh Google Doc "Site text – three-cabinet site".
+
+## 2026-11-16: the big-boxes board, muted colours (v=73 on `services`, on the staging site, not live)
+
+His ask: "simplify even further, particularly by muting the colors a bit and then relegating the animated objects the left of the service boxes on the TDC page, and have those boxes dominate the 'whiteboard' space with most important details immediately visible, and then clicking one expands it over the others, showing the rest of the detail." The version before this is tagged `before-boxes` (v=72, local tag). To go back: "Restore the draft to before-boxes".
+
+- **Layout.** The turning object is now small, in a narrow column on the far left of the board (it still follows the box under the pointer; "drag to turn · tap to change" is hidden on a computer). The rest of the board is the services as wide boxes, one under the other: four on Teach, three on Design and Consult.
+- **A box shows** the name, the price and "click for details" on the left; on the right the one-line description (no longer a tooltip) and, where the details card has them, a point or two copied from that card (`PEEK` in main.js; no new wording): Tutoring and Writing two points each, Classes "What I taught in 2026", Lectures "Watch me teach", Lessons "The arc of a lesson", Modules "Study guides I wrote", For Your University two points. Curricula, For You and For Your School show the description only.
+- **Opening.** A pressed box grows (a clip-path animation from the box's own outline) until its details card covers the whole board under the tabs, the object column included, so the ten cards keep the room they were fitted to (all ten fit without scrolling at 1280x800). The cross, the tab and Escape close it; on a phone the bar at the foot of the card does too, and the card is scrolled so its title sits under the tabs.
+- **Colours.** The three colours are muted everywhere they are used (tabs, boxes, cards, pop-ups, landing boxes): dark theme sage #8FB79A, clay #D3A377, lavender #AA9FCC; light theme #426F53, #8E5C33, #675A8E.
+- **Site text.** `.claude/export_text.py` now lists the points under each box.
+- **Samples.** He wants a sample offering for each service. Present today: Classes (the lesson bookshelf), Lectures (two recordings), Lessons (the arc, and the lesson pop-ups), Modules (five study guides). Missing: Tutoring, Writing, Curricula, For You, For Your School, For Your University. He was given a chat prompt to brainstorm the six.
+- Checked in the preview at 1280x800 (both themes), 1366x700 and 375x812. Not checked on a real phone.
+

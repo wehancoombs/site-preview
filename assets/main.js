@@ -644,7 +644,7 @@
   // Pointing at a service on the list brings up its own shape.
   $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => showShapes(svcBoard.dataset.open, +li.dataset.shape)));
 
-  /* ---------- Details: the list folds away into a chevron and the details are laid over the object, in place of a pop-up ---------- */
+  /* ---------- Details: a box that is pressed opens over the others and fills the board, in place of a pop-up ---------- */
   const bbDetail = $('#bb-detail'), bbChev = $('#bb-chev'), stash = $('#stash'), arcFig = $('.arc');
   let detailFocus = null;
   // What each item shows when Details is pressed. Nothing here is new wording: the name, line and rate are read from the item itself,
@@ -675,6 +675,10 @@
       quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
+  // What each box shows at a glance under its one-line description. Nothing new: each point is already on that service's details card.
+  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2), classes: () => ['What I taught in 2026'],
+    lectures: () => ['Watch me teach'], lesson: () => ['The arc of a lesson'], module: () => ['Study guides I wrote'], university: () => DETAILS.university.lines().slice(1) };
+  Object.keys(PEEK).forEach(id => { const el = $('[data-detail="' + id + '"] .item-pts'); if (el) el.innerHTML = PEEK[id]().map(l => '<span>' + l + '</span>').join(''); });
   function openDetail(id) {
     const d = DETAILS[id], from = $('[data-detail="' + id + '"]');
     if (!d || !from) return;
@@ -701,6 +705,12 @@
     const first = $('.deck .lecture', bbDetail); if (first) first.classList.add('front');
     bbDetail.hidden = false; bbDetail.scrollTop = 0;
     svcStage.classList.add('detail-open');
+    // The card grows out of the box that was pressed, until it covers the others.
+    const a = from.getBoundingClientRect(), b = bbDetail.getBoundingClientRect();
+    if (!reduced && bbDetail.animate && a.width && b.width) bbDetail.animate([
+      { clipPath: 'inset(' + [a.top - b.top, b.right - a.right, b.bottom - a.bottom, a.left - b.left].map(v => Math.max(0, Math.round(v)) + 'px').join(' ') + ' round 14px)' },
+      { clipPath: 'inset(0px 0px 0px 0px round 0px)' }], { duration: 460, easing: 'cubic-bezier(.2, .7, .2, 1)' });
+    if (b.top < 100 || b.top > innerHeight * .6) bbDetail.scrollIntoView({ block: 'start' });   // on a phone, a box far down the page still opens with its title in sight, under the tabs
     title.focus({ preventScroll: true });
     track('detail-' + id);
   }

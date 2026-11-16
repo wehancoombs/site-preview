@@ -1104,8 +1104,8 @@ body.in-detail .pager .pager-btn { visibility: hidden; }
 .pager { top: calc(50% - var(--bar-h) / 2); }
 
 /* ---------- The three colours: Teach green, Design orange, Consult purple ---------- */
-:root { --c-teach: #7CC58C; --c-design: #EC9A4A; --c-consult: #B79CF0; }
-:root[data-theme="light"] { --c-teach: #2F7A48; --c-design: #A85514; --c-consult: #6A4AA6; }
+:root { --c-teach: #8FB79A; --c-design: #D3A377; --c-consult: #AA9FCC; }   /* muted: sage, clay, lavender */
+:root[data-theme="light"] { --c-teach: #426F53; --c-design: #8E5C33; --c-consult: #675A8E; }
 .bb[data-open="teach"], .tabs [data-tab="teach"], .cab-door[data-door="teach"] { --accent: var(--c-teach); }
 .bb[data-open="design"], .tabs [data-tab="design"], .cab-door[data-door="design"] { --accent: var(--c-design); }
 .bb[data-open="consult"], .tabs [data-tab="consult"], .cab-door[data-door="consult"] { --accent: var(--c-consult); }
@@ -1149,7 +1149,7 @@ body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(-
 .svc-head .r-avail { margin-top: 10px; font-size: clamp(15px, 2.1vh, 18px); }
 
 /* The board: one flat near-black panel with a hairline round it */
-.bb { --u: min(1vw, 1.55vh); --menu-w: clamp(236px, 23vw, 320px); --menu-pad: clamp(14px, 1.5vw, 22px); position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--bb); border: 1px solid var(--line-2); border-radius: 6px; transition: background-color .9s var(--ease), border-color .9s; }
+.bb { --u: min(1vw, 1.55vh); --obj-w: clamp(128px, 13vw, 190px); position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--bb); border: 1px solid var(--line-2); border-radius: 6px; transition: background-color .9s var(--ease), border-color .9s; }
 .stage > .bb { margin-right: calc(var(--me-w) - 46px); }
 .tabs { flex: none; display: flex; gap: clamp(18px, 2.4vw, 34px); padding: 0 clamp(16px, 1.8vw, 26px); border-bottom: 1px solid var(--line); }
 .tabs button { all: unset; cursor: pointer; padding: clamp(10px, 1.8vh, 16px) 0 clamp(8px, 1.5vh, 13px); margin-bottom: -1px; font: 500 clamp(22px, min(2.2vw, 3.8vh), 32px)/1 var(--serif); color: var(--text-3); border-bottom: 2px solid transparent; transition: color .3s, border-color .3s; }
@@ -1157,63 +1157,46 @@ body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(-
 .tabs button:hover { color: color-mix(in srgb, var(--accent) 80%, var(--text-3)); }
 .tabs button[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
 .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 3px; }
-.bb-body { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: var(--menu-w) minmax(0, 1fr); transition: grid-template-columns .5s var(--ease); }
+.bb-body { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: var(--obj-w) minmax(0, 1fr); }
 
-/* The list of services, far left */
-.bb-menu { min-width: 0; overflow: hidden; padding: clamp(2px, .6vh, 8px) var(--menu-pad); border-right: 1px solid var(--line); transition: opacity .3s var(--ease), visibility 0s, border-color .3s; }
-.bb-menu .items { display: none; list-style: none; margin: 0; padding: 0; width: calc(var(--menu-w) - 2 * var(--menu-pad) - 1px); }
-.bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { display: block; }
-.item { padding: clamp(7px, calc(var(--u) * 1.05), 18px) 0; }
-.item + .item { border-top: 1px solid var(--line); }
-.item-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.item h3 { margin: 0; font: 500 clamp(19px, calc(var(--u) * 1.8), 28px)/1.15 var(--serif); color: var(--text); }
-.item-head .textlink { flex: none; font-size: 11px; letter-spacing: .14em; padding-bottom: 2px; }
-.item-line { margin: 3px 0 0; font-size: clamp(13.5px, calc(var(--u) * 1.2), 17px); line-height: 1.4; color: var(--text-2); }
-.item-rate { margin: clamp(2px, calc(var(--u) * .35), 6px) 0 0; font: italic 500 clamp(13.5px, calc(var(--u) * 1.12), 16.5px)/1.3 var(--serif); color: var(--accent); }
+/* The object of the service under the pointer: small, far left */
+.bb-stage { grid-column: 1; grid-row: 1; position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 8px 6px 10px; border-right: 1px solid var(--line); }
+.bb .tetra { width: calc(var(--obj-w) - 26px); max-width: 100%; margin: 0; }
+.bb .solid-label { margin: 0; font-size: clamp(14px, 1.9vh, 17px); text-align: center; }
 
-/* The services as buttons: large, with the name, the price and "click for details"; a button swells a little under the pointer */
-.bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { display: flex; flex-direction: column; gap: clamp(8px, 1.5vh, 14px); height: 100%; box-sizing: border-box; padding: clamp(8px, 1.4vh, 14px) 0; }
-.item { flex: 1 1 0; min-height: 0; max-height: 152px; display: flex; padding: 0; }
-.item + .item { border-top: 0; }
-.item-btn { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(3px, .7vh, 7px); padding: 8px clamp(14px, 1.4vw, 20px); cursor: pointer; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--accent) 7%, transparent); transition: transform .3s var(--ease), background-color .3s, border-color .3s, box-shadow .3s; }
-.item-btn:focus-visible { transform: scale(1.045); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 17%, transparent); box-shadow: 0 16px 30px -18px #000; }
-@media (hover: hover) { .item-btn:hover { transform: scale(1.045); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 17%, transparent); box-shadow: 0 16px 30px -18px #000; } .item-btn:hover .item-hint::after { color: var(--accent); } }   /* only where there is a pointer: on a phone a tapped button would stay swollen */
-.item-btn:active { transform: scale(1.01); }
-.item-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.item-name { font: 500 clamp(22px, calc(var(--u) * 2.25), 33px)/1.08 var(--serif); letter-spacing: -.01em; color: var(--text); }
-.item .item-rate { margin: 0; font-size: clamp(13px, calc(var(--u) * 1.05), 15.5px); }
+/* The services: one large box each, sharing the height of the board. A box shows its name, its price and "click for details" on the left,
+   and on the right its one-line description with a point or two under it. Under the pointer it lifts a little. */
+.bb-menu { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 clamp(54px, 4.8vw, 64px) 0 clamp(14px, 1.5vw, 22px); }   /* clear of the pointing hand on the right */
+.bb-menu .items { display: none; list-style: none; margin: 0; padding: 0; }
+.bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { display: flex; flex-direction: column; justify-content: center; gap: clamp(8px, 1.6vh, 14px); height: 100%; box-sizing: border-box; padding: clamp(10px, 1.8vh, 16px) 0; }
+.item { flex: 1 1 0; min-height: 0; max-height: 176px; display: flex; padding: 0; }
+.item-btn { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, .66fr) minmax(0, 1.34fr); align-items: center; column-gap: clamp(16px, 2vw, 28px); padding: 8px clamp(16px, 1.7vw, 24px); cursor: pointer; border: 1px solid color-mix(in srgb, var(--accent) 36%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--accent) 6%, transparent); transition: transform .3s var(--ease), background-color .3s, border-color .3s, box-shadow .3s; }
+.item-btn:focus-visible { transform: scale(1.018); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 13%, transparent); box-shadow: 0 16px 30px -18px #000; outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) { .item-btn:hover { transform: scale(1.018); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 13%, transparent); box-shadow: 0 16px 30px -18px #000; } .item-btn:hover .item-hint::after { color: var(--accent); } }   /* only where there is a pointer: on a phone a tapped box would stay lifted */
+.item-btn:active { transform: scale(1.005); }
+.item-a, .item-b { min-width: 0; display: flex; flex-direction: column; }
+.item-a { gap: clamp(3px, .7vh, 7px); }
+.item-b { gap: clamp(4px, .9vh, 8px); padding-left: clamp(16px, 2vw, 28px); border-left: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); }
+.item-name { font: 500 clamp(22px, calc(var(--u) * 2.3), 33px)/1.08 var(--serif); letter-spacing: -.01em; color: var(--text); }
+.item-rate { font: italic 500 clamp(13px, calc(var(--u) * 1.08), 15.5px)/1.3 var(--serif); color: var(--accent); }
 .item-hint::after { content: "click for details"; font: 600 10px/1 var(--sans); letter-spacing: .17em; text-transform: uppercase; color: var(--text-3); transition: color .3s; }
 .item-btn:focus-visible .item-hint::after { color: var(--accent); }
 @media (hover: none) { .item-hint::after { content: "tap for details"; } }
+.item-line { font: italic 500 clamp(16px, calc(var(--u) * 1.42), 20px)/1.3 var(--serif); color: var(--text); }
+.item-pts { display: flex; flex-direction: column; gap: 2px; }
+.item-pts:empty { display: none; }
+.item-pts span { position: relative; padding-left: 16px; font: 400 clamp(12.5px, calc(var(--u) * 1.06), 14.5px)/1.4 var(--sans); color: var(--text-2); }
+.item-pts span::before { content: ""; position: absolute; left: 2px; top: .48em; width: 5px; height: 5px; transform: rotate(45deg); border: 1px solid var(--accent); }
 
-/* The one-line description of a service: a tooltip beside its button, where there is a pointer and room for it */
-.item .item-line { display: none; }
-@media (hover: hover) and (min-width: 901px) {
-  .bb-menu { overflow: visible; }
-  .stage.detail-open .bb-menu { overflow: hidden; }
-  .item-btn { position: relative; }
-  .item .item-line { display: block; position: absolute; left: calc(100% + 14px); top: 50%; z-index: 5; width: max-content; max-width: 30ch; margin: 0; padding: 9px 13px; transform: translate(-6px, -50%); opacity: 0; pointer-events: none; font: italic 500 16px/1.35 var(--serif); color: var(--text); background: var(--surface); border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 10px; box-shadow: 0 14px 30px -16px #000; transition: opacity .25s, transform .25s var(--ease); }
-  .item-btn:hover .item-line, .item-btn:focus-visible .item-line { opacity: 1; transform: translate(0, -50%); }
-}
-
-/* The chevron the list folds into */
-.bb-chev { all: unset; box-sizing: border-box; position: absolute; left: 0; top: 0; bottom: 0; width: 46px; display: grid; place-items: center; cursor: pointer; color: var(--accent); border-right: 1px solid var(--line); opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), background-color .3s; }
+/* The bar that brings the boxes back: on a phone only (on a computer the cross, the tab and Escape do it) */
+.bb-chev { all: unset; box-sizing: border-box; display: none; place-items: center; cursor: pointer; color: var(--accent); }
 .bb-chev svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.bb-chev:hover, .bb-chev:focus-visible { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .bb-chev:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
-.stage.detail-open .bb-body { grid-template-columns: 46px minmax(0, 1fr); }
-.stage.detail-open .bb-menu { opacity: 0; visibility: hidden; border-right-color: transparent; transition: opacity .2s var(--ease), visibility 0s .2s, border-color .2s; }
-.stage.detail-open .bb-chev { opacity: 1; visibility: visible; transition-delay: .25s; }
 
-/* The object, and the details that are laid over it */
-.bb-stage { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px 0 10px; }
-.bb .tetra { width: min(calc(100vh - 356px), 34vw, 500px); max-width: 100%; margin: 0; transition: opacity .5s var(--ease); }
-@supports (height: 100svh) { .bb .tetra { width: min(calc(100svh - 356px), 34vw, 500px); } }
-.bb .solid-label { font-size: clamp(16px, 2.2vh, 20px); transition: opacity .4s; }
-.bb .solid-hint { transition: opacity .4s; }
-.stage.detail-open .tetra { opacity: 0; }
-.stage.detail-open .bb-stage .solid-label, .stage.detail-open .bb-stage .solid-hint { opacity: 0; }
-.bb-detail { position: absolute; inset: 0; overflow: auto; overscroll-behavior: contain; padding: clamp(16px, 2.8vh, 28px) 74px 18px clamp(20px, 2.6vw, 38px); animation: fadein .5s var(--ease) both; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+/* The details card: it grows out of the box that was pressed and covers the whole board under the tabs. What it covers stays in view
+   until it is covered, then is put out of reach. */
+.stage.detail-open .bb-menu, .stage.detail-open .bb-stage { visibility: hidden; transition: visibility 0s .46s; }
+.bb-detail { position: absolute; inset: 0; overflow: auto; overscroll-behavior: contain; border-radius: 0 0 5px 5px; padding: clamp(16px, 2.8vh, 28px) 74px 18px clamp(20px, 2.6vw, 38px); scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
 .bb-detail[hidden] { display: none; }
 .bb-detail .close { right: 10px; top: 10px; }
 .bb-title { margin: 0 0 16px; padding-right: 40px; font: 500 clamp(26px, 3vw, 38px)/1.1 var(--serif); color: var(--text); outline: none; }
@@ -1239,7 +1222,7 @@ body[data-chapter="services"]:has(#board[data-open="consult"]) { --accent: var(-
 .bb-lines li { padding: clamp(8px, 1.5vh, 13px) 0; border-top: 1px solid var(--line); font: 500 clamp(18px, 2vw, 24px)/1.3 var(--serif); color: var(--text); }
 .sheet-body .bb-proof { margin: 0; padding: 20px 22px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--bb) 70%, transparent); font: italic 18px/1.5 var(--serif); color: var(--text); }
 .bb-proof b { font-style: normal; font-weight: 500; font-size: 26px; color: var(--accent); }
-.bb-detail { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 46%); }
+.bb-detail { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 46%), var(--bb); }
 .bb-head { display: flex; align-items: center; gap: clamp(14px, 1.6vw, 22px); margin: 0 0 clamp(12px, 2vh, 20px); padding-right: 44px; }
 .bb-icon { flex: none; width: clamp(58px, 6vw, 78px); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 72%); }
 .bb-icon svg { width: 56%; height: 56%; fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -1363,7 +1346,7 @@ html.first-visit .me.in { opacity: 1; }
 }
 
 /* A little less air at the top and bottom of a card, so that the longer lines still fit without scrolling on a laptop */
-@media (min-width: 901px) { .bb-detail { padding-top: clamp(20px, 3.4vh, 32px); padding-bottom: 8px; } .bb-head { margin-bottom: clamp(8px, 1.4vh, 14px); } }
+@media (min-width: 901px) { .bb .solid-hint { display: none; } .bb-detail { padding-top: clamp(20px, 3.4vh, 32px); padding-bottom: 8px; } .bb-head { margin-bottom: clamp(8px, 1.4vh, 14px); } }
 /* A card may have a small heading over its list, and a second column of its own above the quotation (A university) */
 .bb-sub { margin: clamp(10px, 1.8vh, 16px) 0 0; }
 .bb-sub + .bb-lines { margin-top: 2px; }
@@ -1443,24 +1426,26 @@ html.first-visit .me.in { opacity: 1; }
   .tabs { height: 46px; box-sizing: border-box; gap: 22px; padding: 0 14px; }
   .tabs button { display: flex; align-items: center; padding: 0; font-size: 22px; }
   .bb-body { display: flex; flex-direction: column; }
-  .bb-stage { order: -1; flex: none; height: var(--st-h); box-sizing: border-box; align-items: flex-start; padding: 6px 0 6px 12px; }
+  .bb-stage { order: -1; flex: none; height: var(--st-h); box-sizing: border-box; align-items: flex-start; padding: 6px 0 6px 12px; border-right: 0; }
   .bb .tetra { width: min(calc(var(--st-h) - 42px), 54vw); }
-  .bb .solid-label { font-size: 15px; padding-left: 4px; }
-  .bb-menu { overflow: visible; padding: 0 14px 2px; border-right: 0; border-top: 1px solid var(--line); }
-  .bb-menu .items { width: auto; }
+  .bb .solid-label { font-size: 15px; padding-left: 4px; text-align: left; }
+  .bb-menu { padding: 0 14px 2px; border-top: 1px solid var(--line); }
   .bb[data-open="teach"] .items[data-col="teach"], .bb[data-open="design"] .items[data-col="design"], .bb[data-open="consult"] .items[data-col="consult"] { height: auto; gap: 8px; padding: 10px 0 8px; }
   .item { flex: none; max-height: none; }
-  .item-btn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; row-gap: 3px; padding: 9px 14px 10px; }   /* the name and "tap for details" share a line, the price sits under them */
+  .item-btn { grid-template-columns: minmax(0, 1fr); row-gap: 7px; padding: 10px 14px 12px; }
+  .item-a { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; row-gap: 3px; }   /* the name and "tap for details" share a line, the price sits under them */
   .item-name { grid-column: 1; grid-row: 1; font-size: 22px; }
   .item-hint { grid-column: 2; grid-row: 1; }
-  .item .item-rate { grid-column: 1 / -1; }
-  .item .item-rate { font-size: 14px; }
+  .item-rate { grid-column: 1 / -1; font-size: 14px; }
+  .item-b { padding-left: 0; border-left: 0; }
+  .item-line { font-size: 16px; }
+  .item-pts span { font-size: 13.5px; }
   .me { right: 2px; bottom: auto; top: calc(46px + var(--st-h) - var(--me-h)); }
-  .bb-chev { position: static; order: 3; flex: none; width: auto; height: 42px; border-right: 0; border-top: 1px solid var(--line); display: none; }
+  .bb-chev { position: absolute; left: 0; right: 0; bottom: 0; height: 42px; border-top: 1px solid var(--line); background: var(--bb); }
   .bb-chev svg { transform: rotate(-90deg); }
   .stage.detail-open .bb-chev { display: grid; }
-  .stage.detail-open .bb-menu { display: none; }
-  .stage.detail-open .bb-stage { flex: 1; height: auto; min-height: 56vh; }
+  .stage.detail-open .bb-body { min-height: 64vh; }
+  .bb-detail { bottom: 42px; border-radius: 0; scroll-margin-top: 118px; }   /* when it is scrolled into sight it stops under the top bar and the tabs */
   .stage.detail-open .me { opacity: 0; }
   .bb-detail { padding: 16px 16px 24px; }
   .bb-short, .bb-two { grid-template-columns: minmax(0, 1fr); }
