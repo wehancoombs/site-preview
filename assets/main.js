@@ -670,14 +670,22 @@
        long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
     // A university: his own lines (chat of 2026-11-15). What the university receives, on the left; his research and how he assessed his own module, on the right, above the quotation.
     university: { line: true, long: true, head: 'What you receive',
-      lines: () => ['A written review of the module’s assessments: which ones a machine can now complete, and which still test the student', 'The weak assessments redesigned, ready to use', 'One meeting with the lecturer to talk it through'],
+      lines: () => ['A written review of the module’s assessments: which ones a machine can now complete, and which still test the student', 'The weak assessments redesigned, ready to use', 'A meeting with your staff to talk it through'],
       side: () => '<p class="bb-para">My research is on teaching in the age of AI: what part of learning cannot be automated, and how to build teaching around it.</p><ul class="bb-lines long"><li>My 2026 honours module was assessed through video essays, podcasts and written work</li><li>Its last assessment was a sit-down essay on an unseen question: the role of philosophy in a world of AI</li></ul>',
       quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
-  // What each box shows at a glance under its one-line description. Nothing new: each point is already on that service's details card.
-  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2), classes: () => ['What I taught in 2026'],
-    lectures: () => ['Watch me teach'], lesson: () => ['The arc of a lesson'], module: () => ['Study guides I wrote'], university: () => DETAILS.university.lines().slice(1) };
+  // What each box shows at a glance under its one-line description: two points. Those for Tutoring and Writing are read from their details cards;
+  // the other eight pairs are his own lines (chat of 2026-11-16). The text export reads the eight from here, so keep one service to a line.
+  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2),
+    classes: () => ['At your school or venue, or live online', 'One session or a short series'],
+    lectures: () => ['In person, live online or recorded', 'One lecture or a whole module'],
+    lesson: () => ['Fitted to CAPS or your own curriculum', 'Plan, slides and worksheets as the lesson needs'],
+    module: () => ['For a university, school or private course', 'Lesson schedule, materials and assessments'],
+    curriculum: () => ['From your existing modules, or from scratch', 'Planned with your staff, if you like'],
+    person: () => ['In person in Pretoria East, or online', 'A conversation, not therapy'],
+    school: () => ['A new policy, or your current one revised', 'The workshop at your school, or online'],
+    university: () => ['A written report and redesigned assessments', 'A meeting with your staff to talk it through'] };
   Object.keys(PEEK).forEach(id => { const el = $('[data-detail="' + id + '"] .item-pts'); if (el) el.innerHTML = PEEK[id]().map(l => '<span>' + l + '</span>').join(''); });
   function openDetail(id) {
     const d = DETAILS[id], from = $('[data-detail="' + id + '"]');
