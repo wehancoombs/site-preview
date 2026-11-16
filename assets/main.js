@@ -685,9 +685,10 @@
       quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
-  // What each box shows at a glance under its one-line description: two points. Those for Tutoring and Writing are read from their details cards;
-  // the other eight pairs are his own lines (chat of 2026-11-16). The text export reads the eight from here, so keep one service to a line.
-  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2),
+  // What each box shows at a glance under its one-line description: two points. Those for Writing are read from its details card; the rest are his own
+  // lines (chat of 2026-11-16; on the Tutoring box he cut "essays" from the first point, in the site text doc, and left the card and the pop-up as they were). The text export reads the eight from here, so keep one service to a line.
+  const PEEK = { writing: () => DETAILS.writing.lines().slice(0, 2),
+    tutoring: () => ['A plan for the term, with marked practice', 'Online English for non-native speakers'],
     classes: () => ['At your school or venue, or live online', 'One session or a short series'],
     lectures: () => ['In person, live online or recorded', 'One lecture or a whole module'],
     lesson: () => ['Fitted to CAPS or your own curriculum', 'Plan, slides and worksheets as the lesson needs'],

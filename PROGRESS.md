@@ -789,3 +789,28 @@ His ask: "simplify even further, particularly by muting the colors a bit and the
 - **Samples.** He wants a sample offering for each service. Present today: Classes (the lesson bookshelf), Lectures (two recordings), Lessons (the arc, and the lesson pop-ups), Modules (five study guides). Missing: Tutoring, Writing, Curricula, For You, For Your School, For Your University. He was given a chat prompt to brainstorm the six.
 - Checked in the preview at 1280x800 (both themes), 1366x700 and 375x812. Not checked on a real phone.
 
+## 2026-11-16: his own points on the boxes (v=74 on `services`, on the staging site, not live)
+
+He kept the big boxes ("I really like the big boxes, keep them") but found the points weak, took them to a chat, and pasted back two points for each of eight services (Tutoring and Writing kept theirs). They are in `PEEK` in main.js, one service to a line; the text export reads them from there. For Your University now reads "An AI review of a module or a whole department"; its card ends "A meeting with your staff to talk it through"; the consulting pop-up bullet says the same.
+
+## 2026-11-16: the dark-mode drawing, the hand over the board, About me tiles (v=75 on `services`, on the staging site, not live)
+
+- **The drawing.** He supplied the white-on-black drawing (kept as he sent it in `assets/wehan-drawing-dark.webp`). It lines up with the light one to within a few pixels, so both share one frame (1004 x 1416, pointing right, mirrored by the page). `.me` is now two layers: `::before` is the figure's solid shape (`wehan-fill.webp`, `wehan-fill-dark.webp`) painted in the page colour, `::after` is the lines (`wehan-line.webp`, `wehan-line-dark.webp`) in the text colour. Because the figure is solid, the board's edge no longer shows through his hand, in either mode. The four masks are made by `draw_dark.py` (session scratchpad; it needs the path of his picture). The prerequisite he set for publishing ("we need the improved white on black image before pushing to the real site") is therefore met; publishing still waits for his word.
+- **About me.** The six figures are outlined tiles with a small arrow after each label and lift under the pointer, so that they read as buttons. Under the constellation, "Papers" is gone and "Research" is "Research & publications".
+
+## 2026-11-16: a trial, testimonials between the solids (v=76 on `services`, on the staging site, not live)
+
+His ask: "should we maybe mix in some testimonials between the shapes on the landing page? let's see how it looks". After a solid has had its nine seconds it dims and one testimonial stands over it for eight seconds, then the next solid comes; a tap or a drag puts the words away. Five testimonials, all from `VOICES` (`LANDING_VOICES` in main.js): two first-year students, the UP mentor lecturer, Prof Finamore, Dr Black. Not shown where motion is reduced (the solid does not change by itself there). To take it out: undo `round76.py` (three blocks in the build script, one in `cabinets.css`), or check out commit 3ae79fe.
+
+## 2026-11-16: his suggestions in the site text doc (v=77 on `services`, on the staging site, not live)
+
+He marked the site text Google Doc (the v74 copy) with three suggestions and three comments. The suggestions are applied:
+
+1. Landing sentence: "specialised educational support" is now "specialised teaching and learning support".
+2. Tutoring box, first point: "A plan for the term, with marked practice" ("essays" cut). He marked only the box; the same line on the Tutoring details card and in the Tutoring pop-up still ends "practice essays" (asked whether to cut it there too).
+3. The Map no longer opens with "Everything lives on this one page. Pick a place and it opens."
+
+His three comments, answered in chat and not yet acted on: (a) Lessons card quotation ("Enhanced the learners' vocabulary through scaffolding"): "We sure we don't have a better one for this?"; (b) For You card quotation (Dr Black, "He moves between close readings of Plato and present concerns..."): "This is great but maybe more suited to a different section?"; (c) the Map from My services down: "I think all of this needs updating or streamlining?". A fourth suggestion thread, "Add space", could not be found in the text and carries no wording.
+
+The text export now also lists the five landing testimonials of the trial.
+
