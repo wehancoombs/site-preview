@@ -1404,6 +1404,16 @@ html.first-visit .me.in { opacity: 1; }
 .lecture .l-cap strong { color: #fff; }
 .lecture iframe { z-index: 2; }
 
+/* The Map: under My services, the three tabs side by side, each with its services; a service opens its details card */
+.map-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 14px; margin: 10px 0 6px; }
+.map-tabs [data-tone="teach"] { --c: var(--c-teach); } .map-tabs [data-tone="design"] { --c: var(--c-design); } .map-tabs [data-tone="consult"] { --c: var(--c-consult); }
+.map-tab { display: block; font: 500 21px/1.2 var(--serif); color: var(--c); text-decoration: none; }
+.map-tab:hover, .map-tab:focus-visible { color: var(--text); }
+.map-group .map-tabs ul { grid-template-columns: minmax(0, 1fr); margin-top: 4px; }
+p.map-ch { margin: 0; }
+p.map-ch:hover { color: var(--text); }
+@media (max-width: 520px) { .map-tabs { grid-template-columns: minmax(0, 1fr); gap: 10px; } .map-group .map-tabs ul { grid-template-columns: 1fr 1fr; gap: 2px 16px; } }
+
 /* Trial: a testimonial between one solid and the next. The solid dims and the words stand over it. */
 .solid-box { position: relative; display: grid; place-items: center; }
 .solid-box #solid { transition: opacity 1.2s var(--ease); }

@@ -430,7 +430,10 @@
     });
   }
   const ORDER = {};
-  $$('.map-group').forEach(g => { ORDER[g.dataset.ch] = $$('[data-sheet]', g).map(b => b.dataset.sheet); });
+  // The order of the pop-ups within each group, for the arrows inside a pop-up and its "3 of 7".
+  Object.assign(ORDER, { threshold: ['about', 'qualifications'], make: ['tutoring', 'editing', 'classes', 'design', 'consulting', 'working', 'book'],
+    teach: ['approach', 'abbotts', 'garsfontein', 'macbeth', 'tempest', 'poems', 'grammar', 'film', 'enrichment', 'ai'],
+    think: ['posts', 'courses', 'guides', 'lectures', 'testimonials', 'publications', 'curriculum'], write: ['resume'] });
 
   const scrim = $('#scrim'), sheet = $('#sheet'), sheetCh = $('#sheet-ch'), sheetTitle = $('#sheet-title'), sheetBody = $('#sheet-body'), sheetWhere = $('#sheet-where'), sheetArt = $('#sheet-art');
   const map = $('#map'), mapBtn = $('#map-btn');
@@ -625,6 +628,10 @@
       return; }
     const dt = e.target.closest('[data-detail]');
     if (dt) { e.preventDefault(); openDetail(dt.dataset.detail); return; }
+    const sv = e.target.closest('[data-svc]');
+    if (sv) { e.preventDefault(); const it = $('.item-btn[data-detail="' + sv.dataset.svc + '"]'); if (!it) return;
+      closeSheet(); closeMap(); body.classList.remove('locked');
+      setTimeout(() => { showTarget('#services', true); openTab(svcBoard, it.closest('.items').dataset.col); openDetail(sv.dataset.svc); }, 60); return; }
     const g = e.target.closest('[data-goto]');
     if (g) { e.preventDefault(); goTo(g.dataset.goto); return; }
     // Any other link to a place on this page (the dots, the W in the top bar) slides to that cabinet.
@@ -669,13 +676,13 @@
     lectures: { line: true, inline: true, wide: true, quote: () => VOICES.think.items[6], more: 'courses',
       extra: () => '<p class="eyebrow">Watch me teach · <span class="deck-n">1 of 2</span></p><div class="deck">' + LECT_HTML +
         '<button class="deck-next" type="button" aria-label="Show the other recording"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>' },
-    lesson: { line: true, inline: true, arc: true, extra: () => '<div class="bb-arc-slot"></div>', quote: () => VOICES.teach.items[1], request: 'design', more: 'approach' },
+    lesson: { line: true, inline: true, arc: true, extra: () => '<div class="bb-arc-slot"></div>', quote: () => ['The lesson plans were well crafted and engaged learners, allowing them to partake and ask questions.', 'Mentor teacher, Hoërskool Garsfontein · formal assessment, 2026'], request: 'design', more: 'approach' },
     // A module: what a module comes with, the modules he has designed (the paragraph that used to sit under A curriculum), and the study guides.
     module: { line: true, inline: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.make.items[4], request: 'design', more: 'design',
       extra: () => '<p class="eyebrow">Study guides I wrote · tap one to read it</p>' + GUIDES_HTML },
     // A curriculum: his own lines (chat of 2026-11-15).
     curriculum: { line: true, text: () => 'A curriculum is a set of modules in an order that makes sense, so that each one prepares for the next. At the University of Pretoria I designed first- and second-year philosophy modules to fit what came before and after them, and helped plan that order with the department.', quote: () => VOICES.think.items[8], request: 'design', more: 'curriculum' },
-    person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => VOICES.make.items[3], request: 'consulting', more: 'consulting' },
+    person: { line: true, text: () => part('consulting', 'h4 + p')[0], quote: () => ['…he has been a guide and mentor to me there as much as in the academy.', 'Dr Mitchell-Ron Black · research collaborator, 2026'], request: 'consulting', more: 'consulting' },
     school: { line: true, lines: () => part('consulting', '.list li').slice(0, 3),   // the fourth point there is for universities
        long: true, quote: () => VOICES.teach.items[4], request: 'consulting', more: 'consulting' },
     // A university: his own lines (chat of 2026-11-15). What the university receives, on the left; his research and how he assessed his own module, on the right, above the quotation.
@@ -685,10 +692,9 @@
       quote: () => ['I find his account of what cannot be automated in learning more persuasive than most of what I read on the subject.', 'Dr Mitchell-Ron Black, 2026'], request: 'consulting', more: 'ai' }
   };
   const DETAIL_ART = { tutoring: 'quill', writing: 'edit', classes: 'people', lectures: 'cap', lesson: 'compass', module: 'blocks', curriculum: 'book', person: 'person', school: 'school', university: 'temple' };
-  // What each box shows at a glance under its one-line description: two points. Those for Writing are read from its details card; the rest are his own
-  // lines (chat of 2026-11-16; on the Tutoring box he cut "essays" from the first point, in the site text doc, and left the card and the pop-up as they were). The text export reads the eight from here, so keep one service to a line.
-  const PEEK = { writing: () => DETAILS.writing.lines().slice(0, 2),
-    tutoring: () => ['A plan for the term, with marked practice', 'Online English for non-native speakers'],
+  // What each box shows at a glance under its one-line description: two points. Those for Tutoring and Writing are read from their details cards;
+  // the other eight pairs are his own lines (chat of 2026-11-16). The text export reads the eight from here, so keep one service to a line.
+  const PEEK = { tutoring: () => DETAILS.tutoring.lines().slice(1, 3), writing: () => DETAILS.writing.lines().slice(0, 2),
     classes: () => ['At your school or venue, or live online', 'One session or a short series'],
     lectures: () => ['In person, live online or recorded', 'One lecture or a whole module'],
     lesson: () => ['Fitted to CAPS or your own curriculum', 'Plan, slides and worksheets as the lesson needs'],
