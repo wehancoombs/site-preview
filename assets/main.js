@@ -178,6 +178,15 @@
     riddleAt = (riddleAt + 1) % RIDDLES.length;
     riddleBtn.textContent = RIDDLES[riddleAt][0]; riddleTip.innerHTML = RIDDLES[riddleAt][1];
   }
+  // Between one solid and the next, a testimonial (all five are on the site already, in VOICES).
+  const voiceBox = $('.solid-box'), voiceEl = $('#solid-voice'); let voiceOn = false, voiceAt = 0, voiceN = -1;
+  const LANDING_VOICES = [['think', 6], ['teach', 0], ['think', 1], ['think', 4], ['teach', 4]];
+  function showVoice(t) {
+    voiceN = (voiceN + 1) % LANDING_VOICES.length; const v = VOICES[LANDING_VOICES[voiceN][0]].items[LANDING_VOICES[voiceN][1]];
+    $('p', voiceEl).textContent = v[0]; $('small', voiceEl).textContent = v[1];
+    voiceOn = true; voiceAt = t; voiceBox.classList.add('voiced'); voiceEl.setAttribute('aria-hidden', 'false');
+  }
+  function hideVoice() { voiceOn = false; voiceBox.classList.remove('voiced'); voiceEl.setAttribute('aria-hidden', 'true'); }
   function switchSolid() { if (S.nxt >= 0) return; S.nxt = (S.cur + 1) % SOLIDS.length; S.mix = 0; S.labelDone = false; }
   function rot(p, ax, ay) {
     const cy = Math.cos(ax), sy = Math.sin(ax);
@@ -213,7 +222,8 @@
     grad.addColorStop(0, 'rgba(' + g.r + ',' + g.g + ',' + g.b + ',' + ((pal.light ? .09 : .13) * br + .04).toFixed(3) + ')');
     grad.addColorStop(1, 'rgba(' + g.r + ',' + g.g + ',' + g.b + ',0)');
     sx.fillStyle = grad; sx.fillRect(0, 0, SW, SW);
-    if (S.nxt < 0 && !S.drag && t - S.lastSwitch > 9000) switchSolid();
+    if (S.drag && voiceOn) hideVoice();
+    if (S.nxt < 0 && !S.drag && t - S.lastSwitch > 9000) { if (!voiceBox) switchSolid(); else if (!voiceOn) showVoice(t); else if (t - voiceAt > 8000) { hideVoice(); switchSolid(); } }
     if (S.nxt >= 0) {
       S.mix = Math.min(1, S.mix + dt / 1500);
       const m = S.mix < .5 ? 2 * S.mix * S.mix : 1 - Math.pow(-2 * S.mix + 2, 2) / 2;
@@ -232,7 +242,7 @@
     S.drag.x = e.clientX; S.drag.y = e.clientY; S.drag.moved += Math.abs(dx) + Math.abs(dy);
     S.ay += dx * .008; S.ax -= dy * .008; S.vy = dx * .0012; S.vx = -dy * .0012;
   });
-  function endDrag() { if (!S.drag) return; const tap = S.drag.moved < 6; S.drag = null; sc.classList.remove('dragging'); if (tap) switchSolid(); }
+  function endDrag() { if (!S.drag) return; const tap = S.drag.moved < 6; S.drag = null; sc.classList.remove('dragging'); if (tap) { if (voiceOn) hideVoice(); switchSolid(); } }
   sc.addEventListener('pointerup', endDrag); sc.addEventListener('pointercancel', endDrag);
   sc.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchSolid(); } });
   let heroVisible = true;

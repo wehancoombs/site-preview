@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=75">
+<link rel="stylesheet" href="assets/style.css?v=76">
 </head>
 <body data-chapter="threshold">
 
@@ -185,7 +185,10 @@
         </nav>
       </div>
       <div class="cab-object solid-wrap">
-      <canvas id="solid" tabindex="0" aria-label="A slowly turning Platonic solid. Drag to turn it, press Enter to change it."></canvas>
+      <div class="solid-box">
+        <canvas id="solid" tabindex="0" aria-label="A slowly turning Platonic solid. Drag to turn it, press Enter to change it."></canvas>
+        <blockquote class="solid-voice" id="solid-voice" aria-hidden="true"><p></p><small></small></blockquote>
+      </div>
       <p class="solid-label"><span id="solid-el">The cosmos</span> · <span id="solid-name">Dodecahedron</span></p>
       <p class="solid-hint">After Plato’s <em>Timaeus</em> · drag to turn · tap to change</p>
       </div>
@@ -1178,7 +1181,7 @@
 
 </div>
 
-<script src="assets/main.js?v=75"></script>
+<script src="assets/main.js?v=76"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
