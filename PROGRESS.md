@@ -764,3 +764,7 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: the descriptions back as tooltips (v=70 on `services`, on the staging site, not live)
 
 - He likes the buttons. Each service's one-line description is back as a tooltip that appears to the right of its button, over the board, on hover or keyboard focus. Only where there is a pointer and the screen is wider than 900px; on a phone it stays off (the line is on the card).
+
+## 2026-11-16: a new landing sentence (v=71 on `services`, on the staging site, not live)
+
+- His: "Philosopher and educator. I teach people to think for themselves by providing specialised educational support for individuals, schools and universities." He typed "school and universities"; set as "schools" and flagged to him.
