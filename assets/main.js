@@ -639,7 +639,8 @@
     track('tab-' + board.id + '-' + k);
   }
   function stepTab(board, d) { const ks = $$('.tabs [data-tab]', board).map(b => b.dataset.tab), k = ks[ks.indexOf(board.dataset.open) + d]; if (k) openTab(board, k); }
-  $$('.bb .tabs [data-tab]').forEach(b => b.addEventListener('click', () => openTab(b.closest('.bb'), b.dataset.tab)));
+  // A tab opens its side of the board. Pressed while a details card is open on that same side, it brings the list back.
+  $$('.bb .tabs [data-tab]').forEach(b => b.addEventListener('click', () => { const bd = b.closest('.bb'); if (bd.dataset.open === b.dataset.tab) closeDetail(); else openTab(bd, b.dataset.tab); }));
   // Pointing at a service on the list brings up its own shape.
   $$('.bb-menu [data-shape]').forEach(li => li.addEventListener('pointerenter', () => showShapes(svcBoard.dataset.open, +li.dataset.shape)));
 
@@ -1301,7 +1302,7 @@
     ];
     const SETS = { teach: [0, 1, 4, 5], design: [2, 6, 7], consult: [8, 3, 9] }, TAB_NAME = { teach: 'Teach', design: 'Design', consult: 'Consult' };
     const T = { ax: .3, ay: -.35, vy: reduced ? 0 : .0035, drag: null, seen: false, col: null, theme: '', cur: 0, nxt: 0, mix: 0, mixing: false, since: performance.now(), set: 'teach', want: 0, named: 0 };
-    const NAMES = ['Tutoring', 'Writing', 'A lesson', 'For Your School', 'Classes', 'Lectures', 'A module', 'A curriculum', 'For You', 'For Your University'];
+    const NAMES = ['Tutoring', 'Writing', 'Lessons', 'For Your School', 'Classes', 'Lectures', 'Modules', 'Curricula', 'For You', 'For Your University'];
     function caption(i) { T.named = i; nameEl.textContent = NAMES[i]; hintEl.textContent = 'drag to turn · tap to change'; }
     function tapShape() { nextShape(); }
     // Ask for a shape. If one is already changing, the new one follows as soon as that change is done.

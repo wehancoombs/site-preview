@@ -768,3 +768,11 @@ Still open: the white-on-black drawing (his Todoist); nine placeholder lines plu
 ## 2026-11-16: a new landing sentence (v=71 on `services`, on the staging site, not live)
 
 - His: "Philosopher and educator. I teach people to think for themselves by providing specialised educational support for individuals, schools and universities." He typed "school and universities"; set as "schools" and flagged to him.
+
+## 2026-11-16: room at the top of the cards, Design names, stills, tabs (v=72 on `services`, on the staging site, not live)
+
+- The details cards have more room above the title again (the study-guide shelf on the Modules card is a little shorter to pay for it; all ten fit at 1280 by 800).
+- Design names: Lessons, Modules, Curricula (buttons, card titles, under the objects, and the Design box on the landing page). The Lessons line: "Lessons, with all their materials, ready to teach".
+- The two recordings on the Lectures card show a still: Google Drive's own preview picture, loaded from drive.google.com/thumbnail by file id (not saved in the repo), darkened at the foot under the caption.
+- A tab pressed while a details card is open on that same tab closes the card and brings the list back.
+- Fresh Google Doc "Site text – three-cabinet site".
