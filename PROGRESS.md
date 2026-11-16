@@ -836,7 +836,7 @@ He asked for a final pass on the whole site, whether it funnels customers, and w
 - The site text now shows the request form's own words (it used to leave the form out).
 
 **An independent first-visitor review** (a second agent, four visitors: a parent, a postgraduate, a principal, a head of department) found the contact routes sound (the bar on every screen, four ways to send, about four clicks from landing to a sent message) but the information before contact uneven. Left for his decision, most valuable first:
-1. "Send from here" (Formspree) has never been confirmed with a real message.
+1. ~~"Send from here" (Formspree) has never been confirmed with a real message.~~ Confirmed 2026-11-16: with his yes, one test message was sent through the form on the local preview (the browser would not open the staging address); the form said "Sent ✓" and Formspree's email reached his Gmail within a minute, subject "Hello", but under the **Updates** tab, not Primary. Not yet tried from a phone or from the staging address itself.
 2. The Tutoring box and card do not say school English or grades until the pop-up; the lines exist there.
 3. The For Your School card is vaguer than its box (general consulting bullets, a first-year student's quotation).
 4. The consulting request form does not mention an AI policy, a review or a university, and a message does not say which card it came from.
