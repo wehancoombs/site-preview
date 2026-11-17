@@ -20,6 +20,15 @@
     var d = document.documentElement, t = null, seen = false;
     try { t = localStorage.getItem('theme'); seen = !!localStorage.getItem('seen'); localStorage.setItem('seen', '1'); } catch (e) {}
     if (t !== 'light' && t !== 'dark') t = 'light';   // light for everyone, whatever their system setting, until they use the switch
+    // Unless the browser is about to darken the page itself (Samsung Internet's dark mode, Chrome's "dark web pages"): a light page then turns a
+    // muddy brown, and a page cannot switch that off. There the site shows its own dark mode, and the switch is put away.
+    var forced = false;
+    try {
+      var e = document.createElement('div'); e.style.cssText = 'color-scheme:light;background-color:canvas;position:absolute;width:1px;height:1px';
+      d.appendChild(e); forced = getComputedStyle(e).backgroundColor !== 'rgb(255, 255, 255)'; d.removeChild(e);
+      if (/SamsungBrowser/i.test(navigator.userAgent) && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) forced = true;
+    } catch (x) {}
+    if (forced) { t = 'dark'; d.classList.add('forced-dark'); }
     if (t === 'light') d.setAttribute('data-theme', 'light');
     if (!seen) d.classList.add('first-visit');
   })();
@@ -28,7 +37,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=83">
+<link rel="stylesheet" href="assets/style.css?v=84">
 </head>
 <body data-chapter="threshold">
 
@@ -1194,7 +1203,7 @@
 
 </div>
 
-<script src="assets/main.js?v=83"></script>
+<script src="assets/main.js?v=84"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
