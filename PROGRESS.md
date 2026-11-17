@@ -882,3 +882,12 @@ He sent a phone screenshot (Samsung Internet): the site was in light mode, but t
 - **The brown.** The page now tells the browser that it has its own light and dark (`<meta name="color-scheme" content="light dark">`, and `color-scheme: only light` / `dark` in the styles), which is what stops a browser's forced dark mode from recolouring it. This could not be reproduced in the preview (it is the phone browser's own feature), so it needs his phone to confirm.
 - **The switch shows its word on a phone too** ("Dark" when the page is light, "Light" when it is dark).
 
+## 2026-11-17: the brown on a Samsung phone, rounds two and three (v=83, v=84 on `services`, on the staging site only)
+
+v=82 (published) did not stop the brown: tested in a Secret mode tab of Samsung Internet on the phone that shows it ("Still brown in secret mode"). His own phone never showed it.
+
+- **v=83** added a `prefers-color-scheme: dark` rule (head and stylesheet), the signal Samsung Internet is said to look for before darkening a page. Still brown.
+- **v=84.** A page cannot switch a browser's own darkening off, so where a browser is going to darken it anyway the site now shows its own dark mode instead, which darkening leaves almost untouched, and hides the switch there (choosing light would bring the brown back). Detected in the first script in the head: Samsung Internet (`SamsungBrowser` in its name) reporting dark, or any browser that recolours the system colours. Everyone else still opens in light. The start-up code was tested against seven pretend browsers (`headtest.js`, session scratchpad): only the Samsung-in-dark and recolouring cases turn dark.
+- **A check page** on the test copy only, https://wehancoombs.com/site-preview/check.html, shows what the phone reports (its browser name, whether it says it prefers dark, a system colour, and whether a plain white page is darkened). It is not on `services`, so the next staging refresh removes it.
+- Not yet known: whether Samsung Internet on that phone reports "prefers dark" while its dark mode is on. If it does not, v=84 cannot tell it is being darkened, and the check page will show that.
+
