@@ -897,3 +897,9 @@ The check page on the affected phone (Samsung Internet 30, Secret mode): it dark
 
 v=85: in Samsung Internet (known by `SamsungBrowser` in its name) the page always declares a dark colour scheme (`color-scheme` meta set to dark by the first script, and `color-scheme: dark` on the root), in its light look too. Chromium-based browsers leave alone a page that says its own scheme is dark. The light look itself does not change (checked in the preview with the Samsung class added: same background, same form colours). The v=84 guess (dark mode and no switch) is removed. Everyone else is unchanged. A second check page, https://wehancoombs.com/site-preview/check2.html, is white and cream but says dark: if Samsung leaves it white, the fix works. Not yet confirmed on the phone.
 
+## 2026-11-17: the Samsung brown, round five (v=86 on `services`, on the staging site only)
+
+v=85 did not help ("Still brown"): Samsung Internet 30 darkens every light page whatever colour scheme the page declares, and reports "prefers light" while doing it, so a page can neither detect it nor switch it off. Its darkening keeps the tint: the white check page turned neutral charcoal, the site's cream turned brown.
+
+v=86: in Samsung Internet only (`html.samsung`, set by the first script from the browser's name), the light look uses neutral off-whites and greys instead of the creams (`--bg #F4F4F3`, `--bg-2`, `--surface`, `--bb`, lines and text greys). With that browser's dark mode off it looks like the light site in white; with it on it should turn charcoal, not brown. Accents, the drawing and everything else are unchanged; other browsers are unchanged. v=85's colour-scheme trick is removed. Checked in the preview with the class added (the background becomes #F4F4F3). Not yet seen on the Samsung phone. The check pages are dropped from the test copy.
+

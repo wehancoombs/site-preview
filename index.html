@@ -20,14 +20,9 @@
     var d = document.documentElement, t = null, seen = false;
     try { t = localStorage.getItem('theme'); seen = !!localStorage.getItem('seen'); localStorage.setItem('seen', '1'); } catch (e) {}
     if (t !== 'light' && t !== 'dark') t = 'light';   // light for everyone, whatever their system setting, until they use the switch
-    // Samsung Internet darkens light pages into a muddy brown when its dark mode is on, and tells the page nothing about it (it reports "prefers light").
-    // It leaves alone a page whose own colour scheme is dark, so there the page always says dark, in its light look too; the look itself is unchanged.
-    try {
-      if (/SamsungBrowser/i.test(navigator.userAgent)) {
-        d.classList.add('samsung');
-        var cs = document.querySelector('meta[name="color-scheme"]'); if (cs) cs.setAttribute('content', 'dark');
-      }
-    } catch (x) {}
+    // Samsung Internet's dark mode darkens every light page, keeping its tint (the cream turns brown), cannot be switched off by the page, and is not
+    // reported to it. So in Samsung Internet the light look uses neutral colours (see html.samsung in the styles): if it is darkened, it turns charcoal.
+    try { if (/SamsungBrowser/i.test(navigator.userAgent)) d.classList.add('samsung'); } catch (x) {}
     if (t === 'light') d.setAttribute('data-theme', 'light');
     if (!seen) d.classList.add('first-visit');
   })();
@@ -36,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=85">
+<link rel="stylesheet" href="assets/style.css?v=86">
 </head>
 <body data-chapter="threshold">
 
@@ -1202,7 +1197,7 @@
 
 </div>
 
-<script src="assets/main.js?v=85"></script>
+<script src="assets/main.js?v=86"></script>
 <script data-goatcounter="https://wehancoombs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

@@ -1564,5 +1564,10 @@ p.map-ch:hover { color: var(--text); }
    The rule sets a value nothing uses, so nothing seen changes; light and dark are still chosen by the switch alone. */
 @media (prefers-color-scheme: dark) { :root { --own-dark: 1; } }
 
-/* Samsung Internet: the page always declares a dark colour scheme, so that the browser's own dark mode leaves it alone (its light look included) */
-html.samsung, html.samsung[data-theme="light"] { color-scheme: dark; }
+/* Samsung Internet: its own dark mode darkens light pages and keeps their tint, so the cream would turn brown. There the light look uses neutral
+   off-whites and greys instead; darkened, they turn charcoal. Accents, the drawing and everything else are unchanged. */
+html.samsung[data-theme="light"] {
+  --bg: #F4F4F3; --bg-2: #EAEAE8; --surface: #FBFBFA; --bb: #FFFFFF;
+  --line: #D9D9D6; --line-2: #C2C2BE;
+  --text: #1E1E1D; --text-2: #5C5C5A; --text-3: #8A8A87;
+}
