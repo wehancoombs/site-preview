@@ -1564,5 +1564,5 @@ p.map-ch:hover { color: var(--text); }
    The rule sets a value nothing uses, so nothing seen changes; light and dark are still chosen by the switch alone. */
 @media (prefers-color-scheme: dark) { :root { --own-dark: 1; } }
 
-/* Where the browser darkens pages itself, the site stays in its own dark mode and the switch is put away (light would turn brown there) */
-html.forced-dark #theme { display: none; }
+/* Samsung Internet: the page always declares a dark colour scheme, so that the browser's own dark mode leaves it alone (its light look included) */
+html.samsung, html.samsung[data-theme="light"] { color-scheme: dark; }

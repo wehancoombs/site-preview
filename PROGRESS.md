@@ -891,3 +891,9 @@ v=82 (published) did not stop the brown: tested in a Secret mode tab of Samsung 
 - **A check page** on the test copy only, https://wehancoombs.com/site-preview/check.html, shows what the phone reports (its browser name, whether it says it prefers dark, a system colour, and whether a plain white page is darkened). It is not on `services`, so the next staging refresh removes it.
 - Not yet known: whether Samsung Internet on that phone reports "prefers dark" while its dark mode is on. If it does not, v=84 cannot tell it is being darkened, and the check page will show that.
 
+## 2026-11-17: the Samsung brown, round four (v=85 on `services`, on the staging site only)
+
+The check page on the affected phone (Samsung Internet 30, Secret mode): it darkened a plain white page while telling it "prefers light" (prefers dark: false; system colour white). So v=84 could not tell it was darkening, and stayed light and brown. His own phone (Chrome inside another app) reports prefers dark but does not darken pages, which is why he never saw it.
+
+v=85: in Samsung Internet (known by `SamsungBrowser` in its name) the page always declares a dark colour scheme (`color-scheme` meta set to dark by the first script, and `color-scheme: dark` on the root), in its light look too. Chromium-based browsers leave alone a page that says its own scheme is dark. The light look itself does not change (checked in the preview with the Samsung class added: same background, same form colours). The v=84 guess (dark mode and no switch) is removed. Everyone else is unchanged. A second check page, https://wehancoombs.com/site-preview/check2.html, is white and cream but says dark: if Samsung leaves it white, the fix works. Not yet confirmed on the phone.
+
