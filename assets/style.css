@@ -1397,6 +1397,9 @@ html.first-visit .me.in { opacity: 1; }
 /* Each recording shows a still from itself (Google Drive's own preview picture), darkened at the foot so that its caption reads */
 .lecture[data-src*="1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ"] { --still: url("https://drive.google.com/thumbnail?id=1qdqHfrFqPeQcDQpA1wr5STu0e5b0S1EJ&sz=w960"); }
 .lecture[data-src*="1JqwCuWJwbXZ4gx45t1xbDxAtxvrOAqL3"] { --still: url("https://drive.google.com/thumbnail?id=1JqwCuWJwbXZ4gx45t1xbDxAtxvrOAqL3&sz=w960"); }
+.lecture[data-src*="peBkDshxgYs"] { --still: url("https://i.ytimg.com/vi/peBkDshxgYs/maxresdefault.jpg"); }
+/* With three recordings, only the next one waits behind the front one; the third stays out of sight */
+.deck .lecture.later { opacity: 0; }
 .lecture::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, .82), rgba(0, 0, 0, .12) 58%, rgba(0, 0, 0, .28)), var(--still, none) center / cover no-repeat; }
 .lecture .play, .lecture .l-cap { z-index: 1; }
 .lecture .play { background: rgba(0, 0, 0, .5); }
