@@ -925,3 +925,5 @@ From his Claude chat. In the Recorded lectures pop-up, "Lecture two in Drive" be
 ## 2026-11-17: the lectures play from YouTube (v=91 on `services`, on the staging site only)
 
 He saw the Drive recordings still on the Lectures card (the YouTube links were only in the Recorded lectures pop-up). Now every lecture player plays the YouTube version: the three recordings in the Lectures card's deck (FIL110 3yu_p7YIFhc, FIL710 A2ta75nJWTI, the micro lesson peBkDshxgYs), and the players in the Courses and Recorded lectures pop-ups (youtube-nocookie, so no YouTube cookies until play). The deck shows his YouTube thumbnails instead of the Drive stills, and under the deck a "Watch on YouTube ↗" link follows the recording in front (counted as `watch-youtube`). No Drive video is left on the site.
+
+**Published 2026-11-17** on his "Publish": v=89, v=90 and v=91 together (merge adc2fb4 on `main`). Checked on wehancoombs.com: v=91 served, the YouTube players, the domain file, the counter and no noindex. Site text regenerated: https://docs.google.com/document/d/1T5AMQ4EBMrJ-RyRwZpu5J-LDqzxIM-9_QrIPsW-aPX4/edit (the v81 doc renamed OLD).
