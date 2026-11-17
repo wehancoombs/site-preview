@@ -917,3 +917,7 @@ From his Claude chat. The six icon files he made (favicon.ico, favicon.svg, appl
 ## 2026-11-17: the FIL110 lecture on YouTube, and the micro lesson beside the lectures (v=89 on `services`, on the staging site only)
 
 From his Claude chat. In the Recorded lectures pop-up, "Lecture one in Drive" became "Watch on YouTube ↗" (https://youtu.be/3yu_p7YIFhc); the FIL710 Drive link is unchanged. The PGCE micro lesson (https://youtu.be/peBkDshxgYs) joins the two lectures: a third recording in the Lectures card's "Watch me teach" deck (caption "English micro lesson on adjectives", "PGCE · 2026", its YouTube still, played from youtube-nocookie), and in the pop-up its heading "English micro lesson on adjectives · PGCE · 2026", the video and "Watch on YouTube ↗". The deck now reads "1 of 3"; only the next recording waits behind the front one. The two lecture players inside the pop-ups still play from Drive. The CVs in wehan-cvs never had the Drive link (nothing to change, no re-render), and his full resume doc already links the YouTube lecture.
+
+## 2026-11-17: the FIL710 seminar on YouTube too (v=90 on `services`, on the staging site only)
+
+From his Claude chat. In the Recorded lectures pop-up, "Lecture two in Drive" became "Watch on YouTube ↗" (https://youtu.be/A2ta75nJWTI), so the row reads "Watch on YouTube ↗ Watch on YouTube ↗" for the two lectures. The CVs in wehan-cvs never had this Drive link either: nothing to change, no re-render. His full resume doc still has the FIL710 Drive link (not changed; offered).
