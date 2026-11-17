@@ -921,3 +921,7 @@ From his Claude chat. In the Recorded lectures pop-up, "Lecture one in Drive" be
 ## 2026-11-17: the FIL710 seminar on YouTube too (v=90 on `services`, on the staging site only)
 
 From his Claude chat. In the Recorded lectures pop-up, "Lecture two in Drive" became "Watch on YouTube ↗" (https://youtu.be/A2ta75nJWTI), so the row reads "Watch on YouTube ↗ Watch on YouTube ↗" for the two lectures. The CVs in wehan-cvs never had this Drive link either: nothing to change, no re-render. His full resume doc still has the FIL710 Drive link (not changed; offered).
+
+## 2026-11-17: the lectures play from YouTube (v=91 on `services`, on the staging site only)
+
+He saw the Drive recordings still on the Lectures card (the YouTube links were only in the Recorded lectures pop-up). Now every lecture player plays the YouTube version: the three recordings in the Lectures card's deck (FIL110 3yu_p7YIFhc, FIL710 A2ta75nJWTI, the micro lesson peBkDshxgYs), and the players in the Courses and Recorded lectures pop-ups (youtube-nocookie, so no YouTube cookies until play). The deck shows his YouTube thumbnails instead of the Drive stills, and under the deck a "Watch on YouTube ↗" link follows the recording in front (counted as `watch-youtube`). No Drive video is left on the site.

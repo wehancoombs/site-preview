@@ -675,7 +675,8 @@
     // Lectures: the two recordings, large, one in front of the other; the chevron beside them brings the other forward.
     lectures: { line: true, inline: true, wide: true, quote: () => VOICES.think.items[6], more: 'courses',
       extra: () => '<p class="eyebrow">Watch me teach · <span class="deck-n">1 of 3</span></p><div class="deck">' + LECT_HTML +
-        '<button class="deck-next" type="button" aria-label="Show the next recording"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>' },
+        '<button class="deck-next" type="button" aria-label="Show the next recording"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>' +
+        '<p class="deck-watch"><a href="https://youtu.be/3yu_p7YIFhc" target="_blank" rel="noopener" data-track="watch-youtube">Watch on YouTube ↗</a></p>' },
     lesson: { line: true, inline: true, arc: true, extra: () => '<div class="bb-arc-slot"></div>', quote: () => ['The lesson plans were well crafted and engaged learners, allowing them to partake and ask questions.', 'Mentor teacher, Hoërskool Garsfontein · formal assessment, 2026'], request: 'design', more: 'approach' },
     // A module: what a module comes with, the modules he has designed (the paragraph that used to sit under A curriculum), and the study guides.
     module: { line: true, inline: true, text: () => part('design', 'h4 + p')[0], quote: () => VOICES.make.items[4], request: 'design', more: 'design',
@@ -760,6 +761,7 @@
       if (i !== to && l.classList.contains('playing')) { const f = $('iframe', l); if (f) f.remove(); l.classList.remove('playing'); }
     });
     $('.deck-n', bbDetail).textContent = (to + 1) + ' of ' + ls.length;
+    const w = $('.deck-watch a', bbDetail); if (w && ls[to].dataset.watch) w.href = ls[to].dataset.watch;   // the link follows the recording in front
   });
 
   /* ---------- The coin beside "About me": pressed, it spins, and as it spins its W flickers through five signs and back,
